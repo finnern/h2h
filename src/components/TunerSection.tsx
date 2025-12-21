@@ -22,6 +22,7 @@ export interface TunerData {
   spiritual: boolean;
   culture: string;
   context: string;
+  additionalInsights?: string;
 }
 
 interface TunerSectionProps {
@@ -155,7 +156,7 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
             </div>
           </div>
 
-          {/* Culture and Context */}
+          {/* Culture and Current Season */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="culture" className="font-body text-ink">
@@ -171,16 +172,30 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
             </div>
             <div className="space-y-2">
               <Label htmlFor="context" className="font-body text-ink">
-                What is the background noise right now?
+                What season are you navigating together?
               </Label>
               <Input
                 id="context"
-                placeholder="e.g., New baby, moved house..."
+                placeholder="e.g., New baby, career shift, moving..."
                 value={formData.context}
                 onChange={(e) => setFormData({ ...formData, context: e.target.value })}
                 className="font-body bg-paper border-border focus:ring-primary"
               />
             </div>
+          </div>
+
+          {/* Open-ended insights field */}
+          <div className="space-y-2">
+            <Label htmlFor="additionalInsights" className="font-body text-ink">
+              What else do you feel comfortable sharing with us to dial in the questions even closer to your situation?
+            </Label>
+            <textarea
+              id="additionalInsights"
+              placeholder="Share anything that might help us understand your unique journey together..."
+              value={formData.additionalInsights || ""}
+              onChange={(e) => setFormData({ ...formData, additionalInsights: e.target.value })}
+              className="w-full min-h-[100px] p-3 font-body bg-paper border border-border rounded-md focus:ring-2 focus:ring-primary focus:outline-none resize-y"
+            />
           </div>
 
           {/* Generate button */}
