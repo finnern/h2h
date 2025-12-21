@@ -79,7 +79,7 @@ export const FlippableCard = ({
   return (
     <div className="flex flex-col items-center gap-3">
       <motion.div
-        className="playing-card w-full max-w-[280px] cursor-pointer"
+        className="playing-card w-full max-w-[300px] cursor-pointer"
         onClick={() => setIsFlipped(!isFlipped)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -93,62 +93,60 @@ export const FlippableCard = ({
         } : {}}
       >
         <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
-          {/* Front of card - Questions */}
-          <div className="card-face card-front">
-            {/* Suit symbol in corner */}
-            <div className="absolute top-3 left-4 text-heartbeat text-2xl font-bold">
-              {config.suit}
-            </div>
-            <div className="absolute bottom-3 right-4 text-heartbeat text-2xl font-bold rotate-180">
-              {config.suit}
+          {/* Front of card - Questions (with small archetype icon) */}
+          <div className="card-face card-front bg-white">
+            {/* Small archetype image at top */}
+            <div className="flex justify-start mb-2">
+              <img
+                src={config.image}
+                alt={config.name}
+                className="h-16 w-auto object-contain"
+              />
             </div>
 
-            {/* Card content */}
-            <div className="flex-1 flex flex-col justify-center px-2 pt-6">
-              {/* Light question */}
-              <p className="font-display text-xl md:text-2xl text-ink leading-relaxed mb-4">
+            {/* Light question */}
+            <div className="flex-1 flex flex-col">
+              <p className="font-display text-xl md:text-2xl text-ink leading-relaxed mb-3">
                 {questions.light}
               </p>
               
               {/* Heartbeat divider */}
-              <HeartbeatLine className="my-3 opacity-60" />
+              <HeartbeatLine className="my-3" />
               
-              {/* Deep question */}
-              <p className="font-display text-xl md:text-2xl text-ink font-semibold leading-relaxed">
+              {/* Deep question - bold */}
+              <p className="font-display text-xl md:text-2xl text-ink font-bold leading-relaxed">
                 {questions.deep}
               </p>
             </div>
 
             {/* Footer */}
-            <div className="mt-auto pt-4 text-center">
-              <p className="font-body text-sm text-ink-light italic">
+            <div className="mt-auto pt-4">
+              <p className="font-display text-lg text-ink">
                 Pass/Not today is OK.
               </p>
-              <p className="font-body text-xs text-muted-foreground mt-1">
+              <p className="font-body text-sm text-ink-light mt-1">
                 End with: 'Was soll ich mir merken?'
               </p>
             </div>
           </div>
 
-          {/* Back of card - Archetype image */}
-          <div className="card-face card-back">
-            <div className="flex flex-col items-center justify-center p-6 h-full">
-              <HeartbeatLine className="w-full mb-4" />
+          {/* Back of card - Full archetype image with heartbeat borders */}
+          <div className="card-face card-back bg-white">
+            <div className="flex flex-col items-center justify-between p-4 h-full w-full">
+              {/* Top heartbeat line */}
+              <HeartbeatLine className="w-full" />
               
-              <div className="flex-1 flex items-center justify-center">
+              {/* Center archetype image */}
+              <div className="flex-1 flex items-center justify-center py-4">
                 <img
                   src={config.image}
                   alt={config.name}
-                  className="max-h-[180px] object-contain"
+                  className="max-h-[220px] w-auto object-contain"
                 />
               </div>
               
-              <HeartbeatLine className="w-full mt-4" />
-              
-              <div className="text-center mt-4">
-                <p className="font-display text-2xl text-ink">{config.name}</p>
-                <p className="font-body text-sm text-ink-light italic">{config.theme}</p>
-              </div>
+              {/* Bottom heartbeat line */}
+              <HeartbeatLine className="w-full" />
             </div>
           </div>
         </div>
