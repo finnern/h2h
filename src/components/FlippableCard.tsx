@@ -79,7 +79,7 @@ export const FlippableCard = ({
   return (
     <div className="flex flex-col items-center gap-3">
       <motion.div
-        className="playing-card w-full max-w-[300px] cursor-pointer"
+        className="playing-card w-full max-w-[320px] cursor-pointer"
         onClick={() => setIsFlipped(!isFlipped)}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

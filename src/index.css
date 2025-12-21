@@ -197,9 +197,9 @@
   /* Playing card styling */
   .playing-card {
     @apply relative rounded-xl;
-    aspect-ratio: 2.5 / 3.5;
+    aspect-ratio: 2.5 / 4;
     perspective: 1000px;
-    min-height: 380px;
+    min-height: 480px;
   }
 
   .card-inner {
