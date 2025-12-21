@@ -196,10 +196,10 @@
 
   /* Playing card styling */
   .playing-card {
-    @apply relative rounded-xl overflow-hidden;
+    @apply relative rounded-xl;
     aspect-ratio: 2.5 / 3.5;
     perspective: 1000px;
-    transform-style: preserve-3d;
+    min-height: 380px;
   }
 
   .card-inner {
@@ -212,18 +212,20 @@
   }
 
   .card-face {
-    @apply absolute inset-0 w-full h-full rounded-xl;
+    @apply absolute inset-0 w-full h-full rounded-xl overflow-hidden;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
 
   .card-front {
-    @apply gradient-card shadow-card p-6 flex flex-col;
+    @apply shadow-card p-5 flex flex-col;
+    background: white;
     border: 2px solid hsl(var(--border));
   }
 
   .card-back {
-    @apply bg-paper-aged shadow-card flex items-center justify-center;
+    @apply shadow-card flex items-center justify-center;
+    background: white;
     transform: rotateY(180deg);
     border: 2px solid hsl(var(--border));
   }
