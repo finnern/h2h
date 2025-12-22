@@ -5,10 +5,12 @@ import { TunerSection, TunerData } from "@/components/TunerSection";
 import { CardGrid } from "@/components/CardGrid";
 import { ConversionFooter } from "@/components/ConversionFooter";
 import { HeartbeatLine } from "@/components/HeartbeatLine";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Archetype } from "@/components/FlippableCard";
 
-// Generic (Universal) cards - always applicable
-const genericCards = [
+// Generic (Universal) cards - will be translated
+const getGenericCards = (t: (key: string) => string) => [
   {
     archetype: "hearts" as Archetype,
     questions: {
@@ -44,22 +46,64 @@ const genericCards = [
 ];
 
 // Generate personalized cards based on tuner input
-const generatePersonalizedCards = (data: TunerData) => {
+const generatePersonalizedCards = (data: TunerData, language: string) => {
   const { partnerA, partnerB, lifecycle, scientific, spiritual, culture } = data;
   
-  // Lifecycle modifiers
-  const lifecycleContext = {
+  // Lifecycle modifiers based on language
+  const lifecycleContext = language === "de" ? {
+    "fresh-spark": { focus: "Entdeckung und Hoffnungen", tone: "aufregende Möglichkeiten" },
+    "deep-groove": { focus: "tieferes Verständnis", tone: "gemeinsames Wachstum" },
+    "vintage-gold": { focus: "Wertschätzung und Geschichte", tone: "wertvolle Erinnerungen" },
+    "navigating-storms": { focus: "Heilung und Wiederverbindung", tone: "gemeinsamer Wiederaufbau" },
+  }[lifecycle] || { focus: "eure Reise", tone: "Verbindung" }
+  : {
     "fresh-spark": { focus: "discovery and hopes", tone: "exciting possibilities" },
     "deep-groove": { focus: "deepening understanding", tone: "growth together" },
     "vintage-gold": { focus: "appreciation and history", tone: "treasured memories" },
     "navigating-storms": { focus: "healing and reconnection", tone: "rebuilding together" },
   }[lifecycle] || { focus: "your journey", tone: "connection" };
 
-  // No preambles - questions only
   // Cultural touches
   const culturalNote = culture?.toLowerCase().includes("swabian") 
-    ? " (remembering our Kehrwoche wisdom)" 
+    ? language === "de" ? " (in Erinnerung an unsere Kehrwoche-Weisheit)" : " (remembering our Kehrwoche wisdom)" 
     : "";
+
+  if (language === "de") {
+    return [
+      {
+        archetype: "hearts" as Archetype,
+        questions: {
+          light: `${partnerA}, welche kleine Geste von ${partnerB} bringt dich in dein 'inneres Zuhause'?`,
+          deep: `Wie würde ${lifecycleContext.focus} in unseren verletzlichsten Momenten gemeinsam aussehen?`,
+        },
+        initialFlipped: false,
+      },
+      {
+        archetype: "clubs" as Archetype,
+        questions: {
+          light: `Welches gemeinsame Projekt könnten ${partnerA} und ${partnerB} diese Saison zusammen erschaffen?${culturalNote}`,
+          deep: `Bei ${lifecycleContext.tone}, welches Handwerk bauen wir mit unseren täglichen Handlungen?`,
+        },
+        initialFlipped: false,
+      },
+      {
+        archetype: "diamonds" as Archetype,
+        questions: {
+          light: `${partnerB}, welche 'Geld-Geschichte' hat dir deine Familie beigebracht, die heute noch nachklingt?`,
+          deep: `Mit ${lifecycleContext.focus}, welches Vermächtnis wollen ${partnerA} und ${partnerB} aufbauen?`,
+        },
+        initialFlipped: false,
+      },
+      {
+        archetype: "spades" as Archetype,
+        questions: {
+          light: `${partnerA}, welche Frage über die Zukunft zögerst du, ${partnerB} zu stellen?`,
+          deep: `In ${lifecycleContext.tone}, welche Weisheit sind wir bereit, gemeinsam anzunehmen?`,
+        },
+        initialFlipped: false,
+      },
+    ];
+  }
 
   return [
     {
@@ -98,10 +142,11 @@ const generatePersonalizedCards = (data: TunerData) => {
 };
 
 const Index = () => {
+  const { t, language } = useLanguage();
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [currentCards, setCurrentCards] = useState(genericCards);
+  const [currentCards, setCurrentCards] = useState(getGenericCards(t));
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
 
   const handleGenerate = useCallback(async (data: TunerData) => {
@@ -112,14 +157,14 @@ const Index = () => {
     // Build anticipation with 5-second delay - cards show archetype images
     await new Promise(resolve => setTimeout(resolve, 5000));
     
-    // Generate personalized cards - all face down (initialFlipped: false)
-    const newCards = generatePersonalizedCards(data);
+    // Generate personalized cards in selected language - all face down (initialFlipped: false)
+    const newCards = generatePersonalizedCards(data, language);
     setCurrentCards(newCards);
     setIsPersonalized(true);
     setIsShuffling(false);
     setShowHeartbeatAnimation(false);
     setIsGenerating(false);
-  }, []);
+  }, [language]);
 
   const handleFeedback = useCallback((archetype: Archetype, positive: boolean) => {
     console.log(`Feedback for ${archetype}: ${positive ? "positive" : "negative"}`);
@@ -129,13 +174,18 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Hertz an Hertz - The Sync Engine for Couples</title>
+        <title>Hertz an Hertz - {t("header.tagline")}</title>
         <meta name="description" content="A premium card game experience for couples. 52 cards for 52 date nights. Personalized questions to deepen your connection." />
       </Helmet>
 
       <div className="min-h-screen gradient-warm">
         {/* Hero Header */}
-        <header className="pt-8 pb-6 text-center px-4">
+        <header className="pt-8 pb-6 text-center px-4 relative">
+          {/* Language Toggle - Top Right */}
+          <div className="absolute top-4 right-4">
+            <LanguageToggle />
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,7 +195,7 @@ const Index = () => {
               Hertz an Hertz
             </h1>
             <p className="font-body text-xl md:text-2xl text-ink-light italic">
-              The Sync Engine for Couples
+              {t("header.tagline")}
             </p>
           </motion.div>
           
@@ -175,17 +225,17 @@ const Index = () => {
             <div className="text-center mb-8">
               <motion.h2
                 className="font-display text-3xl md:text-4xl text-ink"
-                key={isPersonalized ? "personalized" : "generic"}
+                key={`${isPersonalized}-${language}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                {isPersonalized ? "Your Personalized Deck" : "Sample the Experience"}
+                {isPersonalized ? t("cards.personalized") : t("cards.sample")}
               </motion.h2>
               <p className="font-body text-ink-light mt-2">
                 {isPersonalized 
-                  ? "Review your cards and share your feedback" 
-                  : "Click any card to flip and explore both sides"}
+                  ? t("cards.personalizedDesc")
+                  : t("cards.sampleDesc")}
               </p>
             </div>
 
