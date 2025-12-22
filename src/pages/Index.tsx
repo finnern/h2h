@@ -23,7 +23,7 @@ const getGenericCards = () => [
       light: "What is a small thing I do that makes you smile instantly?",
       deep: "What does your 'inner home' look like when you feel completely safe with me?",
     },
-    initialFlipped: false,
+    initialFlipped: false, // Index 0: Image
   },
   {
     archetype: "clubs" as Archetype,
@@ -31,7 +31,7 @@ const getGenericCards = () => [
       light: "If our relationship were a craft, what would it be?",
       deep: "As 'mindfulness is a craft', what is the one habit we should practice weekly?",
     },
-    initialFlipped: false,
+    initialFlipped: true, // Index 1: Text (checkerboard)
   },
   {
     archetype: "diamonds" as Archetype,
@@ -39,7 +39,7 @@ const getGenericCards = () => [
       light: "What was the 'Money Story' you heard most as a child?",
       deep: "What new 'Money Story' do you want us to write together?",
     },
-    initialFlipped: false,
+    initialFlipped: true, // Index 2: Text (checkerboard)
   },
   {
     archetype: "spades" as Archetype,
@@ -47,7 +47,7 @@ const getGenericCards = () => [
       light: "What is a question you are usually afraid to ask in relationships?",
       deep: "What do you fear would happen if you asked me that question right now?",
     },
-    initialFlipped: false,
+    initialFlipped: false, // Index 3: Image
   },
 ];
 
@@ -82,7 +82,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
           light: `${partnerA}, welche kleine Geste von ${partnerB} bringt dich in dein 'inneres Zuhause'?`,
           deep: `Wie würde ${lifecycleContext.focus} in unseren verletzlichsten Momenten gemeinsam aussehen?`,
         },
-        initialFlipped: false,
+        initialFlipped: false, // Index 0: Image
       },
       {
         archetype: "clubs" as Archetype,
@@ -90,7 +90,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
           light: `Welches gemeinsame Projekt könnten ${partnerA} und ${partnerB} diese Saison zusammen erschaffen?${culturalNote}`,
           deep: `Bei ${lifecycleContext.tone}, welches Handwerk bauen wir mit unseren täglichen Handlungen?`,
         },
-        initialFlipped: false,
+        initialFlipped: true, // Index 1: Text (checkerboard)
       },
       {
         archetype: "diamonds" as Archetype,
@@ -98,7 +98,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
           light: `${partnerB}, welche 'Geld-Geschichte' hat dir deine Familie beigebracht, die heute noch nachklingt?`,
           deep: `Mit ${lifecycleContext.focus}, welches Vermächtnis wollen ${partnerA} und ${partnerB} aufbauen?`,
         },
-        initialFlipped: false,
+        initialFlipped: true, // Index 2: Text (checkerboard)
       },
       {
         archetype: "spades" as Archetype,
@@ -106,7 +106,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
           light: `${partnerA}, welche Frage über die Zukunft zögerst du, ${partnerB} zu stellen?`,
           deep: `In ${lifecycleContext.tone}, welche Weisheit sind wir bereit, gemeinsam anzunehmen?`,
         },
-        initialFlipped: false,
+        initialFlipped: false, // Index 3: Image
       },
     ];
   }
@@ -118,7 +118,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         light: `${partnerA}, what small gesture from ${partnerB} brings you into your 'inner home'?`,
         deep: `What would ${lifecycleContext.focus} look like in our most vulnerable moments together?`,
       },
-      initialFlipped: false,
+      initialFlipped: false, // Index 0: Image
     },
     {
       archetype: "clubs" as Archetype,
@@ -126,7 +126,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         light: `What shared project could ${partnerA} and ${partnerB} create together this season?${culturalNote}`,
         deep: `As ${lifecycleContext.tone}, what craft are we building with our daily actions?`,
       },
-      initialFlipped: false,
+      initialFlipped: true, // Index 1: Text (checkerboard)
     },
     {
       archetype: "diamonds" as Archetype,
@@ -134,7 +134,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         light: `${partnerB}, what 'money story' did your family teach you that still echoes today?`,
         deep: `With ${lifecycleContext.focus}, what legacy do ${partnerA} and ${partnerB} want to build?`,
       },
-      initialFlipped: false,
+      initialFlipped: true, // Index 2: Text (checkerboard)
     },
     {
       archetype: "spades" as Archetype,
@@ -142,7 +142,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         light: `${partnerA}, what question about the future are you hesitant to ask ${partnerB}?`,
         deep: `In ${lifecycleContext.tone}, what wisdom are we ready to embrace together?`,
       },
-      initialFlipped: false,
+      initialFlipped: false, // Index 3: Image
     },
   ];
 };
