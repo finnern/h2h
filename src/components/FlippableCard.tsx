@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
-import { HeartbeatLine } from "./HeartbeatLine";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CARD_IMAGES, Archetype } from "@/constants/card-assets";
 
@@ -91,22 +90,11 @@ export const FlippableCard = ({
         <div className={`card-inner ${displayFlipped ? "flipped" : ""}`}>
           {/* Front of card - Archetype image (default visible state) */}
           <div className="card-face card-front bg-white">
-            <div className="flex flex-col items-center justify-between p-4 h-full w-full">
-              {/* Top heartbeat line */}
-              <HeartbeatLine className="w-full" />
-              
-              {/* Center archetype image */}
-              <div className="flex-1 flex items-center justify-center py-4">
-                <img
-                  src={CARD_IMAGES[archetype]}
-                  alt={config.name}
-                  className="max-h-[280px] w-auto object-contain"
-                />
-              </div>
-              
-              {/* Bottom heartbeat line */}
-              <HeartbeatLine className="w-full" />
-            </div>
+            <img
+              src={CARD_IMAGES[archetype]}
+              alt={config.name}
+              className="h-full w-full object-contain"
+            />
           </div>
 
           {/* Back of card - Questions (revealed on click) */}
@@ -126,8 +114,8 @@ export const FlippableCard = ({
                 {questions.light}
               </p>
               
-              {/* Heartbeat divider */}
-              <HeartbeatLine className="my-3" />
+              {/* Divider */}
+              <div className="w-full h-px bg-ink/20 my-3" />
               
               {/* Deep question - bold */}
               <p className="font-display text-xl md:text-2xl text-ink font-bold leading-relaxed">
