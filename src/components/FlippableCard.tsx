@@ -3,12 +3,9 @@ import { motion } from "framer-motion";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { HeartbeatLine } from "./HeartbeatLine";
 import { useLanguage } from "@/contexts/LanguageContext";
-import angelsArchetype from "@/assets/angels-archetype.png";
-import workersArchetype from "@/assets/workers-archetype.png";
-import kingsArchetype from "@/assets/kings-archetype.png";
-import eldersArchetype from "@/assets/elders-archetype.png";
+import { CARD_IMAGES, Archetype } from "@/constants/card-assets";
 
-export type Archetype = "hearts" | "clubs" | "diamonds" | "spades";
+export type { Archetype } from "@/constants/card-assets";
 
 interface CardQuestion {
   light: string;
@@ -28,31 +25,26 @@ const archetypeConfig: Record<Archetype, {
   name: string;
   theme: string;
   suit: string;
-  image: string;
 }> = {
   hearts: {
     name: "The Angels",
     theme: "Vulnerability & Inner Home",
     suit: "♥",
-    image: angelsArchetype,
   },
   clubs: {
     name: "The Workers",
     theme: "Action & Shared Projects",
     suit: "♣",
-    image: workersArchetype,
   },
   diamonds: {
     name: "The Kings",
     theme: "Values & Legacy",
     suit: "♦",
-    image: kingsArchetype,
   },
   spades: {
     name: "The Elders",
     theme: "Wisdom & Transitions",
     suit: "♠",
-    image: eldersArchetype,
   },
 };
 
@@ -106,7 +98,7 @@ export const FlippableCard = ({
               {/* Center archetype image */}
               <div className="flex-1 flex items-center justify-center py-4">
                 <img
-                  src={config.image}
+                  src={CARD_IMAGES[archetype]}
                   alt={config.name}
                   className="max-h-[280px] w-auto object-contain"
                 />
@@ -122,7 +114,7 @@ export const FlippableCard = ({
             {/* Small archetype image at top */}
             <div className="flex justify-start mb-2">
               <img
-                src={config.image}
+                src={CARD_IMAGES[archetype]}
                 alt={config.name}
                 className="h-16 w-auto object-contain"
               />
