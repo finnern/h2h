@@ -97,8 +97,28 @@ export const FlippableCard = ({
         } : {}}
       >
         <div className={`card-inner ${displayFlipped ? "flipped" : ""}`}>
-          {/* Front of card - Questions (with small archetype icon) */}
+          {/* Front of card - Archetype image (default visible state) */}
           <div className="card-face card-front bg-white">
+            <div className="flex flex-col items-center justify-between p-4 h-full w-full">
+              {/* Top heartbeat line */}
+              <HeartbeatLine className="w-full" />
+              
+              {/* Center archetype image */}
+              <div className="flex-1 flex items-center justify-center py-4">
+                <img
+                  src={config.image}
+                  alt={config.name}
+                  className="max-h-[280px] w-auto object-contain"
+                />
+              </div>
+              
+              {/* Bottom heartbeat line */}
+              <HeartbeatLine className="w-full" />
+            </div>
+          </div>
+
+          {/* Back of card - Questions (revealed on click) */}
+          <div className="card-face card-back bg-white">
             {/* Small archetype image at top */}
             <div className="flex justify-start mb-2">
               <img
@@ -131,26 +151,6 @@ export const FlippableCard = ({
               <p className="font-body text-sm text-ink-light mt-1">
                 {t("card.remember")}
               </p>
-            </div>
-          </div>
-
-          {/* Back of card - Full archetype image with heartbeat borders */}
-          <div className="card-face card-back bg-white">
-            <div className="flex flex-col items-center justify-between p-4 h-full w-full">
-              {/* Top heartbeat line */}
-              <HeartbeatLine className="w-full" />
-              
-              {/* Center archetype image */}
-              <div className="flex-1 flex items-center justify-center py-4">
-                <img
-                  src={config.image}
-                  alt={config.name}
-                  className="max-h-[220px] w-auto object-contain"
-                />
-              </div>
-              
-              {/* Bottom heartbeat line */}
-              <HeartbeatLine className="w-full" />
             </div>
           </div>
         </div>

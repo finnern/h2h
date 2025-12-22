@@ -67,6 +67,10 @@ const translations: Record<Language, Record<string, string>> = {
     "toast.reservedDesc": "You're on the priority list for the first batch.",
     "toast.joined": "You're on the list!",
     "toast.joinedDesc": "We'll notify you when Hertz an Hertz launches.",
+    
+    // Accordions
+    "accordion.about": "About / How to Play",
+    "accordion.tuner": "⚡️ Tune Frequency",
   },
   de: {
     // Header
@@ -126,6 +130,10 @@ const translations: Record<Language, Record<string, string>> = {
     "toast.reservedDesc": "Du bist auf der Prioritätsliste für die erste Auflage.",
     "toast.joined": "Du bist auf der Liste!",
     "toast.joinedDesc": "Wir benachrichtigen dich, wenn Hertz an Hertz startet.",
+    
+    // Accordions
+    "accordion.about": "Über / Spielanleitung",
+    "accordion.tuner": "⚡️ Frequenz Tunen",
   },
 };
 
