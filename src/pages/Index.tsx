@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { TunerSection, TunerData } from "@/components/TunerSection";
@@ -8,16 +8,22 @@ import { HeartbeatLine } from "@/components/HeartbeatLine";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Archetype } from "@/components/FlippableCard";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-// Generic (Universal) cards - will be translated
-const getGenericCards = (t: (key: string) => string) => [
+// Generic (Universal) cards - all start face down showing archetype images
+const getGenericCards = () => [
   {
     archetype: "hearts" as Archetype,
     questions: {
       light: "What is a small thing I do that makes you smile instantly?",
       deep: "What does your 'inner home' look like when you feel completely safe with me?",
     },
-    initialFlipped: true,
+    initialFlipped: false,
   },
   {
     archetype: "clubs" as Archetype,
@@ -41,7 +47,7 @@ const getGenericCards = (t: (key: string) => string) => [
       light: "What is a question you are usually afraid to ask in relationships?",
       deep: "What do you fear would happen if you asked me that question right now?",
     },
-    initialFlipped: true,
+    initialFlipped: false,
   },
 ];
 
@@ -146,13 +152,23 @@ const Index = () => {
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [currentCards, setCurrentCards] = useState(getGenericCards(t));
+  const [currentCards, setCurrentCards] = useState(getGenericCards());
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
+  const cardGridRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = useCallback(async (data: TunerData) => {
     setIsGenerating(true);
     setShowHeartbeatAnimation(true);
     setIsShuffling(true);
+    
+    // Close accordion and scroll to cards
+    setOpenAccordion(undefined);
+    
+    // Small delay to let accordion close, then scroll
+    setTimeout(() => {
+      cardGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 300);
     
     // Build anticipation with 5-second delay - cards show archetype images
     await new Promise(resolve => setTimeout(resolve, 5000));
@@ -179,26 +195,72 @@ const Index = () => {
       </Helmet>
 
       <div className="min-h-screen gradient-warm">
-        {/* Hero Header */}
-        <header className="pt-8 pb-6 text-center px-4 relative">
+        {/* Compact Header */}
+        <header className="pt-4 pb-2 text-center px-4 relative">
           {/* Language Toggle - Top Right */}
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-3 right-4">
             <LanguageToggle />
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: -30 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
-            <h1 className="font-display text-5xl md:text-7xl text-heartbeat mb-2">
+            <h1 className="font-display text-4xl md:text-5xl text-heartbeat mb-1">
               Hertz an Hertz
             </h1>
-            <p className="font-body text-xl md:text-2xl text-ink-light italic">
+            <p className="font-body text-lg md:text-xl text-ink-light italic">
               {t("header.tagline")}
             </p>
           </motion.div>
-          
+        </header>
+
+        <main className="pb-8 px-4">
+          {/* Collapsible Accordions */}
+          <Accordion 
+            type="single" 
+            collapsible
+            value={openAccordion}
+            onValueChange={setOpenAccordion}
+            className="max-w-4xl mx-auto mb-4"
+          >
+            {/* About / How to Play - collapsed by default */}
+            <AccordionItem value="about" className="border border-border rounded-lg mb-2 bg-card/50">
+              <AccordionTrigger className="px-4 py-3 font-body text-ink hover:no-underline">
+                {t("accordion.about")}
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-4">
+                <div className="font-body text-ink-light space-y-3">
+                  <p>
+                    {language === "de" 
+                      ? "Hertz an Hertz ist ein Kartenspiel für Paare, das tiefere Gespräche und Verbindung fördert."
+                      : "Hertz an Hertz is a card game for couples that fosters deeper conversations and connection."}
+                  </p>
+                  <p className="font-semibold text-ink">
+                    {language === "de" ? "Die vier Archetypen:" : "The Four Archetypes:"}
+                  </p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>♥ {language === "de" ? "Engel – Verletzlichkeit & Inneres Zuhause" : "Angels – Vulnerability & Inner Home"}</li>
+                    <li>♣ {language === "de" ? "Arbeiter – Aktion & Gemeinsame Projekte" : "Workers – Action & Shared Projects"}</li>
+                    <li>♦ {language === "de" ? "Könige – Werte & Vermächtnis" : "Kings – Values & Legacy"}</li>
+                    <li>♠ {language === "de" ? "Älteste – Weisheit & Übergänge" : "Elders – Wisdom & Transitions"}</li>
+                  </ul>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Tuner - collapsed by default */}
+            <AccordionItem value="tuner" className="border-2 border-primary/30 rounded-lg bg-card">
+              <AccordionTrigger className="px-4 py-3 font-display text-lg text-ink hover:no-underline font-semibold">
+                {t("accordion.tuner")}
+              </AccordionTrigger>
+              <AccordionContent className="px-0 pb-0">
+                <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
           {/* Animated heartbeat line on generation */}
           <AnimatePresence>
             {showHeartbeatAnimation && (
@@ -206,25 +268,18 @@ const Index = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="mt-6 max-w-2xl mx-auto"
+                className="max-w-2xl mx-auto mb-4"
               >
                 <HeartbeatLine animated />
               </motion.div>
             )}
           </AnimatePresence>
-        </header>
 
-        <main className="pb-8">
-          {/* Section A: The Tuner */}
-          <section className="mb-12">
-            <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
-          </section>
-
-          {/* Section B: The Card Grid */}
-          <section className="py-8">
-            <div className="text-center mb-8">
+          {/* Section B: The Card Grid - visible immediately */}
+          <section ref={cardGridRef} className="py-4">
+            <div className="text-center mb-4">
               <motion.h2
-                className="font-display text-3xl md:text-4xl text-ink"
+                className="font-display text-2xl md:text-3xl text-ink"
                 key={`${isPersonalized}-${language}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -232,7 +287,7 @@ const Index = () => {
               >
                 {isPersonalized ? t("cards.personalized") : t("cards.sample")}
               </motion.h2>
-              <p className="font-body text-ink-light mt-2">
+              <p className="font-body text-sm text-ink-light mt-1">
                 {isPersonalized 
                   ? t("cards.personalizedDesc")
                   : t("cards.sampleDesc")}

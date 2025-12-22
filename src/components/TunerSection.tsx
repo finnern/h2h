@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { HeartbeatLine } from "./HeartbeatLine";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface TunerData {
@@ -59,25 +57,8 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
   const isFormValid = formData.partnerA && formData.partnerB && formData.lifecycle;
 
   return (
-    <motion.section
-      className="w-full max-w-4xl mx-auto px-4"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
-      <div className="bg-card rounded-2xl shadow-card p-6 md:p-8 border border-border">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="font-display text-4xl md:text-5xl text-ink mb-2">
-            {t("tuner.title")}
-          </h2>
-          <p className="font-body text-lg text-ink-light italic">
-            {t("tuner.subtitle")}
-          </p>
-          <HeartbeatLine className="mt-4 max-w-md mx-auto opacity-50" />
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="p-4 md:p-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
           {/* Names row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -221,8 +202,7 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
               )}
             </Button>
           </div>
-        </form>
-      </div>
-    </motion.section>
+      </form>
+    </div>
   );
 };
