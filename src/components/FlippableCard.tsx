@@ -103,21 +103,21 @@ export const FlippableCard = ({
             <img
               src={CARD_IMAGES[archetype]}
               alt={config.name}
-              className="h-14 w-auto object-contain mb-3"
+              className="w-16 h-16 object-contain mb-4"
             />
 
             {/* Questions container */}
-            <div className="flex-1 flex flex-col items-center justify-center gap-4">
+            <div className="flex-1 flex flex-col items-center justify-center gap-5">
               {/* Light question */}
-              <p className="font-display text-lg md:text-xl text-ink leading-relaxed">
+              <p className="font-display text-xl md:text-2xl text-ink leading-relaxed">
                 {questions.light}
               </p>
               
               {/* Divider */}
-              <div className="w-16 h-px bg-ink/20" />
+              <div className="w-20 h-px bg-ink/20" />
               
               {/* Deep question - bold */}
-              <p className="font-display text-lg md:text-xl text-ink font-bold leading-relaxed">
+              <p className="font-display text-xl md:text-2xl text-ink font-bold leading-relaxed">
                 {questions.deep}
               </p>
             </div>
