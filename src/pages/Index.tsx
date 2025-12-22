@@ -55,10 +55,7 @@ const generatePersonalizedCards = (data: TunerData) => {
     "navigating-storms": { focus: "healing and reconnection", tone: "rebuilding together" },
   }[lifecycle] || { focus: "your journey", tone: "connection" };
 
-  // Tone modifiers
-  const tonePrefix = scientific ? "From a regulation perspective, " : 
-                     spiritual ? "When we align our energies, " : "";
-
+  // No preambles - questions only
   // Cultural touches
   const culturalNote = culture?.toLowerCase().includes("swabian") 
     ? " (remembering our Kehrwoche wisdom)" 
@@ -69,7 +66,7 @@ const generatePersonalizedCards = (data: TunerData) => {
       archetype: "hearts" as Archetype,
       questions: {
         light: `${partnerA}, what small gesture from ${partnerB} brings you into your 'inner home'?`,
-        deep: `${tonePrefix}What would ${lifecycleContext.focus} look like in our most vulnerable moments together?`,
+        deep: `What would ${lifecycleContext.focus} look like in our most vulnerable moments together?`,
       },
       initialFlipped: false,
     },
@@ -77,7 +74,7 @@ const generatePersonalizedCards = (data: TunerData) => {
       archetype: "clubs" as Archetype,
       questions: {
         light: `What shared project could ${partnerA} and ${partnerB} create together this season?${culturalNote}`,
-        deep: `${tonePrefix}As ${lifecycleContext.tone}, what craft are we building with our daily actions?`,
+        deep: `As ${lifecycleContext.tone}, what craft are we building with our daily actions?`,
       },
       initialFlipped: false,
     },
@@ -85,7 +82,7 @@ const generatePersonalizedCards = (data: TunerData) => {
       archetype: "diamonds" as Archetype,
       questions: {
         light: `${partnerB}, what 'money story' did your family teach you that still echoes today?`,
-        deep: `${tonePrefix}With ${lifecycleContext.focus}, what legacy do ${partnerA} and ${partnerB} want to build?`,
+        deep: `With ${lifecycleContext.focus}, what legacy do ${partnerA} and ${partnerB} want to build?`,
       },
       initialFlipped: false,
     },
@@ -93,7 +90,7 @@ const generatePersonalizedCards = (data: TunerData) => {
       archetype: "spades" as Archetype,
       questions: {
         light: `${partnerA}, what question about the future are you hesitant to ask ${partnerB}?`,
-        deep: `${tonePrefix}In ${lifecycleContext.tone}, what wisdom are we ready to embrace together?`,
+        deep: `In ${lifecycleContext.tone}, what wisdom are we ready to embrace together?`,
       },
       initialFlipped: false,
     },
@@ -110,14 +107,12 @@ const Index = () => {
   const handleGenerate = useCallback(async (data: TunerData) => {
     setIsGenerating(true);
     setShowHeartbeatAnimation(true);
-    
-    // Simulate generation delay with shuffle animation
-    await new Promise(resolve => setTimeout(resolve, 800));
     setIsShuffling(true);
     
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    // Build anticipation with 3-second delay
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
-    // Generate personalized cards
+    // Generate personalized cards - all face down (initialFlipped: false)
     const newCards = generatePersonalizedCards(data);
     setCurrentCards(newCards);
     setIsPersonalized(true);
