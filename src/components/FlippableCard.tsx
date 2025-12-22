@@ -98,37 +98,36 @@ export const FlippableCard = ({
           </div>
 
           {/* Back of card - Questions (revealed on click) */}
-          <div className="card-face card-back bg-white">
+          <div className="card-face card-back bg-white flex flex-col items-center justify-between text-center px-5 py-6">
             {/* Small archetype image at top */}
-            <div className="flex justify-start mb-2">
-              <img
-                src={CARD_IMAGES[archetype]}
-                alt={config.name}
-                className="h-16 w-auto object-contain"
-              />
-            </div>
+            <img
+              src={CARD_IMAGES[archetype]}
+              alt={config.name}
+              className="h-14 w-auto object-contain mb-3"
+            />
 
-            {/* Light question */}
-            <div className="flex-1 flex flex-col">
-              <p className="font-display text-xl md:text-2xl text-ink leading-relaxed mb-3">
+            {/* Questions container */}
+            <div className="flex-1 flex flex-col items-center justify-center gap-4">
+              {/* Light question */}
+              <p className="font-display text-lg md:text-xl text-ink leading-relaxed">
                 {questions.light}
               </p>
               
               {/* Divider */}
-              <div className="w-full h-px bg-ink/20 my-3" />
+              <div className="w-16 h-px bg-ink/20" />
               
               {/* Deep question - bold */}
-              <p className="font-display text-xl md:text-2xl text-ink font-bold leading-relaxed">
+              <p className="font-display text-lg md:text-xl text-ink font-bold leading-relaxed">
                 {questions.deep}
               </p>
             </div>
 
             {/* Footer */}
-            <div className="mt-auto pt-4">
-              <p className="font-display text-lg text-ink">
+            <div className="mt-4 pt-3 border-t border-ink/10 w-full">
+              <p className="font-display text-sm text-ink">
                 {t("card.passOk")}
               </p>
-              <p className="font-body text-sm text-ink-light mt-1">
+              <p className="font-body text-xs text-ink-light mt-1 italic">
                 {t("card.remember")}
               </p>
             </div>

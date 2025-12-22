@@ -45,7 +45,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Card Footer
     "card.passOk": "Pass/Not today is OK.",
-    "card.remember": "End with: 'What should I remember from this?'",
+    "card.remember": "What do we want to remember from this?",
     
     // Conversion Footer
     "footer.sampleTitle": "This was just a 4-card sample",
@@ -108,7 +108,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Card Footer
     "card.passOk": "Passen/Nicht heute ist OK.",
-    "card.remember": "Ende mit: 'Was soll ich mir merken?'",
+    "card.remember": "Was wollen wir uns davon merken?",
     
     // Conversion Footer
     "footer.sampleTitle": "Das war nur ein 4-Karten-Sample",
