@@ -2,8 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { HeartbeatLine } from "./HeartbeatLine";
-
-// Import archetype images
+import { useLanguage } from "@/contexts/LanguageContext";
 import angelsArchetype from "@/assets/angels-archetype.png";
 import workersArchetype from "@/assets/workers-archetype.png";
 import kingsArchetype from "@/assets/kings-archetype.png";
@@ -65,6 +64,7 @@ export const FlippableCard = ({
   onFeedback,
   isShuffling = false,
 }: FlippableCardProps) => {
+  const { t } = useLanguage();
   const [isFlipped, setIsFlipped] = useState(initialFlipped);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   
@@ -126,10 +126,10 @@ export const FlippableCard = ({
             {/* Footer */}
             <div className="mt-auto pt-4">
               <p className="font-display text-lg text-ink">
-                Pass/Not today is OK.
+                {t("card.passOk")}
               </p>
               <p className="font-body text-sm text-ink-light mt-1">
-                End with: 'Was soll ich mir merken?'
+                {t("card.remember")}
               </p>
             </div>
           </div>

@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HeartbeatLine } from "./HeartbeatLine";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ConversionFooterProps {
   isVisible: boolean;
 }
 
 export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [isReserved, setIsReserved] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
@@ -19,8 +21,8 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
     // Simulate reservation - in real app, would integrate with payment
     setIsReserved(true);
     toast({
-      title: "Reserved! 🎉",
-      description: "You're on the priority list for the first batch.",
+      title: t("toast.reserved"),
+      description: t("toast.reservedDesc"),
     });
   };
 
@@ -29,8 +31,8 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
     if (email) {
       setIsJoined(true);
       toast({
-        title: "You're on the list!",
-        description: "We'll notify you when Hertz an Hertz launches.",
+        title: t("toast.joined"),
+        description: t("toast.joinedDesc"),
       });
     }
   };
@@ -58,12 +60,19 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
             <Heart className="w-12 h-12 text-heartbeat mx-auto mb-4" />
           </motion.div>
           <h2 className="font-display text-3xl md:text-4xl text-ink mb-4">
-            This was just a 4-card sample
+            {t("footer.sampleTitle")}
           </h2>
           <p className="font-body text-xl text-ink-light max-w-2xl mx-auto leading-relaxed">
-            The full ritual is <span className="font-semibold text-ink">52 cards</span>—one 
-            for every date night of the year. A premium physical deck, personalized to your 
-            journey together.
+            {t("footer.sampleDesc").split(t("footer.cards")).map((part, i, arr) => (
+              i < arr.length - 1 ? (
+                <span key={i}>
+                  {part}
+                  <span className="font-semibold text-ink">{t("footer.cards")}</span>
+                </span>
+              ) : (
+                <span key={i}>{part}</span>
+              )
+            ))}
           </p>
         </div>
 
@@ -80,10 +89,10 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
                 <CreditCard className="w-7 h-7 text-primary" />
               </div>
               <h3 className="font-display text-2xl text-ink mb-2">
-                Reserve First Batch
+                {t("footer.reserveTitle")}
               </h3>
               <p className="font-body text-ink-light mb-4">
-                €5 Priority Down Payment
+                {t("footer.reservePrice")}
               </p>
               <Button
                 onClick={handleReserve}
@@ -93,14 +102,14 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
                 {isReserved ? (
                   <>
                     <Check className="mr-2 h-5 w-5" />
-                    Reserved!
+                    {t("footer.reserved")}
                   </>
                 ) : (
-                  "Secure My Deck"
+                  t("footer.secureBtn")
                 )}
               </Button>
               <p className="font-body text-xs text-muted-foreground mt-3">
-                VIP access to launch & exclusive content
+                {t("footer.vipAccess")}
               </p>
             </div>
           </motion.div>
@@ -116,21 +125,21 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
                 <Mail className="w-7 h-7 text-secondary-foreground" />
               </div>
               <h3 className="font-display text-2xl text-ink mb-2">
-                Notify Me
+                {t("footer.notifyTitle")}
               </h3>
               <p className="font-body text-ink-light mb-4">
-                Join the waitlist for updates
+                {t("footer.notifyDesc")}
               </p>
               {isJoined ? (
                 <div className="flex items-center justify-center gap-2 py-3 text-primary">
                   <Check className="h-5 w-5" />
-                  <span className="font-display text-lg">You're on the list!</span>
+                  <span className="font-display text-lg">{t("footer.onList")}</span>
                 </div>
               ) : (
                 <form onSubmit={handleJoinWaitlist} className="space-y-3">
                   <Input
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder={t("footer.emailPlaceholder")}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="font-body bg-paper border-border text-center"
@@ -141,7 +150,7 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
                     variant="outline"
                     className="w-full font-display text-lg py-5 border-border hover:bg-secondary"
                   >
-                    Join Waitlist
+                    {t("footer.joinWaitlist")}
                   </Button>
                 </form>
               )}
@@ -155,7 +164,7 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
             Hertz an Hertz
           </p>
           <p className="font-body text-sm text-muted-foreground mt-2 italic">
-            The Sync Engine for Couples
+            {t("header.tagline")}
           </p>
         </div>
       </div>
