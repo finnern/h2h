@@ -69,6 +69,9 @@ export const FlippableCard = ({
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   
   const config = archetypeConfig[archetype];
+  
+  // During shuffling, show the archetype images (back of card = not flipped)
+  const displayFlipped = isShuffling ? false : isFlipped;
 
   const handleFeedback = (positive: boolean, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -80,19 +83,20 @@ export const FlippableCard = ({
     <div className="flex flex-col items-center gap-3">
       <motion.div
         className="playing-card w-full max-w-[320px] cursor-pointer"
-        onClick={() => setIsFlipped(!isFlipped)}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        onClick={() => !isShuffling && setIsFlipped(!isFlipped)}
+        whileHover={isShuffling ? {} : { scale: 1.02 }}
+        whileTap={isShuffling ? {} : { scale: 0.98 }}
         animate={isShuffling ? {
-          rotateY: [0, 180, 360],
-          y: [0, -20, 0],
+          y: [0, -15, 0, -10, 0],
+          rotate: [0, -2, 2, -1, 0],
         } : {}}
         transition={isShuffling ? {
-          duration: 0.8,
+          duration: 1.2,
+          repeat: Infinity,
           ease: "easeInOut",
         } : {}}
       >
-        <div className={`card-inner ${isFlipped ? "flipped" : ""}`}>
+        <div className={`card-inner ${displayFlipped ? "flipped" : ""}`}>
           {/* Front of card - Questions (with small archetype icon) */}
           <div className="card-face card-front bg-white">
             {/* Small archetype image at top */}

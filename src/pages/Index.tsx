@@ -109,14 +109,15 @@ const Index = () => {
     setShowHeartbeatAnimation(true);
     setIsShuffling(true);
     
-    // Build anticipation with 3-second delay
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // Build anticipation with 5-second delay - cards show archetype images
+    await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Generate personalized cards - all face down (initialFlipped: false)
     const newCards = generatePersonalizedCards(data);
     setCurrentCards(newCards);
     setIsPersonalized(true);
     setIsShuffling(false);
+    setShowHeartbeatAnimation(false);
     setIsGenerating(false);
   }, []);
 
