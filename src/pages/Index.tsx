@@ -258,8 +258,8 @@ const Index = () => {
     <div className="font-body text-ink-light space-y-4 leading-relaxed">
       <p className="italic text-ink/80">
         {language === "de"
-          ? "Beziehungen leben von Resonanz. Doch im Alltag verlieren wir oft unseren gemeinsamen Takt. Dieses Spiel ist euer Stimmgerät."
-          : "Relationships live on resonance. But in daily life, we often lose our shared rhythm. This game is your tuning fork."}
+          ? "Beziehungen leben von Resonanz. Doch im Alltag verlieren wir oft unseren gemeinsamen Takt. Diese Karten sind euer Stimmgabel."
+          : "Relationships live on resonance. But in daily life, we often lose our shared rhythm. These cards are your tuning forks."}
       </p>
 
       <p className="font-semibold text-heartbeat text-sm uppercase tracking-wide mt-4">
