@@ -245,40 +245,96 @@ const Index = () => {
             className="max-w-4xl mx-auto mb-4"
           >
             {/* About / How to Play - collapsed by default */}
-            <AccordionItem value="about" className="border border-border rounded-lg mb-2 bg-card/50">
-              <AccordionTrigger className="px-4 py-3 font-body text-ink hover:no-underline">
-                {t("accordion.about")}
-              </AccordionTrigger>
-              <AccordionContent className="px-4 pb-4">
-                <div className="font-body text-ink-light space-y-3">
-                  <p>
-                    {language === "de" 
-                      ? "Hertz an Hertz ist ein Kartenspiel für Paare, das tiefere Gespräche und Verbindung fördert."
-                      : "Hertz an Hertz is a card game for couples that fosters deeper conversations and connection."}
-                  </p>
-                  <p className="font-semibold text-ink">
-                    {language === "de" ? "Die vier Archetypen:" : "The Four Archetypes:"}
-                  </p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>♥ {language === "de" ? "Engel – Verletzlichkeit & Inneres Zuhause" : "Angels – Vulnerability & Inner Home"}</li>
-                    <li>♣ {language === "de" ? "Arbeiter – Aktion & Gemeinsame Projekte" : "Workers – Action & Shared Projects"}</li>
-                    <li>♦ {language === "de" ? "Könige – Werte & Vermächtnis" : "Kings – Values & Legacy"}</li>
-                    <li>♠ {language === "de" ? "Älteste – Weisheit & Übergänge" : "Elders – Wisdom & Transitions"}</li>
-                  </ul>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+            
+            
+            {/* Start des Bereichs "Über / Philosophie" */}
+<AccordionItem value="about" className="border border-border rounded-lg mb-2 bg-card/50">
+  <AccordionTrigger className="px-4 py-3 font-body text-ink hover:no-underline">
+    {/* Hier ändern wir den Titel auch leicht, damit es besser passt, oder lassen es beim Standard */}
+    {language === "de" ? "Philosophie & Anleitung" : "Philosophy & How to Play"}
+  </AccordionTrigger>
+  
+  <AccordionContent className="px-4 pb-4">
+    <div className="font-body text-ink-light space-y-4 leading-relaxed">
+      <p className="italic text-ink/80">
+        {language === "de"
+          ? "Beziehungen leben von Resonanz. Doch im Alltag verlieren wir oft unseren gemeinsamen Takt. Dieses Spiel ist euer Stimmgerät."
+          : "Relationships live on resonance. But in daily life, we often lose our shared rhythm. This game is your tuning fork."}
+      </p>
 
-            {/* Tuner - collapsed by default */}
-            <AccordionItem value="tuner" className="border-2 border-primary/30 rounded-lg bg-card">
-              <AccordionTrigger className="px-4 py-3 font-display text-lg text-ink hover:no-underline font-semibold">
-                {t("accordion.tuner")}
-              </AccordionTrigger>
-              <AccordionContent className="px-0 pb-0">
-                <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+      <p className="font-semibold text-heartbeat text-sm uppercase tracking-wide mt-4">
+        {language === "de" ? "Die vier Wegweiser:" : "The Four Guides:"}
+      </p>
+
+      <ul className="space-y-3 mt-2">
+        <li className="flex gap-3 items-start">
+          <span className="text-xl shrink-0">♥️</span>
+          <span>
+            {language === "de" ? (
+              <>
+                <strong className="text-ink">Der Engel (Verletzlichkeit):</strong> Öffnet das „innere Zuhause“, in dem wir die Waffen fallen lassen.
+              </>
+            ) : (
+              <>
+                <strong className="text-ink">The Angel (Vulnerability):</strong> Opens the "inner home" where we can drop our defenses.
+              </>
+            )}
+          </span>
+        </li>
+
+        <li className="flex gap-3 items-start">
+          <span className="text-xl shrink-0">♣️</span>
+          <span>
+            {language === "de" ? (
+              <>
+                <strong className="text-ink">Der Arbeiter (Tatkraft):</strong> Erinnert uns daran: Liebe ist ein Verb und zeigt sich im gemeinsamen Tun.
+              </>
+            ) : (
+              <>
+                <strong className="text-ink">The Worker (Action):</strong> Reminds us: Love is a verb, proven in shared doing.
+              </>
+            )}
+          </span>
+        </li>
+
+        <li className="flex gap-3 items-start">
+          <span className="text-xl shrink-0">♦️</span>
+          <span>
+            {language === "de" ? (
+              <>
+                <strong className="text-ink">Der König (Werte):</strong> Fragt uns: Welches Königreich und welches Vermächtnis bauen wir auf?
+              </>
+            ) : (
+              <>
+                <strong className="text-ink">The King (Values):</strong> Asks us: What kingdom and legacy are we building together?
+              </>
+            )}
+          </span>
+        </li>
+
+        <li className="flex gap-3 items-start">
+          <span className="text-xl shrink-0">♠️</span>
+          <span>
+            {language === "de" ? (
+              <>
+                <strong className="text-ink">Der Älteste (Weisheit):</strong> Hilft uns, Stürme zu navigieren und an Veränderungen zu wachsen.
+              </>
+            ) : (
+              <>
+                <strong className="text-ink">The Elder (Wisdom):</strong> Helps us navigate storms and grow through transitions.
+              </>
+            )}
+          </span>
+        </li>
+      </ul>
+    </div>
+  </AccordionContent>
+</AccordionItem>
+{/* Ende des Bereichs */}
+            
+    
+            
+              </Accordion>
 
           {/* Animated heartbeat line on generation */}
           <AnimatePresence>
@@ -319,7 +375,7 @@ const Index = () => {
               isShuffling={isShuffling}
               onFeedback={handleFeedback}
             />
-          </section>
+          </section>Ï
 
           {/* Conversion Footer - appears after personalization */}
           <ConversionFooter isVisible={isPersonalized} />
