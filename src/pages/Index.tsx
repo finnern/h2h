@@ -307,25 +307,7 @@ const Index = () => {
                 {isPersonalized ? t("cards.personalized") : t("cards.sample")}
               </motion.h2>
               <p className="font-body text-sm text-ink-light mt-1">
-                {isPersonalized {/* --- NEUER INTRO TEXT START (Hier einfügen) --- */}
-        <div className="text-center max-w-2xl mx-auto mb-6 mt-2 space-y-2 animate-fade-in">
-          <p className="font-body text-ink/80 text-base md:text-lg leading-relaxed">
-            {language === "de" ? (
-              <>
-                Jede Liebe hat ihre eigene Frequenz. Spüren Sie Ihre?<br />
-                Drehen Sie die Karten unten um für einen ersten Funken. Wenn Sie bereit für die ganze Magie sind: <br className="hidden md:block" />
-                Öffnen Sie den <span className="font-semibold text-heartbeat">Tuner</span> und lassen Sie Ihr ganz persönliches Deck entstehen.
-              </>
-            ) : (
-              <>
-                Every love has its own frequency. Can you feel yours?<br />
-                Flip the cards below for a first spark. When you're ready for the real magic: <br className="hidden md:block" />
-                Open the <span className="font-semibold text-heartbeat">Tuner</span> and generate a deck that tells your unique story.
-              </>
-            )}
-          </p>
-        </div>
-        {/* --- NEUER INTRO TEXT ENDE --- */}
+                {isPersonalized 
                   ? t("cards.personalizedDesc")
                   : t("cards.sampleDesc")}
               </p>
