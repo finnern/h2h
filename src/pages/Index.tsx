@@ -217,27 +217,24 @@ const Index = () => {
         </header>
 
         <main className="pb-8 px-4">
-          {/* --- NEUER INTRO TEXT START (Hier einfügen) --- */}
-        <div className="text-center max-w-2xl mx-auto mb-6 mt-2 space-y-2 animate-fade-in">
-          <p className="font-body text-ink/80 text-base md:text-lg leading-relaxed">
-            {language === "de" ? (
-              <>
-                Jede Liebe hat ihre eigene Frequenz. Spüren Sie Ihre?<br />
-                Drehen Sie die Karten unten um für einen ersten Funken. Wenn Sie bereit für die ganze Magie sind: <br className="hidden md:block" />
-                Öffnen Sie den <span className="font-semibold text-heartbeat">Tuner</span> und lassen Sie Ihr ganz persönliches Deck entstehen.
-              </>
-            ) : (
-              <>
-                Every love has its own frequency. Can you feel yours?<br />
-                Flip the cards below for a first spark. When you're ready for the real magic: <br className="hidden md:block" />
-                Open the <span className="font-semibold text-heartbeat">Tuner</span> and generate a deck that tells your unique story.
-              </>
-            )}
-          </p>
-        </div>
-        {/* --- NEUER INTRO TEXT ENDE --- */}
-
-
+          {/* --- NEUER INTRO TEXT --- */}
+          <div className="text-center max-w-2xl mx-auto mb-6 mt-2 space-y-2 animate-fade-in">
+            <p className="font-body text-ink/80 text-base md:text-lg leading-relaxed">
+              {language === "de" ? (
+                <>
+                  Jede Liebe hat ihre eigene Frequenz. Spüren Sie Ihre?<br />
+                  Drehen Sie die Karten unten um für einen ersten Funken. Wenn Sie bereit für die ganze Magie sind: <br className="hidden md:block" />
+                  Öffnen Sie den <span className="font-semibold text-heartbeat">Tuner</span> und lassen Sie Ihr ganz persönliches Deck entstehen.
+                </>
+              ) : (
+                <>
+                  Every love has its own frequency. Can you feel yours?<br />
+                  Flip the cards below for a first spark. When you're ready for the real magic: <br className="hidden md:block" />
+                  Open the <span className="font-semibold text-heartbeat">Tuner</span> and generate a deck that tells your unique story.
+                </>
+              )}
+            </p>
+          </div>
 
           {/* Collapsible Accordions */}
           <Accordion 
@@ -326,7 +323,7 @@ const Index = () => {
               </AccordionContent>
             </AccordionItem>
 
-            {/* 2. Tuner Section (DAS HAT GEFEHLT) */}
+            {/* 2. Tuner Section */}
             <AccordionItem value="tuner" className="border-2 border-primary/30 rounded-lg bg-card">
               <AccordionTrigger className="px-4 py-3 font-display text-lg text-ink hover:no-underline font-semibold">
                 {t("accordion.tuner")}
@@ -335,12 +332,7 @@ const Index = () => {
                 <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
               </AccordionContent>
             </AccordionItem>
-
           </Accordion>
-                   
-{/* Ende des Bereichs */}
-            
-
 
           {/* Animated heartbeat line on generation */}
           <AnimatePresence>
@@ -381,7 +373,7 @@ const Index = () => {
               isShuffling={isShuffling}
               onFeedback={handleFeedback}
             />
-          </section>Ï
+          </section>
 
           {/* Conversion Footer - appears after personalization */}
           <ConversionFooter isVisible={isPersonalized} />
