@@ -22,6 +22,7 @@ export interface TunerData {
   culture: string;
   context: string;
   additionalInsights?: string;
+  historyOptIn: boolean;
 }
 
 interface TunerSectionProps {
@@ -47,6 +48,7 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
     spiritual: false,
     culture: "",
     context: "",
+    historyOptIn: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -180,6 +182,24 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
               onChange={(e) => setFormData({ ...formData, additionalInsights: e.target.value })}
               className="w-full min-h-[100px] p-3 font-body bg-paper border border-border rounded-md focus:ring-2 focus:ring-primary focus:outline-none resize-y"
             />
+          </div>
+
+          {/* History Opt-In Checkbox */}
+          <div className="flex items-start space-x-3 p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <Checkbox
+              id="historyOptIn"
+              checked={formData.historyOptIn}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, historyOptIn: checked as boolean })
+              }
+              className="mt-0.5"
+            />
+            <Label 
+              htmlFor="historyOptIn" 
+              className="font-body text-ink-light cursor-pointer leading-relaxed text-sm"
+            >
+              {t("tuner.historyOptIn")}
+            </Label>
           </div>
 
           {/* Generate button */}
