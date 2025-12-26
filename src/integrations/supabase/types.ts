@@ -14,7 +14,109 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      memories: {
+        Row: {
+          constraints: string | null
+          core_events: string | null
+          created_at: string
+          id: string
+          profile_id: string
+          shared_values: string | null
+          updated_at: string
+        }
+        Insert: {
+          constraints?: string | null
+          core_events?: string | null
+          created_at?: string
+          id?: string
+          profile_id: string
+          shared_values?: string | null
+          updated_at?: string
+        }
+        Update: {
+          constraints?: string | null
+          core_events?: string | null
+          created_at?: string
+          id?: string
+          profile_id?: string
+          shared_values?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memories_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          anniversary: string | null
+          couple_names: string | null
+          created_at: string
+          history_opt_in: boolean
+          id: string
+          session_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          anniversary?: string | null
+          couple_names?: string | null
+          created_at?: string
+          history_opt_in?: boolean
+          id?: string
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          anniversary?: string | null
+          couple_names?: string | null
+          created_at?: string
+          history_opt_in?: boolean
+          id?: string
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
