@@ -98,11 +98,16 @@ export const useProfileData = () => {
       if (triggerError) {
         console.error('Trigger production error:', triggerError);
         // Non-blocking - the local generation can still work
-      } else {
-        console.log('Production triggered:', triggerData);
+        return { profile, triggerData: null };
       }
 
-      return { profile, triggerData };
+      console.log('Production triggered:', triggerData);
+
+      // n8n returns { success: true, data: { cards: [...] } }
+      // Extract cards directly - response is already parsed JSON
+      const n8nCards = triggerData?.data?.cards || null;
+      
+      return { profile, triggerData, n8nCards };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An error occurred';
       setError(message);

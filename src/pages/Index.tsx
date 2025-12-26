@@ -173,9 +173,10 @@ const Index = () => {
       cardGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 300);
 
-    // Save to Supabase and trigger n8n in background (non-blocking)
+    // Save to Supabase and trigger n8n - wait for response
+    let n8nCards = null;
     try {
-      await saveProfileAndTriggerProduction(
+      const result = await saveProfileAndTriggerProduction(
         {
           coupleNames: `${data.partnerA} & ${data.partnerB}`,
           historyOptIn: data.historyOptIn,
@@ -198,17 +199,36 @@ const Index = () => {
         }
       );
       console.log('Profile saved and production triggered');
+      n8nCards = result?.n8nCards;
     } catch (error) {
       console.error('Background save/trigger failed:', error);
       // Non-blocking - continue with local generation
     }
     
-    // Build anticipation with 5-second delay - cards show archetype images
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // Build anticipation with 3-second delay - cards show archetype images
+    await new Promise(resolve => setTimeout(resolve, 3000));
     
-    // Generate personalized cards in selected language - all face down (initialFlipped: false)
-    const newCards = generatePersonalizedCards(data, language);
-    setCurrentCards(newCards);
+    // Use n8n cards if available, otherwise fall back to local generation
+    if (n8nCards && Array.isArray(n8nCards) && n8nCards.length > 0) {
+      console.log('Using n8n generated cards:', n8nCards);
+      // Map n8n cards to our card format
+      const archetypes: Archetype[] = ["hearts", "clubs", "diamonds", "spades"];
+      const mappedCards = n8nCards.slice(0, 4).map((card: { question?: string; type?: string }, index: number) => ({
+        archetype: archetypes[index] || "hearts",
+        questions: {
+          light: card.question || "",
+          deep: card.question || "",
+        },
+        initialFlipped: index === 1 || index === 2, // Checkerboard pattern
+      }));
+      setCurrentCards(mappedCards);
+    } else {
+      // Fallback: Generate personalized cards locally
+      console.log('Falling back to local card generation');
+      const newCards = generatePersonalizedCards(data, language);
+      setCurrentCards(newCards);
+    }
+    
     setIsPersonalized(true);
     setIsShuffling(false);
     setShowHeartbeatAnimation(false);
