@@ -34,6 +34,7 @@ const translations: Record<Language, Record<string, string>> = {
     "tuner.seasonPlaceholder": "e.g., New baby, career shift, moving...",
     "tuner.insights": "What else do you feel comfortable sharing with us to dial in the questions even closer to your situation?",
     "tuner.insightsPlaceholder": "Share anything that might help us understand your unique journey together...",
+    "tuner.historyOptIn": "Save our journey? Allow Hertz an Hertz to remember this context for future decks.",
     "tuner.syncing": "Syncing...",
     "tuner.generate": "SYNC / GENERATE DECK",
     
@@ -97,6 +98,7 @@ const translations: Record<Language, Record<string, string>> = {
     "tuner.seasonPlaceholder": "z.B. Neues Baby, Karrierewechsel, Umzug...",
     "tuner.insights": "Was möchtet ihr noch mit uns teilen, damit wir die Fragen noch besser auf eure Situation abstimmen können?",
     "tuner.insightsPlaceholder": "Teilt alles, was uns helfen könnte, eure einzigartige Reise zu verstehen...",
+    "tuner.historyOptIn": "Unsere Reise speichern? Erlaube Hertz an Hertz, diesen Kontext für zukünftige Decks zu merken.",
     "tuner.syncing": "Synchronisiere...",
     "tuner.generate": "SYNCHRONISIEREN / DECK ERSTELLEN",
     

@@ -7,6 +7,7 @@ import { ConversionFooter } from "@/components/ConversionFooter";
 import { HeartbeatLine } from "@/components/HeartbeatLine";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useProfileData } from "@/hooks/useProfileData";
 import { Archetype } from "@/components/FlippableCard";
 import {
   Accordion,
@@ -149,6 +150,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
 
 const Index = () => {
   const { t, language } = useLanguage();
+  const { saveProfileAndTriggerProduction } = useProfileData();
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
@@ -169,6 +171,36 @@ const Index = () => {
     setTimeout(() => {
       cardGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 300);
+
+    // Save to Supabase and trigger n8n in background (non-blocking)
+    try {
+      await saveProfileAndTriggerProduction(
+        {
+          coupleNames: `${data.partnerA} & ${data.partnerB}`,
+          historyOptIn: data.historyOptIn,
+        },
+        {
+          coreEvents: data.additionalInsights,
+          sharedValues: `${data.scientific ? 'Scientific' : ''} ${data.spiritual ? 'Spiritual' : ''}`.trim(),
+          constraints: data.context,
+        },
+        {
+          partnerA: data.partnerA,
+          partnerB: data.partnerB,
+          lifecycle: data.lifecycle,
+          scientific: data.scientific,
+          spiritual: data.spiritual,
+          culture: data.culture,
+          context: data.context,
+          additionalInsights: data.additionalInsights,
+          language,
+        }
+      );
+      console.log('Profile saved and production triggered');
+    } catch (error) {
+      console.error('Background save/trigger failed:', error);
+      // Non-blocking - continue with local generation
+    }
     
     // Build anticipation with 5-second delay - cards show archetype images
     await new Promise(resolve => setTimeout(resolve, 5000));
@@ -180,7 +212,7 @@ const Index = () => {
     setIsShuffling(false);
     setShowHeartbeatAnimation(false);
     setIsGenerating(false);
-  }, [language]);
+  }, [language, saveProfileAndTriggerProduction]);
 
   const handleFeedback = useCallback((archetype: Archetype, positive: boolean) => {
     console.log(`Feedback for ${archetype}: ${positive ? "positive" : "negative"}`);

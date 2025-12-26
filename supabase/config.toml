@@ -1,1 +1,4 @@
 project_id = "wzxdtytxvmfgnqhezakk"
+
+[functions.trigger-production]
+verify_jwt = false
