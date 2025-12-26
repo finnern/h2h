@@ -213,11 +213,11 @@ const Index = () => {
       console.log('Using n8n generated cards:', n8nCards);
       // Map n8n cards to our card format
       const archetypes: Archetype[] = ["hearts", "clubs", "diamonds", "spades"];
-      const mappedCards = n8nCards.slice(0, 4).map((card: { question?: string; type?: string }, index: number) => ({
+      const mappedCards = n8nCards.slice(0, 4).map((card: { question_surface?: string; question_deep?: string; type?: string }, index: number) => ({
         archetype: archetypes[index] || "hearts",
         questions: {
-          light: card.question || "",
-          deep: card.question || "",
+          light: card.question_surface || "",
+          deep: card.question_deep || "",
         },
         initialFlipped: index === 1 || index === 2, // Checkerboard pattern
       }));

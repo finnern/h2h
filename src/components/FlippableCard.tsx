@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp, ThumbsDown, Feather, Anchor } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CARD_IMAGES, Archetype } from "@/constants/card-assets";
 
@@ -107,19 +107,25 @@ export const FlippableCard = ({
             />
 
             {/* Questions container */}
-            <div className="flex-1 flex flex-col items-center justify-center gap-5">
-              {/* Light question */}
-              <p className="font-display text-xl md:text-2xl text-ink leading-relaxed">
-                {questions.light}
-              </p>
+            <div className="flex-1 flex flex-col items-center justify-center gap-4">
+              {/* Surface question - light/playful */}
+              <div className="flex flex-col items-center gap-2">
+                <Feather className="w-5 h-5 text-ink/50" />
+                <p className="font-display text-lg md:text-xl text-ink leading-relaxed text-center">
+                  {questions.light}
+                </p>
+              </div>
               
               {/* Divider */}
-              <div className="w-20 h-px bg-ink/20" />
+              <div className="w-24 h-px bg-ink/20" />
               
-              {/* Deep question - bold */}
-              <p className="font-display text-xl md:text-2xl text-ink font-bold leading-relaxed">
-                {questions.deep}
-              </p>
+              {/* Deep question - profound */}
+              <div className="flex flex-col items-center gap-2">
+                <Anchor className="w-5 h-5 text-primary" />
+                <p className="font-display text-lg md:text-xl text-ink font-semibold leading-relaxed text-center">
+                  {questions.deep}
+                </p>
+              </div>
             </div>
 
             {/* Footer */}
