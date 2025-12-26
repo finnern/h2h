@@ -6,6 +6,7 @@ import { CardGrid } from "@/components/CardGrid";
 import { ConversionFooter } from "@/components/ConversionFooter";
 import { HeartbeatLine } from "@/components/HeartbeatLine";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import AuthButton from "@/components/AuthButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProfileData } from "@/hooks/useProfileData";
 import { Archetype } from "@/components/FlippableCard";
@@ -229,8 +230,9 @@ const Index = () => {
       <div className="min-h-screen gradient-warm">
         {/* Compact Header */}
         <header className="pt-4 pb-2 text-center px-4 relative">
-          {/* Language Toggle - Top Right */}
-          <div className="absolute top-3 right-4">
+          {/* Top Right Controls */}
+          <div className="absolute top-3 right-4 flex items-center gap-2">
+            <AuthButton />
             <LanguageToggle />
           </div>
 
