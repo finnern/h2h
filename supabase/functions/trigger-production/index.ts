@@ -49,6 +49,7 @@ serve(async (req) => {
 
     // Prepare payload for n8n
     const payload = {
+      action: "preview",
       user_id: profile_id,
       couple_data,
       memories: history_opt_in ? memories : null,
