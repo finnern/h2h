@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 const SESSION_KEY = 'h2h_session_id';
 
 const generateSessionId = (): string => {
-  return `sess_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+  // Use cryptographically secure random UUID instead of predictable Math.random()
+  return `sess_${crypto.randomUUID()}`;
 };
 
 export const useSessionId = () => {
