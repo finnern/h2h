@@ -8,7 +8,7 @@
 
 @layer base {
   :root {
-    /* Core palette - warm cream and deep crimson */
+    /* Core palette - warm cream and deep bordeaux */
     --background: 40 33% 96%;
     --foreground: 20 25% 15%;
 
@@ -19,8 +19,8 @@
     --popover: 42 40% 94%;
     --popover-foreground: 20 25% 15%;
 
-    /* Primary - deep crimson red (heartbeat line color) */
-    --primary: 0 65% 45%;
+    /* Primary - deep bordeaux/wine red for excellent contrast */
+    --primary: 355 55% 28%;
     --primary-foreground: 40 33% 96%;
 
     /* Secondary - muted gold/ochre */
@@ -28,10 +28,10 @@
     --secondary-foreground: 20 25% 20%;
 
     --muted: 38 25% 88%;
-    --muted-foreground: 20 15% 45%;
+    --muted-foreground: 20 15% 40%;
 
-    /* Accent - warm burgundy */
-    --accent: 350 55% 35%;
+    /* Accent - deep bordeaux */
+    --accent: 355 55% 28%;
     --accent-foreground: 40 33% 96%;
 
     --destructive: 0 84.2% 60.2%;
@@ -39,16 +39,16 @@
 
     --border: 30 20% 80%;
     --input: 30 20% 85%;
-    --ring: 0 65% 45%;
+    --ring: 355 55% 28%;
 
     --radius: 0.5rem;
 
     /* Custom tokens */
-    --heartbeat: 0 65% 45%;
+    --heartbeat: 355 55% 28%;
     --paper: 42 40% 92%;
     --paper-aged: 35 35% 85%;
-    --ink: 20 30% 18%;
-    --ink-light: 20 20% 40%;
+    --ink: 20 30% 12%;
+    --ink-light: 20 20% 35%;
     
     /* Gradients */
     --gradient-paper: linear-gradient(180deg, hsl(42 40% 96%) 0%, hsl(38 35% 90%) 100%);
@@ -67,12 +67,12 @@
     /* Sidebar tokens */
     --sidebar-background: 40 33% 96%;
     --sidebar-foreground: 20 25% 20%;
-    --sidebar-primary: 0 65% 45%;
+    --sidebar-primary: 355 55% 28%;
     --sidebar-primary-foreground: 40 33% 96%;
     --sidebar-accent: 38 45% 88%;
     --sidebar-accent-foreground: 20 25% 20%;
     --sidebar-border: 30 20% 80%;
-    --sidebar-ring: 0 65% 45%;
+    --sidebar-ring: 355 55% 28%;
   }
 
   .dark {
@@ -86,7 +86,7 @@
     --popover: 20 18% 12%;
     --popover-foreground: 40 25% 90%;
 
-    --primary: 0 60% 55%;
+    --primary: 355 50% 50%;
     --primary-foreground: 20 20% 8%;
 
     --secondary: 30 20% 20%;
@@ -95,7 +95,7 @@
     --muted: 20 15% 18%;
     --muted-foreground: 35 15% 55%;
 
-    --accent: 350 50% 45%;
+    --accent: 355 50% 50%;
     --accent-foreground: 40 25% 95%;
 
     --destructive: 0 62.8% 50%;
@@ -103,9 +103,9 @@
 
     --border: 20 15% 20%;
     --input: 20 15% 20%;
-    --ring: 0 60% 55%;
+    --ring: 355 50% 50%;
 
-    --heartbeat: 0 60% 55%;
+    --heartbeat: 355 50% 50%;
     --paper: 20 18% 12%;
     --paper-aged: 20 15% 15%;
     --ink: 40 25% 90%;
@@ -113,12 +113,12 @@
 
     --sidebar-background: 20 20% 8%;
     --sidebar-foreground: 40 25% 90%;
-    --sidebar-primary: 0 60% 55%;
+    --sidebar-primary: 355 50% 50%;
     --sidebar-primary-foreground: 20 20% 8%;
     --sidebar-accent: 20 15% 18%;
     --sidebar-accent-foreground: 40 25% 90%;
     --sidebar-border: 20 15% 20%;
-    --sidebar-ring: 0 60% 55%;
+    --sidebar-ring: 355 50% 50%;
   }
 }
 
@@ -127,13 +127,53 @@
     @apply border-border;
   }
 
+  html {
+    font-size: 18px; /* Increased base font size for better readability */
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+    @apply text-lg leading-relaxed;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    @apply text-primary;
+  }
+
+  h1 {
+    @apply text-5xl md:text-6xl lg:text-7xl;
+  }
+
+  h2 {
+    @apply text-4xl md:text-5xl;
+  }
+
+  h3 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h4 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+
+  /* Card text exception - keep compact */
+  .card, [class*="card-"] {
+    font-size: 1rem;
+  }
+
+  .card p, [class*="card-"] p {
+    @apply text-base leading-normal;
+  }
+
+  .card h1, .card h2, .card h3, .card h4,
+  [class*="card-"] h1, [class*="card-"] h2, [class*="card-"] h3, [class*="card-"] h4 {
+    @apply text-2xl;
   }
 }
 
