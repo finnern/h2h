@@ -360,7 +360,7 @@ const About = () => {
             </div>
 
             <p className="font-body text-sm text-ink/60 text-center">
-              <Link to="/hartschierle-story" className="underline hover:text-heartbeat transition-colors">
+              <Link to="/hartschierle" className="underline hover:text-heartbeat transition-colors">
                 Mehr zur wahren Geschichte hinter den Bildern erfahren →
               </Link>
             </p>
