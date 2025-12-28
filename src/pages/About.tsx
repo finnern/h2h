@@ -342,7 +342,7 @@ const About = () => {
               <motion.img 
                 src={hartschierleWanderer} 
                 alt="Hartschierle - Wanderer mit Rucksack"
-                className="h-48 md:h-64 w-auto object-contain drop-shadow-lg"
+                className="h-56 md:h-72 w-auto object-contain drop-shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -351,7 +351,7 @@ const About = () => {
               <motion.img 
                 src={hartschierleMadonna} 
                 alt="Hartschierle - Mutter mit Kind"
-                className="h-52 md:h-72 w-auto object-contain drop-shadow-lg"
+                className="h-56 md:h-72 w-auto object-contain drop-shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
