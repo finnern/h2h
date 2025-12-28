@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { TunerSection, TunerData } from "@/components/TunerSection";
 import { CardGrid } from "@/components/CardGrid";
 import { ConversionFooter } from "@/components/ConversionFooter";
@@ -250,6 +251,16 @@ const Index = () => {
       <div className="min-h-screen gradient-warm">
         {/* Compact Header */}
         <header className="pt-4 pb-2 text-center px-4 relative">
+          {/* Top Left - About Link */}
+          <div className="absolute top-3 left-4">
+            <Link 
+              to="/about" 
+              className="font-body text-sm text-ink/70 hover:text-heartbeat transition-colors"
+            >
+              {language === "de" ? "Über uns" : "About"}
+            </Link>
+          </div>
+
           {/* Top Right Controls */}
           <div className="absolute top-3 right-4 flex items-center gap-2">
             <AuthButton />
