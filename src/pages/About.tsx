@@ -28,13 +28,6 @@ const staggerContainer = {
 const About = () => {
   const { language } = useLanguage();
 
-  const paintings = [
-    { src: hartschierleWanderer, alt: "Hartschierle - Wanderer mit Rucksack" },
-    { src: hartschierleMadonna, alt: "Hartschierle - Mutter mit Kind" },
-    { src: hartschierleWandererCape, alt: "Hartschierle - Mann mit Umhang" },
-    { src: hartschierleFloetenspieler, alt: "Hartschierle - Flötenspieler am Baum" },
-  ];
-
   return (
     <>
       <Helmet>
@@ -105,6 +98,21 @@ const About = () => {
               </p>
             </motion.div>
           </motion.section>
+
+          {/* First Figure - After intro */}
+          <motion.div
+            className="flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <img 
+              src={hartschierleWandererCape} 
+              alt="Hartschierle - Mann mit Umhang"
+              className="h-48 md:h-64 w-auto object-contain drop-shadow-lg"
+            />
+          </motion.div>
 
           {/* Rat der Weisen */}
           <motion.section 
@@ -263,6 +271,22 @@ const About = () => {
             <h1 className="font-display text-3xl md:text-4xl text-heartbeat text-center">
               Die Seele: Großvater Hartschierles Vermächtnis
             </h1>
+
+            {/* Hermit figure - quiet, contemplative */}
+            <motion.div
+              className="flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <img 
+                src={hartschierleFloetenspieler} 
+                alt="Hartschierle - Flötenspieler am Baum"
+                className="h-56 md:h-72 w-auto object-contain drop-shadow-lg"
+              />
+            </motion.div>
+
             <div className="font-body text-ink/70 leading-relaxed max-w-3xl mx-auto space-y-4 text-center">
               <p>
                 Doch Wissenschaft, Daten und Algorithmen sind oft laut und schnell. 
@@ -296,7 +320,7 @@ const About = () => {
             </blockquote>
           </motion.section>
 
-          {/* Bildergalerie */}
+          {/* Visuelle Wurzeln - with remaining figures */}
           <motion.section 
             className="space-y-8"
             initial={{ opacity: 0 }}
@@ -313,26 +337,26 @@ const About = () => {
               Kunst, um der modernen Technik tiefe, regionale Wurzeln zu geben.
             </p>
 
-            {/* Gallery Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {paintings.map((painting, index) => (
-                <motion.div
-                  key={index}
-                  className="aspect-[3/4] rounded-lg overflow-hidden border-2 border-border shadow-lg bg-card"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.03 }}
-                >
-                  <img 
-                    src={painting.src} 
-                    alt={painting.alt}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </motion.div>
-              ))}
+            {/* Remaining figures displayed elegantly */}
+            <div className="flex flex-wrap justify-center items-end gap-8 md:gap-12 py-8">
+              <motion.img 
+                src={hartschierleWanderer} 
+                alt="Hartschierle - Wanderer mit Rucksack"
+                className="h-48 md:h-64 w-auto object-contain drop-shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0 }}
+              />
+              <motion.img 
+                src={hartschierleMadonna} 
+                alt="Hartschierle - Mutter mit Kind"
+                className="h-52 md:h-72 w-auto object-contain drop-shadow-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+              />
             </div>
 
             <p className="font-body text-sm text-ink/60 text-center">
@@ -362,26 +386,15 @@ const About = () => {
                 die euch helfen, die Herausforderungen des Lebens aufzufangen und wieder in Resonanz zu kommen. 
                 Hertz an Hertz möchte eine der tragenden Säulen sein, die euch dabei unterstützt.
               </p>
-              <p className="font-semibold text-ink">
-                Findet euren Rhythmus. Damit das entsteht, wonach wir uns alle sehnen: 
-                Eine Liebe, die wächst und gedeiht.
+              <p>
+                Findet euren Rhythmus. Damit das entsteht, wonach wir uns alle sehnen: Eine Liebe, die wächst und gedeiht.
               </p>
             </div>
-            <p className="font-display text-2xl text-heartbeat mt-8">
+            <p className="font-display text-2xl text-heartbeat pt-4">
               Hertz an Hertz.
             </p>
           </motion.section>
         </main>
-
-        {/* Footer */}
-        <footer className="py-6 text-center border-t border-border">
-          <Link 
-            to="/" 
-            className="font-body text-ink/60 hover:text-heartbeat transition-colors"
-          >
-            {language === "de" ? "← Zurück zur Startseite" : "← Back to Home"}
-          </Link>
-        </footer>
       </div>
     </>
   );
