@@ -26,7 +26,7 @@ const staggerContainer = {
 };
 
 const About = () => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <>
@@ -44,7 +44,7 @@ const About = () => {
               className="flex items-center gap-2 font-body text-ink hover:text-heartbeat transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              {t("about.back")}
             </Link>
           </div>
           <div className="absolute top-3 right-4">
@@ -71,30 +71,26 @@ const About = () => {
               className="font-display text-4xl md:text-5xl text-heartbeat"
               variants={fadeInUp}
             >
-              About Hertz an Hertz
+              {t("about.title")}
             </motion.h1>
             <motion.h2 
               className="font-body text-xl md:text-2xl text-ink/80 italic max-w-2xl mx-auto"
               variants={fadeInUp}
             >
-              Where science meets heartbeat—and technology meets tradition.
+              {t("about.subtitle")}
             </motion.h2>
             <motion.div 
               className="font-body text-ink/70 leading-relaxed max-w-3xl mx-auto space-y-4"
               variants={fadeInUp}
             >
               <p>
-                Welcome to Hertz an Hertz. We believe that love is more than just a fleeting feeling. 
-                It is physics—a vibration that needs nurturing.
+                {t("about.intro.p1")}
               </p>
               <p>
-                Our philosophy is based on a fascinating discovery by physicist Christiaan Huygens 
-                in 1665: He observed that two pendulum clocks hanging from the same wooden beam eventually 
-                adjust their swings to match each other perfectly. He called this phenomenon <em>synchronization</em>.
+                {t("about.intro.p2")}
               </p>
               <p>
-                In a relationship, you are these two clocks. And Hertz an Hertz is the sounding board 
-                that connects you, helping you find your shared rhythm.
+                {t("about.intro.p3")}
               </p>
             </motion.div>
           </motion.section>
@@ -123,45 +119,32 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="font-display text-3xl md:text-4xl text-heartbeat text-center">
-              The "Council of the Wise": Our Global DNA
+              {t("about.council.title")}
             </h1>
             <p className="font-body text-ink/70 leading-relaxed text-center max-w-3xl mx-auto">
-              This card deck is not a random product. It is the result of a deep analysis of the world's 
-              leading relationship experts. Our Artificial Intelligence was not trained on simplistic 
-              calendar mottos, but on the "gold standards" of modern couples therapy—both international and European.
+              {t("about.council.intro")}
             </p>
             <p className="font-body text-ink/80 text-center italic">
-              Every card you hold in your hand is based on the principles of these thought leaders:
+              {t("about.council.subtitle")}
             </p>
 
             {/* International Pioneers */}
             <div className="space-y-6">
               <h3 className="font-display text-xl text-ink border-b border-border pb-2">
-                The International Pioneers
+                {t("about.pioneers.title")}
               </h3>
               <ul className="space-y-6">
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Drs. John & Julie Gottman</strong> (The Seven Principles for Making Marriage Work): 
-                  The architects of the famous "Love Lab." From them comes the concept of "Love Maps." 
-                  Our questions help you constantly update these internal maps of your partner, 
-                  because we know: You can only deeply love what you truly know.
+                  {t("about.pioneers.gottman")}
                 </li>
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Esther Perel</strong> (Mating in Captivity): 
-                  She explores the eternal tension between safety and adventure. Her wisdom flows 
-                  into our deep questions to preserve the mystery in your relationship 
-                  and prevent everything from suffocating in routine.
+                  {t("about.pioneers.perel")}
                 </li>
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Dr. Sue Johnson</strong> (Hold Me Tight): 
-                  The founder of Emotionally Focused Therapy (EFT). Her work teaches us that behind 
-                  almost every argument lies one anxious question: "Are you really there for me?" Our cards 
-                  create the safe space to answer this question together.
+                  {t("about.pioneers.johnson")}
                 </li>
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Terry Real</strong> (The New Rules of Marriage): 
-                  He coined modern "Us-Consciousness." His strategies help us shift from an egocentric 
-                  battle to a collaborative partnership—becoming a team.
+                  {t("about.pioneers.real")}
                 </li>
               </ul>
             </div>
@@ -169,26 +152,20 @@ const About = () => {
             {/* European Grounding */}
             <div className="space-y-6">
               <h3 className="font-display text-xl text-ink border-b border-border pb-2">
-                The European Grounding
+                {t("about.european.title")}
               </h3>
               <p className="font-body text-ink/70 leading-relaxed">
-                To integrate grounded perspectives and cultural nuance, we rely on leading voices from the German-speaking world:
+                {t("about.european.intro")}
               </p>
               <ul className="space-y-6">
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Stefanie Stahl</strong> (The Child in You): 
-                  Essential for working with the "Inner Child." Our prompts help distinguish: 
-                  Is my adult self speaking right now, or an old wound from the past?
+                  {t("about.european.stahl")}
                 </li>
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Michael Mary</strong> (The 5 Lies of Love): 
-                  Our anchor for healthy realism. He teaches us that expectations are negotiable 
-                  and conflicts do not mean the end. This relieves the pressure.
+                  {t("about.european.mary")}
                 </li>
                 <li className="font-body text-ink/70 leading-relaxed">
-                  <strong className="text-ink">Oskar Holzberg</strong> (Key Sentences of Love): 
-                  The master of everyday life. His observations flow into our micro-rituals, 
-                  ensuring love survives amidst dishwashing, job stress, and raising children.
+                  {t("about.european.holzberg")}
                 </li>
               </ul>
             </div>
@@ -203,59 +180,50 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="font-display text-3xl md:text-4xl text-heartbeat text-center">
-              The Technology: Your Story in Safe Hands
+              {t("about.tech.title")}
             </h1>
             <p className="font-body text-ink/70 leading-relaxed text-center max-w-3xl mx-auto">
-              Here, modern analysis meets human need. Our AI uses this concentrated expertise 
-              as a flexible toolbox to find the right prompts for you. Yet we know: Technology—especially 
-              AI—can feel intimidating. That's why we operate on the principle of absolute sovereignty over your data.
+              {t("about.tech.intro")}
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 mt-8">
-              {/* Card 1 */}
               <div className="bg-card/60 rounded-xl p-6 border border-border space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Shield className="w-6 h-6 text-heartbeat" />
                 </div>
                 <h3 className="font-display text-lg text-ink">
-                  1. Works Without Baring Your Soul
+                  {t("about.tech.card1.title")}
                 </h3>
                 <p className="font-body text-ink/70 text-sm leading-relaxed">
-                  You don't have to tell the AI anything about yourselves if you don't want to. 
-                  Even without specific knowledge of your personal situation, the system generates wonderful impulses. 
-                  Why? Because the universal principles of Gottman, Perel, or Stahl are so strong that they enrich every relationship.
+                  {t("about.tech.card1.text")}
                 </p>
               </div>
 
-              {/* Card 2 */}
               <div className="bg-card/60 rounded-xl p-6 border border-border space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Database className="w-6 h-6 text-heartbeat" />
                 </div>
                 <h3 className="font-display text-lg text-ink">
-                  2. The Turbo Charge: Tailor-Made
+                  {t("about.tech.card2.title")}
                 </h3>
                 <p className="font-body text-ink/70 text-sm leading-relaxed">
-                  However, if you choose to give the AI context (e.g., "We just became parents" 
-                  or "We are navigating a loss"), it can refine the questions. Instead of generic advice, 
-                  you receive prompts that start exactly where you currently are.
+                  {t("about.tech.card2.text")}
                 </p>
               </div>
 
-              {/* Card 3 */}
               <div className="bg-card/60 rounded-xl p-6 border border-border space-y-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <Lock className="w-6 h-6 text-heartbeat" />
                 </div>
                 <h3 className="font-display text-lg text-ink">
-                  3. Our Safety Promise
+                  {t("about.tech.card3.title")}
                 </h3>
                 <div className="font-body text-ink/70 text-sm leading-relaxed space-y-2">
-                  <p className="font-semibold text-ink">Your privacy is our highest asset.</p>
+                  <p className="font-semibold text-ink">{t("about.tech.card3.subtitle")}</p>
                   <ul className="list-disc list-inside space-y-1">
-                    <li><strong>No AI Training:</strong> None of your inputs are used to train the AI. Your data stays with you.</li>
-                    <li><strong>GDPR Compliance:</strong> We strictly adhere to the General Data Protection Regulation.</li>
-                    <li><strong>Data Economy:</strong> Your information is only stored securely encrypted if you explicitly wish it—for example, to develop further, even more fitting card decks for you later. Otherwise, the rule applies: What happens in the moment, stays in the moment.</li>
+                    <li>{t("about.tech.card3.noTraining")}</li>
+                    <li>{t("about.tech.card3.gdpr")}</li>
+                    <li>{t("about.tech.card3.dataEconomy")}</li>
                   </ul>
                 </div>
               </div>
@@ -271,10 +239,9 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="font-display text-3xl md:text-4xl text-heartbeat text-center">
-              The Soul: Grandfather Hartschierle's Legacy
+              {t("about.soul.title")}
             </h1>
 
-            {/* Hermit figure - quiet, contemplative */}
             <motion.div
               className="flex justify-center"
               initial={{ opacity: 0, y: 20 }}
@@ -290,7 +257,19 @@ const About = () => {
             </motion.div>
 
             <div className="font-body text-ink/70 leading-relaxed max-w-3xl mx-auto space-y-4 text-center">
-              <p>
+              <p>{t("about.soul.p1")}</p>
+              <p className="font-semibold text-ink">{t("about.soul.intro")}</p>
+              <p>{t("about.soul.p2")}</p>
+              <p>{t("about.soul.p3")}</p>
+              <p>{t("about.soul.p4")}</p>
+            </div>
+
+            <blockquote className="max-w-2xl mx-auto bg-card/80 border-l-4 border-heartbeat p-6 rounded-r-xl italic">
+              <p className="font-body text-ink text-lg leading-relaxed">
+                {t("about.soul.quote")}
+              </p>
+            </blockquote>
+          </motion.section>
                 Yet science, data, and algorithms are often loud and fast. 
                 Sometimes love needs the exact opposite: Silence, slowness, and humility.
               </p>
@@ -331,12 +310,10 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h3 className="font-display text-xl md:text-2xl text-ink text-center">
-              The Visual Roots: The Real Painter "Hartschierle"
+              {t("about.visual.title")}
             </h3>
             <p className="font-body text-ink/70 leading-relaxed text-center max-w-3xl mx-auto">
-              The visual soul of our project is based on the unique style of a real 19th-century painter 
-              from Schramberg, Germany, known historically as "Hartschierle." We use his naive yet character-rich 
-              folk art to give our modern technology deep, regional roots.
+              {t("about.visual.text")}
             </p>
 
             {/* Remaining figures displayed elegantly */}
@@ -363,7 +340,7 @@ const About = () => {
 
             <p className="font-body text-sm text-ink/60 text-center">
               <Link to="/hartschierle" className="underline hover:text-heartbeat transition-colors">
-                Learn more about the true story behind the pictures →
+                {t("about.visual.link")}
               </Link>
             </p>
           </motion.section>
