@@ -12,7 +12,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useProfileData } from "@/hooks/useProfileData";
 import { Archetype } from "@/components/FlippableCard";
 import { Button } from "@/components/ui/button";
-import { Brain, Heart, Sparkles, ArrowRight } from "lucide-react";
+import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Accordion,
   AccordionContent,
@@ -157,9 +159,11 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
 
 const Index = () => {
   const { t, language } = useLanguage();
+  const { toast } = useToast();
   const { saveProfileAndTriggerProduction } = useProfileData();
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isOrdering, setIsOrdering] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [currentCards, setCurrentCards] = useState(getGenericCards());
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
@@ -244,6 +248,48 @@ const Index = () => {
   const handleFeedback = useCallback((archetype: Archetype, positive: boolean) => {
     console.log(`Feedback for ${archetype}: ${positive ? "positive" : "negative"}`);
   }, []);
+
+  const handleOrder = useCallback(async () => {
+    if (!isPersonalized) return;
+    
+    setIsOrdering(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('order-production', {
+        body: {
+          cards: currentCards.map(card => ({
+            archetype: card.archetype,
+            questions: card.questions,
+          })),
+          language,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: language === "de" ? "Erfolgreich bestellt!" : "Order successful!",
+        description: language === "de" 
+          ? "Dein PDF ist unterwegs." 
+          : "Your PDF is on its way.",
+      });
+      
+      console.log('Order response:', data);
+    } catch (error) {
+      console.error('Order failed:', error);
+      toast({
+        title: language === "de" ? "Bestellung fehlgeschlagen" : "Order failed",
+        description: language === "de" 
+          ? "Bitte versuche es später erneut." 
+          : "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsOrdering(false);
+    }
+  }, [isPersonalized, currentCards, language, toast]);
 
   return (
     <>
@@ -589,6 +635,39 @@ const Index = () => {
                   isShuffling={isShuffling}
                   onFeedback={handleFeedback}
                 />
+
+                {/* Order Production Button */}
+                <AnimatePresence>
+                  {isPersonalized && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                      className="flex justify-center mt-8"
+                    >
+                      <Button
+                        onClick={handleOrder}
+                        disabled={isOrdering}
+                        size="lg"
+                        variant="secondary"
+                        className="font-body text-lg px-8 py-6 bg-accent hover:bg-accent/90 text-accent-foreground"
+                      >
+                        {isOrdering ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            {language === "de" ? "Sende Auftrag an Druckerei..." : "Sending order to print..."}
+                          </>
+                        ) : (
+                          <>
+                            <Printer className="mr-2 h-5 w-5" />
+                            {language === "de" ? "Personalisiertes Set bestellen" : "Order Personalized Set"}
+                          </>
+                        )}
+                      </Button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Conversion Footer */}
