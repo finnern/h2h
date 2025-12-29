@@ -270,36 +270,6 @@ const About = () => {
               </p>
             </blockquote>
           </motion.section>
-                Yet science, data, and algorithms are often loud and fast. 
-                Sometimes love needs the exact opposite: Silence, slowness, and humility.
-              </p>
-              <p className="font-semibold text-ink">
-                May we introduce: Grandfather Hartschierle.
-              </p>
-              <p>
-                He was by no means a relationship expert in the classical sense. On the contrary: 
-                He avoided the hustle and bustle of people. He withdrew as a hermit into the solitude 
-                of a cave deep in the Black Forest to find answers there that get drowned out in the noise of everyday life.
-              </p>
-              <p>
-                He was an observer who drew his wisdom not from books, but from the rustling of the treetops, 
-                the moss on the stones, and the eternal cycle of nature. He taught us that answers often lie 
-                not in hectic exchange, but in enduring silence together.
-              </p>
-              <p>
-                In Hertz an Hertz, he is the resting pole. He doesn't ask you to talk, but simply to be present. 
-                His cards are invitations to calmness:
-              </p>
-            </div>
-
-            {/* Quote Block */}
-            <blockquote className="max-w-2xl mx-auto bg-card/80 border-l-4 border-heartbeat p-6 rounded-r-xl italic">
-              <p className="font-body text-ink text-lg leading-relaxed">
-                "Listen to the forest. In the silence, thoughts clarify—and therein, 
-                you finally hear the other person's heart beating again."
-              </p>
-            </blockquote>
-          </motion.section>
 
           {/* Visual Roots - with remaining figures */}
           <motion.section 
@@ -354,20 +324,12 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="font-display text-3xl md:text-4xl text-heartbeat">
-              Your Pillar for a Living Relationship
+              {t("about.conclusion.title")}
             </h1>
             <div className="font-body text-ink/70 leading-relaxed max-w-3xl mx-auto space-y-4">
-              <p>
-                Synchronization doesn't mean you have to march in perfect unison all the time.
-              </p>
-              <p>
-                It's about finding your way back to each other after dissonance. It's about mechanisms 
-                that help you absorb life's challenges and get back into resonance. 
-                Hertz an Hertz aims to be one of the supporting pillars that aids you in this.
-              </p>
-              <p>
-                Find your rhythm. So that what we all long for can emerge: A love that grows and thrives.
-              </p>
+              <p>{t("about.conclusion.p1")}</p>
+              <p>{t("about.conclusion.p2")}</p>
+              <p>{t("about.conclusion.p3")}</p>
             </div>
             <p className="font-display text-2xl text-heartbeat pt-4">
               Hertz an Hertz.
