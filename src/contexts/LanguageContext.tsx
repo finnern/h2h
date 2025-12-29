@@ -117,6 +117,10 @@ const translations: Record<Language, Record<string, string>> = {
     "about.cta.title": "Ready to Find Your Rhythm?",
     "about.cta.text": "Let Hertz an Hertz become the resonating board for your relationship. Try our sample deck or reserve your personalized cards today.",
     "about.cta.button": "Start Syncing",
+    "about.conclusion.title": "Your Pillar for a Living Relationship",
+    "about.conclusion.p1": "Synchronization doesn't mean you have to march in perfect unison all the time.",
+    "about.conclusion.p2": "It's about finding your way back to each other after dissonance. It's about mechanisms that help you absorb life's challenges and get back into resonance. Hertz an Hertz aims to be one of the supporting pillars that aids you in this.",
+    "about.conclusion.p3": "Find your rhythm. So that what we all long for can emerge: A love that grows and thrives.",
   },
   de: {
     // Header
@@ -226,6 +230,10 @@ const translations: Record<Language, Record<string, string>> = {
     "about.cta.title": "Bereit, euren Rhythmus zu finden?",
     "about.cta.text": "Lasst Hertz an Hertz zum Resonanzboden für eure Beziehung werden. Probiert unser Sample-Deck oder reserviert noch heute eure personalisierten Karten.",
     "about.cta.button": "Jetzt synchronisieren",
+    "about.conclusion.title": "Euer Stützpfeiler für eine lebendige Beziehung",
+    "about.conclusion.p1": "Synchronisation bedeutet nicht, dass ihr immer perfekt im Gleichschritt marschieren müsst.",
+    "about.conclusion.p2": "Es geht darum, nach Dissonanzen zueinander zurückzufinden. Es geht um Mechanismen, die euch helfen, die Herausforderungen des Lebens abzufedern und wieder in Resonanz zu kommen. Hertz an Hertz möchte einer der Stützpfeiler sein, die euch dabei helfen.",
+    "about.conclusion.p3": "Findet euren Rhythmus. Damit das entstehen kann, wonach wir uns alle sehnen: Eine Liebe, die wächst und gedeiht.",
   },
 };
 
