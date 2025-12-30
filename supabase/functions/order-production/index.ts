@@ -26,9 +26,9 @@ function isValidCards(data: unknown): boolean {
 // Validate session_id format (must match the format from useSessionId hook)
 function isValidSessionId(sessionId: unknown): boolean {
   if (typeof sessionId !== 'string') return false;
-  // Session ID format: sess_<timestamp>_<random>
-  const sessionPattern = /^sess_\d+_[a-z0-9]+$/;
-  return sessionPattern.test(sessionId) && sessionId.length <= 50;
+  // Session ID format: sess_<uuid> (e.g., sess_550e8400-e29b-41d4-a716-446655440000)
+  const sessionPattern = /^sess_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return sessionPattern.test(sessionId) && sessionId.length <= 60;
 }
 
 serve(async (req) => {
