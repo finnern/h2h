@@ -10,6 +10,7 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import AuthButton from "@/components/AuthButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProfileData } from "@/hooks/useProfileData";
+import { useSessionId } from "@/hooks/useSessionId";
 import { Archetype } from "@/components/FlippableCard";
 import { Button } from "@/components/ui/button";
 import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2 } from "lucide-react";
@@ -160,6 +161,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
 const Index = () => {
   const { t, language } = useLanguage();
   const { toast } = useToast();
+  const sessionId = useSessionId();
   const { saveProfileAndTriggerProduction } = useProfileData();
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -262,6 +264,7 @@ const Index = () => {
             questions: card.questions,
           })),
           language,
+          session_id: sessionId,
         },
       });
 
@@ -289,7 +292,7 @@ const Index = () => {
     } finally {
       setIsOrdering(false);
     }
-  }, [isPersonalized, currentCards, language, toast]);
+  }, [isPersonalized, currentCards, language, toast, sessionId]);
 
   return (
     <>
