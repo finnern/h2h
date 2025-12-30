@@ -46,8 +46,8 @@ serve(async (req) => {
   }
 
   try {
-    // Get the base webhook URL and ensure it points to /generate endpoint
-    let n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
+    // Get the webhook URL directly from secrets - use exactly as configured
+    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
     if (!n8nWebhookUrl) {
       console.error('N8N_WEBHOOK_URL is not configured');
       return new Response(
@@ -55,15 +55,8 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    // Ensure the URL ends with /generate (replace /order if present, or append /generate)
-    if (n8nWebhookUrl.endsWith('/order')) {
-      n8nWebhookUrl = n8nWebhookUrl.replace(/\/order$/, '/generate');
-    } else if (!n8nWebhookUrl.endsWith('/generate')) {
-      n8nWebhookUrl = n8nWebhookUrl.replace(/\/$/, '') + '/generate';
-    }
     
-    console.log('Using n8n webhook URL:', n8nWebhookUrl);
+    console.log('Calling n8n URL:', n8nWebhookUrl);
 
     // Parse and validate request body
     let requestBody;
@@ -173,9 +166,9 @@ serve(async (req) => {
 
     if (!n8nResponse.ok) {
       const errorText = await n8nResponse.text();
-      console.error('n8n webhook error:', n8nResponse.status, errorText);
+      console.error('n8n webhook error - Status:', n8nResponse.status, 'Response:', errorText);
       return new Response(
-        JSON.stringify({ error: 'Webhook request failed' }),
+        JSON.stringify({ error: 'Webhook request failed', status: n8nResponse.status, details: errorText }),
         { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
