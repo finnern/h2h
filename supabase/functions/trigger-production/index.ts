@@ -46,7 +46,8 @@ serve(async (req) => {
   }
 
   try {
-    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
+    // Get the base webhook URL and ensure it points to /generate endpoint
+    let n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
     if (!n8nWebhookUrl) {
       console.error('N8N_WEBHOOK_URL is not configured');
       return new Response(
@@ -54,6 +55,15 @@ serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    // Ensure the URL ends with /generate (replace /order if present, or append /generate)
+    if (n8nWebhookUrl.endsWith('/order')) {
+      n8nWebhookUrl = n8nWebhookUrl.replace(/\/order$/, '/generate');
+    } else if (!n8nWebhookUrl.endsWith('/generate')) {
+      n8nWebhookUrl = n8nWebhookUrl.replace(/\/$/, '') + '/generate';
+    }
+    
+    console.log('Using n8n webhook URL:', n8nWebhookUrl);
 
     // Parse and validate request body
     let requestBody;
