@@ -26,9 +26,17 @@ function isValidCards(data: unknown): boolean {
 // Validate session_id format (must match the format from useSessionId hook)
 function isValidSessionId(sessionId: unknown): boolean {
   if (typeof sessionId !== 'string') return false;
-  // Session ID format: sess_<uuid> (e.g., sess_550e8400-e29b-41d4-a716-446655440000)
-  const sessionPattern = /^sess_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  return sessionPattern.test(sessionId) && sessionId.length <= 60;
+
+  // Support both:
+  // - Current format: sess_<uuid>
+  // - Legacy format: sess_<timestamp>_<random> (older sessions stored in localStorage)
+  const uuidPattern = /^sess_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const legacyPattern = /^sess_\d{10,20}_[a-z0-9]{6,}$/i;
+
+  return (
+    sessionId.length <= 80 &&
+    (uuidPattern.test(sessionId) || legacyPattern.test(sessionId))
+  );
 }
 
 serve(async (req) => {
@@ -56,7 +64,7 @@ serve(async (req) => {
       );
     }
 
-    // Parse and validate request body
+    // Parse request body FIRST (we need session_id even for anonymous users)
     let requestBody;
     try {
       requestBody = await req.json();
@@ -68,11 +76,42 @@ serve(async (req) => {
       );
     }
 
-    const { cards, language, session_id } = requestBody;
+    const { cards, language, session_id } = (requestBody ?? {}) as Record<string, unknown>;
 
-    // Validate session_id is provided and valid format
-    if (!isValidSessionId(session_id)) {
-      console.error('Invalid or missing session_id');
+    // Initialize Supabase clients
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+
+    // Service role client for DB operations
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Optional auth: if a user is logged in, allow request even without session_id
+    const authHeader = req.headers.get('authorization') ?? req.headers.get('Authorization');
+    let userId: string | null = null;
+
+    if (authHeader) {
+      try {
+        const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+          global: { headers: { Authorization: authHeader } },
+        });
+
+        const { data: userData, error: userError } = await authClient.auth.getUser();
+        if (!userError && userData?.user) {
+          userId = userData.user.id;
+        }
+      } catch (e) {
+        console.warn('Auth user check failed (continuing):', e);
+      }
+    }
+
+    const hasValidSessionId = isValidSessionId(session_id);
+
+    // Allow the request if:
+    // A) a user is logged in, OR
+    // B) a valid session_id is present in the request body
+    if (!userId && !hasValidSessionId) {
+      console.error('Valid session required (no auth user, no valid session_id)');
       return new Response(
         JSON.stringify({ error: 'Valid session required' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -97,24 +136,43 @@ serve(async (req) => {
       );
     }
 
-    // Initialize Supabase client with service role for verification
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Resolve the target profile:
+    // - Prefer session_id when provided
+    // - Otherwise fall back to logged-in user
+    let profile: { id: string } | null = null;
 
-    // Verify the session_id corresponds to a valid profile
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('session_id', session_id)
-      .single();
+    if (hasValidSessionId) {
+      const { data: bySession, error: bySessionError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('session_id', session_id as string)
+        .single();
 
-    if (profileError || !profile) {
-      console.error('Profile not found for session:', session_id);
-      return new Response(
-        JSON.stringify({ error: 'Session not found' }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      if (bySessionError || !bySession) {
+        console.error('Profile not found for session:', session_id);
+        return new Response(
+          JSON.stringify({ error: 'Session not found' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      profile = bySession;
+    } else {
+      const { data: byUser, error: byUserError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', userId as string)
+        .single();
+
+      if (byUserError || !byUser) {
+        console.error('Profile not found for user:', userId);
+        return new Response(
+          JSON.stringify({ error: 'Profile not found' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      profile = byUser;
     }
 
     // Rate limiting: Check for recent orders from this profile (max 3 per hour)
@@ -138,6 +196,7 @@ serve(async (req) => {
       .from('orders')
       .insert({
         profile_id: profile.id,
+        user_id: userId,
         status: 'pending'
       })
       .select()
