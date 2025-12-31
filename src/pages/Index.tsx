@@ -673,8 +673,8 @@ const Index = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Conversion Footer */}
-              <ConversionFooter isVisible={isPersonalized} />
+              {/* Conversion Footer - Always visible */}
+              <ConversionFooter isVisible={true} />
             </div>
           </section>
 
