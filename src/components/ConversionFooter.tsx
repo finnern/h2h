@@ -18,12 +18,8 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
   const [isJoined, setIsJoined] = useState(false);
 
   const handleReserve = () => {
-    // Simulate reservation - in real app, would integrate with payment
-    setIsReserved(true);
-    toast({
-      title: t("toast.reserved"),
-      description: t("toast.reservedDesc"),
-    });
+    // Open Stripe payment link in a new tab
+    window.open("https://buy.stripe.com/eVq8wPbEj31c7l31N4fIs00", "_blank");
   };
 
   const handleJoinWaitlist = (e: React.FormEvent) => {
