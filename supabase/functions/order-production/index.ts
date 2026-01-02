@@ -76,7 +76,7 @@ serve(async (req) => {
       );
     }
 
-    const { cards, language, session_id } = (requestBody ?? {}) as Record<string, unknown>;
+    const { cards, language, session_id, couple } = (requestBody ?? {}) as Record<string, unknown>;
 
     // Initialize Supabase clients
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -216,7 +216,7 @@ serve(async (req) => {
     const payload = {
       action: "order",
       order_id: order.id,
-      profile_id: profile.id,
+      couple: couple || {},
       cards,
       language: language || 'de',
       ordered_at: new Date().toISOString(),

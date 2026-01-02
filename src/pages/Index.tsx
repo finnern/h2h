@@ -169,6 +169,7 @@ const Index = () => {
   const [isShuffling, setIsShuffling] = useState(false);
   const [currentCards, setCurrentCards] = useState(getGenericCards());
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
+  const [coupleData, setCoupleData] = useState<{ partner_a: string; partner_b: string } | null>(null);
   const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
   const cardGridRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
@@ -241,6 +242,7 @@ const Index = () => {
       setCurrentCards(newCards);
     }
     
+    setCoupleData({ partner_a: data.partnerA, partner_b: data.partnerB });
     setIsPersonalized(true);
     setIsShuffling(false);
     setShowHeartbeatAnimation(false);
@@ -263,6 +265,7 @@ const Index = () => {
             archetype: card.archetype,
             questions: card.questions,
           })),
+          couple: coupleData,
           language,
           session_id: sessionId,
         },
@@ -292,7 +295,7 @@ const Index = () => {
     } finally {
       setIsOrdering(false);
     }
-  }, [isPersonalized, currentCards, language, toast, sessionId]);
+  }, [isPersonalized, currentCards, coupleData, language, toast, sessionId]);
 
   return (
     <>
