@@ -175,7 +175,7 @@ serve(async (req) => {
       profile = byUser;
     }
 
-    // Rate limiting: Check for recent orders from this profile (max 3 per hour)
+    // Rate limiting: Check for recent orders from this profile (max 10 per hour)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { data: recentOrders, error: ordersError } = await supabase
       .from('orders')
@@ -183,7 +183,7 @@ serve(async (req) => {
       .eq('profile_id', profile.id)
       .gte('created_at', oneHourAgo);
 
-    if (!ordersError && recentOrders && recentOrders.length >= 3) {
+    if (!ordersError && recentOrders && recentOrders.length >= 10) {
       console.error('Rate limit exceeded for profile:', profile.id);
       return new Response(
         JSON.stringify({ error: 'Too many orders. Please try again later.' }),
