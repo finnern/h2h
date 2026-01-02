@@ -55,9 +55,9 @@ serve(async (req) => {
   }
 
   try {
-    const n8nOrderUrl = Deno.env.get('N8N_ORDER_URL');
+    const n8nOrderUrl = Deno.env.get('N8N_ORDER');
     if (!n8nOrderUrl) {
-      console.error('N8N_ORDER_URL is not configured');
+      console.error('N8N_ORDER is not configured');
       return new Response(
         JSON.stringify({ error: 'Order service unavailable' }),
         { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
