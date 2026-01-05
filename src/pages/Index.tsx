@@ -24,9 +24,9 @@ import {
 } from "@/components/ui/accordion";
 
 // Import Hartschierle images
-import hartschierleFloetenspieler from "@/assets/hartschierle-floetenspieler.png";
 import hartschierleMadonna from "@/assets/hartschierle-madonna.png";
 import hartschierleWanderer from "@/assets/hartschierle-wanderer.png";
+import hertzProductPhoto from "@/assets/hertz-product-photo.jpg";
 
 // Generic (Universal) cards - all start face down showing archetype images
 const getGenericCards = () => [
@@ -357,25 +357,18 @@ const Index = () => {
                   </Button>
                 </motion.div>
 
-                {/* Right: Product Image Placeholder */}
+                {/* Right: Product Image */}
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="relative flex justify-center order-1 md:order-2"
                 >
-                  {/* Product photography placeholder - styled box for cards/coffee scene */}
-                  <div className="relative w-full max-w-md aspect-square bg-gradient-to-br from-muted/50 to-muted rounded-2xl flex items-center justify-center border border-border/30 shadow-lg overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,hsl(var(--primary)/0.08),transparent_60%)]" />
-                    <div className="text-center p-8 relative z-10">
-                      <div className="w-24 h-32 mx-auto mb-4 bg-primary/10 rounded-lg border-2 border-dashed border-primary/30 flex items-center justify-center">
-                        <Heart className="w-8 h-8 text-primary/50" />
-                      </div>
-                      <p className="font-body text-sm text-ink/50">
-                        {language === "de" ? "Produktfoto kommt hier" : "Product photo goes here"}
-                      </p>
-                    </div>
-                  </div>
+                  <img 
+                    src={hertzProductPhoto} 
+                    alt="Hertz an Hertz Karten mit Tasse – Das Sync-Deck für Paare"
+                    className="w-full max-w-lg rounded-2xl shadow-xl object-cover"
+                  />
                 </motion.div>
               </div>
             </div>
