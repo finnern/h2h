@@ -326,7 +326,7 @@ const Index = () => {
         </header>
 
         <main className="pb-16">
-          {/* Hero Section */}
+        {/* Hero Section */}
           <section className="px-4 pt-8 pb-12 md:pt-16 md:pb-20">
             <div className="max-w-6xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -335,48 +335,129 @@ const Index = () => {
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="text-center md:text-left"
+                  className="text-center md:text-left order-2 md:order-1"
                 >
                   <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-primary mb-4 leading-tight">
-                    {language === "de" ? "Vom Herzschlag zur Resonanz." : "From Heartbeat to Resonance."}
-                  </h1>
-                  <p className="font-display text-xl md:text-2xl text-primary/80 mb-6">
                     {language === "de" 
-                      ? "Findet euren gemeinsamen Takt." 
-                      : "Find your shared rhythm."}
-                  </p>
-                  <p className="font-body text-lg text-ink/80 mb-8 leading-relaxed">
+                      ? "Hertz an Hertz – Das Sync-Deck für Paare." 
+                      : "Hertz an Hertz – The Sync Deck for Couples."}
+                  </h1>
+                  <p className="font-body text-lg md:text-xl text-ink/80 mb-8 leading-relaxed">
                     {language === "de"
-                      ? "Das Beziehungswerkzeug, das modernste Wissenschaft, künstliche Intelligenz und alte Weisheit verbindet."
-                      : "The relationship tool that combines cutting-edge science, artificial intelligence, and ancient wisdom."}
+                      ? "52 Wochen. 52 Fragen. Euer Ritual, um im Alltag wieder einen gemeinsamen Takt zu finden."
+                      : "52 weeks. 52 questions. Your ritual to find a shared rhythm in everyday life."}
                   </p>
                   <Button 
                     onClick={scrollToTuner}
                     size="lg"
                     className="font-body text-lg px-8 py-6"
                   >
-                    {language === "de" ? "Den Takt finden" : "Find the Rhythm"}
+                    {language === "de" ? "Deck entdecken" : "Discover the Deck"}
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </motion.div>
 
-                {/* Right: Image with subtle heartbeat line */}
+                {/* Right: Product Image Placeholder */}
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="relative flex justify-center"
+                  className="relative flex justify-center order-1 md:order-2"
                 >
-                  <div className="absolute inset-0 flex items-center justify-center opacity-20">
-                    <HeartbeatLine animated={false} />
+                  {/* Product photography placeholder - styled box for cards/coffee scene */}
+                  <div className="relative w-full max-w-md aspect-square bg-gradient-to-br from-muted/50 to-muted rounded-2xl flex items-center justify-center border border-border/30 shadow-lg overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,hsl(var(--primary)/0.08),transparent_60%)]" />
+                    <div className="text-center p-8 relative z-10">
+                      <div className="w-24 h-32 mx-auto mb-4 bg-primary/10 rounded-lg border-2 border-dashed border-primary/30 flex items-center justify-center">
+                        <Heart className="w-8 h-8 text-primary/50" />
+                      </div>
+                      <p className="font-body text-sm text-ink/50">
+                        {language === "de" ? "Produktfoto kommt hier" : "Product photo goes here"}
+                      </p>
+                    </div>
                   </div>
-                  <img 
-                    src={hartschierleFloetenspieler} 
-                    alt="Historische Hartschierle-Figur" 
-                    className="h-64 md:h-80 lg:h-96 object-contain relative z-10"
-                  />
                 </motion.div>
               </div>
+            </div>
+          </section>
+
+          {/* So funktioniert's Section */}
+          <section className="px-4 py-12 md:py-16 bg-primary/5">
+            <div className="max-w-4xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="font-display text-2xl md:text-3xl text-primary mb-10 text-center">
+                  {language === "de" ? "So funktioniert's" : "How it works"}
+                </h2>
+                <div className="grid md:grid-cols-3 gap-8">
+                  {/* Step 1 */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                    className="text-center"
+                  >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="font-display text-2xl text-primary">1</span>
+                    </div>
+                    <h3 className="font-display text-xl text-primary mb-2">
+                      {language === "de" ? "Karte ziehen" : "Draw a card"}
+                    </h3>
+                    <p className="font-body text-ink/70 text-sm">
+                      {language === "de" 
+                        ? "Jede Woche eine neue Frage für euch beide." 
+                        : "A new question for both of you every week."}
+                    </p>
+                  </motion.div>
+
+                  {/* Step 2 */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="text-center"
+                  >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="font-display text-2xl text-primary">2</span>
+                    </div>
+                    <h3 className="font-display text-xl text-primary mb-2">
+                      {language === "de" ? "Tacheles reden" : "Speak openly"}
+                    </h3>
+                    <p className="font-body text-ink/70 text-sm">
+                      {language === "de" 
+                        ? "Ehrliche Gespräche ohne Ablenkung." 
+                        : "Honest conversations without distractions."}
+                    </p>
+                  </motion.div>
+
+                  {/* Step 3 */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    className="text-center"
+                  >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="font-display text-2xl text-primary">3</span>
+                    </div>
+                    <h3 className="font-display text-xl text-primary mb-2">
+                      {language === "de" ? "Verbunden fühlen" : "Feel connected"}
+                    </h3>
+                    <p className="font-body text-ink/70 text-sm">
+                      {language === "de" 
+                        ? "Gemeinsam wachsen, Woche für Woche." 
+                        : "Grow together, week by week."}
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
             </div>
           </section>
 
