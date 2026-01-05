@@ -13,7 +13,7 @@ import { useProfileData } from "@/hooks/useProfileData";
 import { useSessionId } from "@/hooks/useSessionId";
 import { Archetype } from "@/components/FlippableCard";
 import { Button } from "@/components/ui/button";
-import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2 } from "lucide-react";
+import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2, FileText, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -375,80 +375,104 @@ const Index = () => {
           </section>
 
           {/* So funktioniert's Section */}
-          <section className="px-4 py-12 md:py-16 bg-primary/5">
+          <section className="px-4 py-8 md:py-10">
             <div className="max-w-4xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
+                className="bg-muted/50 rounded-2xl px-6 py-8 md:px-10 md:py-10 border border-border/30"
               >
-                <h2 className="font-display text-2xl md:text-3xl text-primary mb-10 text-center">
+                <h2 className="font-display text-xl md:text-2xl text-primary mb-6 text-center">
                   {language === "de" ? "So funktioniert's" : "How it works"}
                 </h2>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {/* Step 1 */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-center"
-                  >
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="font-display text-2xl text-primary">1</span>
-                    </div>
-                    <h3 className="font-display text-xl text-primary mb-2">
-                      {language === "de" ? "Karte ziehen" : "Draw a card"}
-                    </h3>
-                    <p className="font-body text-ink/70 text-sm">
-                      {language === "de" 
-                        ? "Jede Woche eine neue Frage für euch beide." 
-                        : "A new question for both of you every week."}
-                    </p>
-                  </motion.div>
+                
+                {/* Steps with heartbeat connector */}
+                <div className="relative">
+                  {/* Heartbeat SVG line connecting the icons */}
+                  <div className="hidden md:block absolute top-7 left-[15%] right-[15%] h-8 z-0">
+                    <svg 
+                      viewBox="0 0 400 32" 
+                      className="w-full h-full" 
+                      preserveAspectRatio="none"
+                    >
+                      <path 
+                        d="M0,16 L80,16 L90,16 L100,4 L110,28 L120,4 L130,28 L140,16 L200,16 L210,16 L220,4 L230,28 L240,4 L250,28 L260,16 L320,16 L330,16 L340,4 L350,28 L360,4 L370,28 L380,16 L400,16" 
+                        fill="none" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth="2" 
+                        strokeOpacity="0.25"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
 
-                  {/* Step 2 */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="text-center"
-                  >
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="font-display text-2xl text-primary">2</span>
-                    </div>
-                    <h3 className="font-display text-xl text-primary mb-2">
-                      {language === "de" ? "Tacheles reden" : "Speak openly"}
-                    </h3>
-                    <p className="font-body text-ink/70 text-sm">
-                      {language === "de" 
-                        ? "Ehrliche Gespräche ohne Ablenkung." 
-                        : "Honest conversations without distractions."}
-                    </p>
-                  </motion.div>
+                  <div className="grid md:grid-cols-3 gap-6 md:gap-4 relative z-10">
+                    {/* Step 1 */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.1 }}
+                      className="text-center"
+                    >
+                      <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center shadow-sm">
+                        <FileText className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="font-display text-lg text-primary font-semibold mb-1">
+                        {language === "de" ? "Karte ziehen" : "Draw a card"}
+                      </h3>
+                      <p className="font-body text-ink/70 text-base leading-snug">
+                        {language === "de" 
+                          ? "Jede Woche eine neue Frage für euch beide." 
+                          : "A new question for both of you every week."}
+                      </p>
+                    </motion.div>
 
-                  {/* Step 3 */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="text-center"
-                  >
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="font-display text-2xl text-primary">3</span>
-                    </div>
-                    <h3 className="font-display text-xl text-primary mb-2">
-                      {language === "de" ? "Verbunden fühlen" : "Feel connected"}
-                    </h3>
-                    <p className="font-body text-ink/70 text-sm">
-                      {language === "de" 
-                        ? "Gemeinsam wachsen, Woche für Woche." 
-                        : "Grow together, week by week."}
-                    </p>
-                  </motion.div>
+                    {/* Step 2 */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.2 }}
+                      className="text-center"
+                    >
+                      <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center shadow-sm">
+                        <MessageCircle className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="font-display text-lg text-primary font-semibold mb-1">
+                        {language === "de" ? "Tacheles reden" : "Speak openly"}
+                      </h3>
+                      <p className="font-body text-ink/70 text-base leading-snug">
+                        {language === "de" 
+                          ? "Ehrliche Gespräche ohne Ablenkung." 
+                          : "Honest conversations without distractions."}
+                      </p>
+                    </motion.div>
+
+                    {/* Step 3 */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 15 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: 0.3 }}
+                      className="text-center"
+                    >
+                      <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center shadow-sm">
+                        <Heart className="w-6 h-6 text-primary" />
+                      </div>
+                      <h3 className="font-display text-lg text-primary font-semibold mb-1">
+                        {language === "de" ? "Verbunden fühlen" : "Feel connected"}
+                      </h3>
+                      <p className="font-body text-ink/70 text-base leading-snug">
+                        {language === "de" 
+                          ? "Gemeinsam wachsen, Woche für Woche." 
+                          : "Grow together, week by week."}
+                      </p>
+                    </motion.div>
+                  </div>
                 </div>
               </motion.div>
             </div>
