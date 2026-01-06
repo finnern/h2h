@@ -68,7 +68,7 @@ const CuckooClock = ({
   const doorRotation = doorsOpen ? (isLeft ? -75 : 75) : 0;
 
   return (
-    // THE CONTAINER: Reference frame - no border, overflow visible for pendulum
+    // THE CONTAINER: Reference frame - overflow visible for pendulum
     <div 
       className="clock-wrapper relative overflow-visible"
       style={{ 
@@ -76,7 +76,7 @@ const CuckooClock = ({
         aspectRatio: '1 / 1.2',
       }}
     >
-      {/* Z-INDEX 1: Pendulum - starts inside house bottom, extends below */}
+      {/* Z-INDEX 1: Pendulum - BEHIND the house, swings from attachment point */}
       <motion.img
         src={cuckooPendulum}
         alt="Pendulum"
@@ -84,12 +84,11 @@ const CuckooClock = ({
         style={{
           zIndex: 1,
           mixBlendMode: "multiply",
-          width: "25%",
+          width: "80%",
           height: "auto",
-          top: "55%",
-          left: "37.5%",
+          top: "50%",
+          left: "10%",
           transformOrigin: "50% 0%",
-          scale: 1.5,
         }}
         animate={{ rotate: pendulumAngle }}
         transition={{
@@ -99,7 +98,7 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 5: Bird - hidden behind door in the gable window */}
+      {/* Z-INDEX 5: Bird - HIDDEN behind door, only visible when birdOut */}
       <motion.img
         src={cuckooBird}
         alt="Cuckoo bird"
@@ -107,14 +106,15 @@ const CuckooClock = ({
         style={{
           zIndex: 5,
           mixBlendMode: "multiply",
-          width: "32%",
+          width: "18%",
           height: "auto",
-          top: "12%",
-          left: "34%",
+          top: "8%",
+          left: "41%",
         }}
         animate={{
-          scale: birdOut ? 1.15 : 0.95,
-          y: birdOut ? "-8%" : "5%",
+          opacity: birdOut ? 1 : 0,
+          scale: birdOut ? 1.1 : 0.8,
+          y: birdOut ? "-10%" : "10%",
         }}
         transition={{
           type: "spring",
@@ -138,7 +138,7 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 15: Clock Hands - use SVG images, centered on dial */}
+      {/* Z-INDEX 15: Clock Hands - DIV elements for visibility */}
       <div
         className="absolute"
         style={{
@@ -147,43 +147,51 @@ const CuckooClock = ({
           height: "100%",
           top: 0,
           left: 0,
+          pointerEvents: "none",
         }}
       >
-        {/* Hour hand - fixed at 10 o'clock */}
-        <motion.img
-          src={cuckooHourHand}
-          alt="Hour Hand"
-          className="absolute"
+        {/* Clock face center point at ~53% from top, 50% from left */}
+        
+        {/* Hour hand - fixed at 10 o'clock (-60deg) */}
+        <motion.div
+          className="absolute bg-foreground rounded-full"
           style={{
-            mixBlendMode: "multiply",
-            width: "8%",
-            height: "auto",
-            top: "36%",
-            left: "46%",
+            width: "3px",
+            height: "20%",
+            top: "35%",
+            left: "calc(50% - 1.5px)",
             transformOrigin: "50% 90%",
           }}
           animate={{ rotate: -60 }}
         />
 
-        {/* Minute hand - rotates from 60° (10 min) to 90° (15 min) */}
-        <motion.img
-          src={cuckooMinuteHand}
-          alt="Minute Hand"
-          className="absolute"
+        {/* Minute hand - rotates from 60° to 90° (10 to 15 min past) */}
+        <motion.div
+          className="absolute bg-foreground rounded-full"
           style={{
-            mixBlendMode: "multiply",
-            width: "6%",
-            height: "auto",
-            top: "33%",
-            left: "47%",
+            width: "2px",
+            height: "25%",
+            top: "30%",
+            left: "calc(50% - 1px)",
             transformOrigin: "50% 95%",
           }}
           animate={{ rotate: minuteHandRotation }}
           transition={{ type: "tween", ease: "linear" }}
         />
+
+        {/* Center dot */}
+        <div
+          className="absolute bg-foreground rounded-full"
+          style={{
+            width: "6px",
+            height: "6px",
+            top: "calc(53% - 3px)",
+            left: "calc(50% - 3px)",
+          }}
+        />
       </div>
 
-      {/* Z-INDEX 20: Door - covers the bird in gable window */}
+      {/* Z-INDEX 20: Door - covers the bird until doorsOpen */}
       <motion.img
         src={isLeft ? cuckooDoorLeft : cuckooDoorRight}
         alt="Clock door"
@@ -193,7 +201,7 @@ const CuckooClock = ({
           mixBlendMode: "multiply",
           width: "14%",
           height: "auto",
-          top: "14%",
+          top: "10%",
           left: "43%",
           transformOrigin: isLeft ? "0% 50%" : "100% 50%",
         }}
