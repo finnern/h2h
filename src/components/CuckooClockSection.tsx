@@ -68,153 +68,154 @@ const CuckooClock = ({
   const doorRotation = doorsOpen ? (isLeft ? -75 : 75) : 0;
 
   return (
-    <div className="relative w-28 sm:w-32 md:w-36">
-      {/* Main clock assembly container */}
-      <div className="relative w-full" style={{ paddingBottom: "180%" }}>
-        {/* Z-INDEX 1: Bird (hidden behind doors initially) */}
-        <motion.img
-          src={cuckooBird}
-          alt="Cuckoo bird"
-          className="absolute"
-          style={{
-            zIndex: 1,
-            mixBlendMode: "multiply",
-            top: "18%",
-            left: "28%",
-            width: "44%",
-            height: "auto",
-          }}
-          animate={{
-            scale: birdOut ? 1.3 : 0.9,
-            y: birdOut ? "-20%" : "5%",
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 350,
-            damping: 18,
-          }}
-        />
+    // THE CONTAINER: Reference frame with strict aspect ratio 3:4
+    <div 
+      className="clock-wrapper relative overflow-visible"
+      style={{ 
+        width: '120px',
+        aspectRatio: '3 / 4',
+        border: '1px solid red', // DEBUG: Remove after alignment is verified
+      }}
+    >
+      {/* Z-INDEX 1: Pendulum - hangs BELOW the house */}
+      <motion.img
+        src={cuckooPendulum}
+        alt="Pendulum"
+        className="absolute"
+        style={{
+          zIndex: 1,
+          mixBlendMode: "multiply",
+          width: "80%",
+          height: "auto",
+          top: "95%",
+          left: "10%",
+          transformOrigin: "50% 0%", // Pivot at TOP
+          scale: 1.5, // 1.5x larger
+        }}
+        animate={{ rotate: pendulumAngle }}
+        transition={{
+          type: "tween",
+          ease: [0.37, 0, 0.63, 1],
+          duration: 0.016,
+        }}
+      />
 
-        {/* Z-INDEX 2: Pendulum (swings behind/below housing) */}
+      {/* Z-INDEX 5: Bird - hidden behind door initially */}
+      <motion.img
+        src={cuckooBird}
+        alt="Cuckoo bird"
+        className="absolute"
+        style={{
+          zIndex: 5,
+          mixBlendMode: "multiply",
+          width: "20%",
+          height: "auto",
+          top: "15%",
+          left: "40%",
+        }}
+        animate={{
+          scale: birdOut ? 1.4 : 1,
+          y: birdOut ? "-15%" : "0%",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 350,
+          damping: 18,
+        }}
+      />
+
+      {/* Z-INDEX 10: House - the main background */}
+      <img
+        src={cuckooHouse}
+        alt="Clock house"
+        className="absolute"
+        style={{
+          zIndex: 10,
+          mixBlendMode: "multiply",
+          width: "100%",
+          height: "auto",
+          top: 0,
+          left: 0,
+        }}
+      />
+
+      {/* Z-INDEX 20: Door - covers the bird */}
+      <motion.img
+        src={isLeft ? cuckooDoorLeft : cuckooDoorRight}
+        alt="Clock door"
+        className="absolute"
+        style={{
+          zIndex: 20,
+          mixBlendMode: "multiply",
+          width: "22%",
+          height: "auto",
+          top: "15%",
+          left: "39%",
+          transformOrigin: isLeft ? "0% 50%" : "100% 50%", // Pivot on OUTER edge
+        }}
+        animate={{ rotateY: doorRotation }}
+        transition={{
+          type: "spring",
+          stiffness: 180,
+          damping: 22,
+        }}
+      />
+
+      {/* Z-INDEX 25: Hands - centered on clock face */}
+      <div
+        className="absolute"
+        style={{
+          zIndex: 25,
+          width: "40%",
+          height: "40%",
+          top: "45%",
+          left: "30%",
+          // border: '1px solid blue', // DEBUG: Uncomment to see hands container
+        }}
+      >
+        {/* Hour hand - fixed at 10 o'clock (-60° from 12) */}
         <motion.div
-          className="absolute"
+          className="absolute bg-foreground"
           style={{
-            zIndex: 2,
-            top: "52%",
+            width: "4px",
+            height: "35%",
             left: "50%",
-            width: "35%",
-            marginLeft: "-17.5%",
-            transformOrigin: "50% 0%", // Pivot at TOP
-          }}
-          animate={{ rotate: pendulumAngle }}
-          transition={{
-            type: "tween",
-            ease: [0.37, 0, 0.63, 1],
-            duration: 0.016,
-          }}
-        >
-          <img
-            src={cuckooPendulum}
-            alt="Pendulum"
-            className="w-full h-auto"
-            style={{
-              mixBlendMode: "multiply",
-              transform: "scaleY(1.5)", // 1.5x longer
-              transformOrigin: "top center",
-            }}
-          />
-        </motion.div>
-
-        {/* Z-INDEX 3: Clock Housing */}
-        <img
-          src={cuckooHouse}
-          alt="Cuckoo clock house"
-          className="absolute inset-0 w-full"
-          style={{
-            zIndex: 3,
+            top: "50%",
+            marginLeft: "-2px",
+            marginTop: "-30%",
+            transformOrigin: "50% 85%",
+            borderRadius: "2px",
             mixBlendMode: "multiply",
-            height: "75%",
-            objectFit: "contain",
-            objectPosition: "top center",
           }}
+          animate={{ rotate: -60 }}
         />
 
-        {/* Z-INDEX 4: Clock Hands - FORCED VISIBLE */}
-        <div
-          className="absolute"
+        {/* Minute hand - rotates from 60° (10 min) to 90° (15 min) */}
+        <motion.div
+          className="absolute bg-foreground"
           style={{
-            zIndex: 4,
-            top: "42%",
+            width: "3px",
+            height: "48%",
             left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          {/* Hour hand - fixed at 10 o'clock (-60° from 12) */}
-          <motion.div
-            className="absolute bg-foreground"
-            style={{
-              width: "4px",
-              height: "18px",
-              left: "50%",
-              top: "50%",
-              marginLeft: "-2px",
-              marginTop: "-14px",
-              transformOrigin: "50% 78%",
-              borderRadius: "2px",
-              mixBlendMode: "multiply",
-            }}
-            animate={{ rotate: -60 }}
-          />
-
-          {/* Minute hand - rotates from 60° (10 min) to 90° (15 min) */}
-          <motion.div
-            className="absolute bg-foreground"
-            style={{
-              width: "3px",
-              height: "24px",
-              left: "50%",
-              top: "50%",
-              marginLeft: "-1.5px",
-              marginTop: "-20px",
-              transformOrigin: "50% 83%",
-              borderRadius: "2px",
-              mixBlendMode: "multiply",
-            }}
-            animate={{ rotate: minuteHandRotation }}
-            transition={{ type: "tween", ease: "linear" }}
-          />
-
-          {/* Center pin */}
-          <div
-            className="absolute w-2 h-2 bg-foreground rounded-full"
-            style={{
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-              mixBlendMode: "multiply",
-            }}
-          />
-        </div>
-
-        {/* Z-INDEX 5: Doors (cover the bird) */}
-        <motion.img
-          src={isLeft ? cuckooDoorLeft : cuckooDoorRight}
-          alt="Clock door"
-          className="absolute"
-          style={{
-            zIndex: 5,
+            top: "50%",
+            marginLeft: "-1.5px",
+            marginTop: "-42%",
+            transformOrigin: "50% 87%",
+            borderRadius: "2px",
             mixBlendMode: "multiply",
-            top: "17%",
-            left: isLeft ? "26%" : "52%",
-            width: "22%",
-            height: "auto",
-            transformOrigin: isLeft ? "0% 50%" : "100% 50%", // Pivot on OUTER edge
           }}
-          animate={{ rotateY: doorRotation }}
-          transition={{
-            type: "spring",
-            stiffness: 180,
-            damping: 22,
+          animate={{ rotate: minuteHandRotation }}
+          transition={{ type: "tween", ease: "linear" }}
+        />
+
+        {/* Center pin */}
+        <div
+          className="absolute w-2 h-2 bg-foreground rounded-full"
+          style={{
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            mixBlendMode: "multiply",
           }}
         />
       </div>
