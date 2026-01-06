@@ -68,16 +68,15 @@ const CuckooClock = ({
   const doorRotation = doorsOpen ? (isLeft ? -75 : 75) : 0;
 
   return (
-    // THE CONTAINER: Reference frame with strict aspect ratio 3:4
+    // THE CONTAINER: Reference frame - no border, overflow visible for pendulum
     <div 
       className="clock-wrapper relative overflow-visible"
       style={{ 
-        width: '120px',
-        aspectRatio: '3 / 4',
-        border: '1px solid red', // DEBUG: Remove after alignment is verified
+        width: '140px',
+        aspectRatio: '1 / 1.2',
       }}
     >
-      {/* Z-INDEX 1: Pendulum - hangs BELOW the house */}
+      {/* Z-INDEX 1: Pendulum - starts inside house bottom, extends below */}
       <motion.img
         src={cuckooPendulum}
         alt="Pendulum"
@@ -85,12 +84,12 @@ const CuckooClock = ({
         style={{
           zIndex: 1,
           mixBlendMode: "multiply",
-          width: "80%",
+          width: "25%",
           height: "auto",
-          top: "95%",
-          left: "10%",
-          transformOrigin: "50% 0%", // Pivot at TOP
-          scale: 1.5, // 1.5x larger
+          top: "55%",
+          left: "37.5%",
+          transformOrigin: "50% 0%",
+          scale: 1.5,
         }}
         animate={{ rotate: pendulumAngle }}
         transition={{
@@ -100,7 +99,7 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 5: Bird - hidden behind door initially */}
+      {/* Z-INDEX 5: Bird - hidden behind door in the gable window */}
       <motion.img
         src={cuckooBird}
         alt="Cuckoo bird"
@@ -108,14 +107,14 @@ const CuckooClock = ({
         style={{
           zIndex: 5,
           mixBlendMode: "multiply",
-          width: "20%",
+          width: "32%",
           height: "auto",
-          top: "15%",
-          left: "40%",
+          top: "12%",
+          left: "34%",
         }}
         animate={{
-          scale: birdOut ? 1.4 : 1,
-          y: birdOut ? "-15%" : "0%",
+          scale: birdOut ? 1.15 : 0.95,
+          y: birdOut ? "-8%" : "5%",
         }}
         transition={{
           type: "spring",
@@ -139,7 +138,52 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 20: Door - covers the bird */}
+      {/* Z-INDEX 15: Clock Hands - use SVG images, centered on dial */}
+      <div
+        className="absolute"
+        style={{
+          zIndex: 15,
+          width: "100%",
+          height: "100%",
+          top: 0,
+          left: 0,
+        }}
+      >
+        {/* Hour hand - fixed at 10 o'clock */}
+        <motion.img
+          src={cuckooHourHand}
+          alt="Hour Hand"
+          className="absolute"
+          style={{
+            mixBlendMode: "multiply",
+            width: "8%",
+            height: "auto",
+            top: "36%",
+            left: "46%",
+            transformOrigin: "50% 90%",
+          }}
+          animate={{ rotate: -60 }}
+        />
+
+        {/* Minute hand - rotates from 60° (10 min) to 90° (15 min) */}
+        <motion.img
+          src={cuckooMinuteHand}
+          alt="Minute Hand"
+          className="absolute"
+          style={{
+            mixBlendMode: "multiply",
+            width: "6%",
+            height: "auto",
+            top: "33%",
+            left: "47%",
+            transformOrigin: "50% 95%",
+          }}
+          animate={{ rotate: minuteHandRotation }}
+          transition={{ type: "tween", ease: "linear" }}
+        />
+      </div>
+
+      {/* Z-INDEX 20: Door - covers the bird in gable window */}
       <motion.img
         src={isLeft ? cuckooDoorLeft : cuckooDoorRight}
         alt="Clock door"
@@ -147,11 +191,11 @@ const CuckooClock = ({
         style={{
           zIndex: 20,
           mixBlendMode: "multiply",
-          width: "22%",
+          width: "14%",
           height: "auto",
-          top: "15%",
-          left: "39%",
-          transformOrigin: isLeft ? "0% 50%" : "100% 50%", // Pivot on OUTER edge
+          top: "14%",
+          left: "43%",
+          transformOrigin: isLeft ? "0% 50%" : "100% 50%",
         }}
         animate={{ rotateY: doorRotation }}
         transition={{
@@ -160,65 +204,6 @@ const CuckooClock = ({
           damping: 22,
         }}
       />
-
-      {/* Z-INDEX 25: Hands - centered on clock face */}
-      <div
-        className="absolute"
-        style={{
-          zIndex: 25,
-          width: "40%",
-          height: "40%",
-          top: "45%",
-          left: "30%",
-          // border: '1px solid blue', // DEBUG: Uncomment to see hands container
-        }}
-      >
-        {/* Hour hand - fixed at 10 o'clock (-60° from 12) */}
-        <motion.div
-          className="absolute bg-foreground"
-          style={{
-            width: "4px",
-            height: "35%",
-            left: "50%",
-            top: "50%",
-            marginLeft: "-2px",
-            marginTop: "-30%",
-            transformOrigin: "50% 85%",
-            borderRadius: "2px",
-            mixBlendMode: "multiply",
-          }}
-          animate={{ rotate: -60 }}
-        />
-
-        {/* Minute hand - rotates from 60° (10 min) to 90° (15 min) */}
-        <motion.div
-          className="absolute bg-foreground"
-          style={{
-            width: "3px",
-            height: "48%",
-            left: "50%",
-            top: "50%",
-            marginLeft: "-1.5px",
-            marginTop: "-42%",
-            transformOrigin: "50% 87%",
-            borderRadius: "2px",
-            mixBlendMode: "multiply",
-          }}
-          animate={{ rotate: minuteHandRotation }}
-          transition={{ type: "tween", ease: "linear" }}
-        />
-
-        {/* Center pin */}
-        <div
-          className="absolute w-2 h-2 bg-foreground rounded-full"
-          style={{
-            left: "50%",
-            top: "50%",
-            transform: "translate(-50%, -50%)",
-            mixBlendMode: "multiply",
-          }}
-        />
-      </div>
     </div>
   );
 };
@@ -378,18 +363,18 @@ export const CuckooClockSection = () => {
               />
             </div>
 
-            {/* Sync indicator */}
-            <div className="w-full flex flex-col items-center mt-2">
-              <div className="w-full max-w-[180px] h-1.5 bg-muted rounded-full overflow-hidden">
+            {/* Sync indicator - positioned lower */}
+            <div className="w-full flex flex-col items-center mt-auto pt-16">
+              <div className="w-full max-w-[200px] h-2 bg-muted rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-primary/80 rounded-full"
                   style={{ width: `${currentSync * 100}%` }}
                 />
               </div>
-              <p className="font-body text-xs text-ink/50 mt-1">
+              <p className="font-body text-sm text-ink/50 mt-2 italic">
                 {language === "de"
                   ? `Synchronisation: ${Math.round(currentSync * 100)}%`
-                  : `Sync: ${Math.round(currentSync * 100)}%`}
+                  : `Synchronisation: ${Math.round(currentSync * 100)}%`}
               </p>
             </div>
           </div>
@@ -445,17 +430,17 @@ export const CuckooClockSection = () => {
           </div>
 
           {/* Sync indicator */}
-          <div className="w-full flex flex-col items-center mt-4">
-            <div className="w-40 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div className="w-full flex flex-col items-center mt-8">
+            <div className="w-48 h-2 bg-muted rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-primary/80 rounded-full"
                 style={{ width: `${currentSync * 100}%` }}
               />
             </div>
-            <p className="font-body text-xs text-ink/50 mt-1">
+            <p className="font-body text-sm text-ink/50 mt-2 italic">
               {language === "de"
                 ? `Synchronisation: ${Math.round(currentSync * 100)}%`
-                : `Sync: ${Math.round(currentSync * 100)}%`}
+                : `Synchronisation: ${Math.round(currentSync * 100)}%`}
             </p>
           </div>
         </div>
