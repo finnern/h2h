@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { useSessionId } from './useSessionId';
+import { getSupabaseWithSession, getCurrentSessionId } from '@/lib/supabaseWithSession';
 
 export interface ProfileData {
   coupleNames: string;
@@ -15,9 +14,12 @@ export interface MemoriesData {
 }
 
 export const useProfileData = () => {
-  const sessionId = useSessionId();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Get session-aware Supabase client and current session ID
+  const supabase = getSupabaseWithSession();
+  const sessionId = getCurrentSessionId();
 
   const saveProfileAndTriggerProduction = useCallback(async (
     profileData: ProfileData,
