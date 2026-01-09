@@ -16,7 +16,7 @@ import { Archetype } from "@/components/FlippableCard";
 import { Button } from "@/components/ui/button";
 import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2, FileText, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabaseWithSession } from "@/lib/supabaseWithSession";
 import {
   Accordion,
   AccordionContent,
@@ -260,6 +260,8 @@ const Index = () => {
     setIsOrdering(true);
     
     try {
+      // Use session-aware Supabase client for RLS compliance
+      const supabase = getSupabaseWithSession();
       const { data, error } = await supabase.functions.invoke('order-production', {
         body: {
           cards: currentCards.map(card => ({

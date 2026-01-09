@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getCurrentSessionId } from '@/lib/supabaseWithSession';
 
 const SESSION_KEY = 'h2h_session_id';
 
@@ -11,14 +12,10 @@ export const useSessionId = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   useEffect(() => {
-    let storedSessionId = localStorage.getItem(SESSION_KEY);
-    
-    if (!storedSessionId) {
-      storedSessionId = generateSessionId();
-      localStorage.setItem(SESSION_KEY, storedSessionId);
-    }
-    
-    setSessionId(storedSessionId);
+    // Use the centralized session ID from supabaseWithSession
+    // This ensures the same session ID is used for RLS validation
+    const currentSessionId = getCurrentSessionId();
+    setSessionId(currentSessionId);
   }, []);
 
   return sessionId;
