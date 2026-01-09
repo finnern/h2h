@@ -65,30 +65,62 @@ const CuckooClock = ({
   birdOut,
 }: CuckooClockProps) => {
   const pendulumAngle = usePendulumSwing(isLeft, syncProgress);
-  const doorRotation = doorsOpen ? (isLeft ? -75 : 75) : 0;
+
+  // Visual tuning constants (easy to tweak step-by-step)
+  const WIDTH_PX = 150;
+  const PENDULUM = {
+    top: "43%", // ensures top part is behind the house
+    left: "-6%",
+    width: "112%", // bigger
+  } as const;
+
+  const BIRD = {
+    top: "7.5%",
+    left: "42.5%",
+    width: "14%",
+  } as const;
+
+  const DOOR = {
+    top: "7.3%",
+    leftLeft: "38.5%",
+    leftRight: "50%",
+    width: "19%", // each door; combined covers the hole
+  } as const;
+
+  const HANDS_SCALE = 0.62;
+
+  const doorLeftRotation = doorsOpen ? -80 : 0;
+  const doorRightRotation = doorsOpen ? 80 : 0;
 
   return (
-    // THE CONTAINER: Reference frame - overflow visible for pendulum
-    <div 
+    // Reference frame (overflow visible so the pendulum can hang below)
+    <div
       className="clock-wrapper relative overflow-visible"
-      style={{ 
-        width: '140px',
-        aspectRatio: '1 / 1.2',
+      style={{
+        width: `${WIDTH_PX}px`,
+        aspectRatio: "1 / 1.2",
       }}
     >
-      {/* Z-INDEX 1: Pendulum - BEHIND the house, swings from attachment point */}
+      {/* White card background (hides the pendulum SVG's white frame while swinging) */}
+      <div
+        className="absolute inset-0 rounded-md bg-paper shadow-sm"
+        style={{ zIndex: 0 }}
+        aria-hidden="true"
+      />
+
+      {/* Pendulum (BEHIND the house) */}
       <motion.img
         src={cuckooPendulum}
-        alt="Pendulum"
+        alt="Pendel"
         className="absolute"
         style={{
           zIndex: 1,
           mixBlendMode: "multiply",
-          width: "80%",
           height: "auto",
-          top: "50%",
-          left: "10%",
-          transformOrigin: "50% 0%",
+          top: PENDULUM.top,
+          left: PENDULUM.left,
+          width: PENDULUM.width,
+          transformOrigin: "50% 6%",
         }}
         animate={{ rotate: pendulumAngle }}
         transition={{
@@ -98,35 +130,10 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 5: Bird - HIDDEN behind door, only visible when birdOut */}
-      <motion.img
-        src={cuckooBird}
-        alt="Cuckoo bird"
-        className="absolute"
-        style={{
-          zIndex: 5,
-          mixBlendMode: "multiply",
-          width: "18%",
-          height: "auto",
-          top: "8%",
-          left: "41%",
-        }}
-        animate={{
-          opacity: birdOut ? 1 : 0,
-          scale: birdOut ? 1.1 : 0.8,
-          y: birdOut ? "-10%" : "10%",
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 350,
-          damping: 18,
-        }}
-      />
-
-      {/* Z-INDEX 10: House - the main background */}
+      {/* House */}
       <img
         src={cuckooHouse}
-        alt="Clock house"
+        alt="Kuckucksuhr-Gehäuse"
         className="absolute"
         style={{
           zIndex: 10,
@@ -138,79 +145,110 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Z-INDEX 15: Clock Hands - DIV elements for visibility */}
+      {/* Clock hands (SVG pointers, scaled down) */}
       <div
         className="absolute"
         style={{
-          zIndex: 15,
+          zIndex: 16,
           width: "100%",
           height: "100%",
           top: 0,
           left: 0,
           pointerEvents: "none",
         }}
+        aria-hidden="true"
       >
-        {/* Clock face center point at ~53% from top, 50% from left */}
-        
-        {/* Hour hand - fixed at 10 o'clock (-60deg) */}
-        <motion.div
-          className="absolute bg-foreground rounded-full"
+        <motion.img
+          src={cuckooHourHand}
+          alt="Stundenzeiger"
+          className="absolute"
           style={{
-            width: "3px",
-            height: "20%",
-            top: "35%",
-            left: "calc(50% - 1.5px)",
-            transformOrigin: "50% 90%",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            mixBlendMode: "multiply",
+            transformOrigin: "50% 50%",
+            scale: HANDS_SCALE,
           }}
           animate={{ rotate: -60 }}
+          transition={{ type: "tween", ease: "linear" }}
         />
 
-        {/* Minute hand - rotates from 60° to 90° (10 to 15 min past) */}
-        <motion.div
-          className="absolute bg-foreground rounded-full"
+        <motion.img
+          src={cuckooMinuteHand}
+          alt="Minutenzeiger"
+          className="absolute"
           style={{
-            width: "2px",
-            height: "25%",
-            top: "30%",
-            left: "calc(50% - 1px)",
-            transformOrigin: "50% 95%",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            mixBlendMode: "multiply",
+            transformOrigin: "50% 50%",
+            scale: HANDS_SCALE,
           }}
           animate={{ rotate: minuteHandRotation }}
           transition={{ type: "tween", ease: "linear" }}
         />
-
-        {/* Center dot */}
-        <div
-          className="absolute bg-foreground rounded-full"
-          style={{
-            width: "6px",
-            height: "6px",
-            top: "calc(53% - 3px)",
-            left: "calc(50% - 3px)",
-          }}
-        />
       </div>
 
-      {/* Z-INDEX 20: Door - covers the bird until doorsOpen */}
+      {/* Bird (hidden behind doors until cuckoo moment) */}
       <motion.img
-        src={isLeft ? cuckooDoorLeft : cuckooDoorRight}
-        alt="Clock door"
+        src={cuckooBird}
+        alt="Kuckuck"
         className="absolute"
         style={{
-          zIndex: 20,
+          zIndex: 18,
           mixBlendMode: "multiply",
-          width: "14%",
+          width: BIRD.width,
           height: "auto",
-          top: "10%",
-          left: "43%",
-          transformOrigin: isLeft ? "0% 50%" : "100% 50%",
+          top: BIRD.top,
+          left: BIRD.left,
         }}
-        animate={{ rotateY: doorRotation }}
+        animate={{
+          opacity: birdOut ? 1 : 0,
+          scale: birdOut ? 1 : 0.85,
+          y: birdOut ? "-6%" : "8%",
+        }}
         transition={{
           type: "spring",
-          stiffness: 180,
-          damping: 22,
+          stiffness: 350,
+          damping: 20,
         }}
+      />
+
+      {/* Doors (bigger, cover the whole hole) */}
+      <motion.img
+        src={cuckooDoorLeft}
+        alt="Tür links"
+        className="absolute"
+        style={{
+          zIndex: 25,
+          mixBlendMode: "multiply",
+          width: DOOR.width,
+          height: "auto",
+          top: DOOR.top,
+          left: DOOR.leftLeft,
+          transformOrigin: "0% 50%",
+        }}
+        animate={{ rotateY: doorLeftRotation }}
+        transition={{ type: "spring", stiffness: 180, damping: 22 }}
+      />
+
+      <motion.img
+        src={cuckooDoorRight}
+        alt="Tür rechts"
+        className="absolute"
+        style={{
+          zIndex: 25,
+          mixBlendMode: "multiply",
+          width: DOOR.width,
+          height: "auto",
+          top: DOOR.top,
+          left: DOOR.leftRight,
+          transformOrigin: "100% 50%",
+        }}
+        animate={{ rotateY: doorRightRotation }}
+        transition={{ type: "spring", stiffness: 180, damping: 22 }}
       />
     </div>
   );
