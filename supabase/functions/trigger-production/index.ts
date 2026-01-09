@@ -70,7 +70,25 @@ serve(async (req) => {
       );
     }
 
-    const { profile_id, couple_data, memories, history_opt_in } = requestBody;
+    const { profile_id, couple_data, memories, history_opt_in, session_id } = requestBody;
+
+    // Validate session_id (required for ownership verification)
+    if (!session_id || typeof session_id !== 'string') {
+      console.error('Missing or invalid session_id');
+      return new Response(
+        JSON.stringify({ error: 'Session required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate session_id format (reasonable length check)
+    if (session_id.length > 100 || session_id.length < 10) {
+      console.error('Invalid session_id format');
+      return new Response(
+        JSON.stringify({ error: 'Invalid session format' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Validate profile_id (required, must be UUID)
     if (!isValidUUID(profile_id)) {
@@ -115,18 +133,19 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Verify that the profile exists in the database (ownership verification)
+    // Verify that the profile exists AND belongs to this session (ownership check)
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('id, session_id')
       .eq('id', profile_id)
+      .eq('session_id', session_id)
       .single();
 
     if (profileError || !profileData) {
-      console.error('Profile not found or access denied:', profileError);
+      console.error('Profile not found or session mismatch:', profileError);
       return new Response(
-        JSON.stringify({ error: 'Profile not found' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 

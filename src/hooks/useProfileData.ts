@@ -93,6 +93,7 @@ export const useProfileData = () => {
             couple_data: coupleData,
             memories: memoriesData,
             history_opt_in: profileData.historyOptIn,
+            session_id: sessionId,
           },
         }
       );
