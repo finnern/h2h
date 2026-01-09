@@ -69,9 +69,9 @@ const CuckooClock = ({
   // Visual tuning constants (easy to tweak step-by-step)
   const WIDTH_PX = 150;
   const PENDULUM = {
-    top: "43%", // ensures top part is behind the house
-    left: "-6%",
-    width: "112%", // bigger
+    top: "58%", // 50% lower, top 15% behind house
+    left: "20%",
+    width: "60%", // proper size
   } as const;
 
   const BIRD = {
@@ -81,13 +81,18 @@ const CuckooClock = ({
   } as const;
 
   const DOOR = {
-    top: "7.3%",
-    leftLeft: "38.5%",
+    top: "15%",
+    leftLeft: "33%",
     leftRight: "50%",
-    width: "19%", // each door; combined covers the hole
+    width: "17%", // each door covers half the hole
   } as const;
 
-  const HANDS_SCALE = 0.62;
+  const HANDS = {
+    top: "28%",
+    left: "25%",
+    width: "50%",
+    height: "30%",
+  } as const;
 
   const doorLeftRotation = doorsOpen ? -80 : 0;
   const doorRightRotation = doorsOpen ? 80 : 0;
@@ -101,14 +106,14 @@ const CuckooClock = ({
         aspectRatio: "1 / 1.2",
       }}
     >
-      {/* White card background (hides the pendulum SVG's white frame while swinging) */}
+      {/* White card background */}
       <div
-        className="absolute inset-0 rounded-md bg-paper shadow-sm"
+        className="absolute inset-0 rounded-md bg-paper"
         style={{ zIndex: 0 }}
         aria-hidden="true"
       />
 
-      {/* Pendulum (BEHIND the house) */}
+      {/* Pendulum (BEHIND the house, no background) */}
       <motion.img
         src={cuckooPendulum}
         alt="Pendel"
@@ -120,7 +125,8 @@ const CuckooClock = ({
           top: PENDULUM.top,
           left: PENDULUM.left,
           width: PENDULUM.width,
-          transformOrigin: "50% 6%",
+          transformOrigin: "50% 0%",
+          filter: "drop-shadow(0 0 0 transparent)",
         }}
         animate={{ rotate: pendulumAngle }}
         transition={{
@@ -145,51 +151,44 @@ const CuckooClock = ({
         }}
       />
 
-      {/* Clock hands (SVG pointers, scaled down) */}
-      <div
+      {/* Clock hands (SVG pointers, properly sized and positioned) */}
+      <motion.img
+        src={cuckooHourHand}
+        alt="Stundenzeiger"
         className="absolute"
         style={{
           zIndex: 16,
-          width: "100%",
-          height: "100%",
-          top: 0,
-          left: 0,
+          top: HANDS.top,
+          left: HANDS.left,
+          width: HANDS.width,
+          height: HANDS.height,
+          objectFit: "contain",
+          mixBlendMode: "multiply",
+          transformOrigin: "50% 50%",
           pointerEvents: "none",
         }}
-        aria-hidden="true"
-      >
-        <motion.img
-          src={cuckooHourHand}
-          alt="Stundenzeiger"
-          className="absolute"
-          style={{
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            mixBlendMode: "multiply",
-            transformOrigin: "50% 50%",
-            scale: HANDS_SCALE,
-          }}
-          animate={{ rotate: -60 }}
-          transition={{ type: "tween", ease: "linear" }}
-        />
+        animate={{ rotate: -60 }}
+        transition={{ type: "tween", ease: "linear" }}
+      />
 
-        <motion.img
-          src={cuckooMinuteHand}
-          alt="Minutenzeiger"
-          className="absolute"
-          style={{
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            mixBlendMode: "multiply",
-            transformOrigin: "50% 50%",
-            scale: HANDS_SCALE,
-          }}
-          animate={{ rotate: minuteHandRotation }}
-          transition={{ type: "tween", ease: "linear" }}
-        />
-      </div>
+      <motion.img
+        src={cuckooMinuteHand}
+        alt="Minutenzeiger"
+        className="absolute"
+        style={{
+          zIndex: 17,
+          top: HANDS.top,
+          left: HANDS.left,
+          width: HANDS.width,
+          height: HANDS.height,
+          objectFit: "contain",
+          mixBlendMode: "multiply",
+          transformOrigin: "50% 50%",
+          pointerEvents: "none",
+        }}
+        animate={{ rotate: minuteHandRotation }}
+        transition={{ type: "tween", ease: "linear" }}
+      />
 
       {/* Bird (hidden behind doors until cuckoo moment) */}
       <motion.img
