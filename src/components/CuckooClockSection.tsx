@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
-import cuckooClock from "@/assets/cuckoo-clock.svg";
-import cuckooPendulum from "@/assets/cuckoo-pendulum.svg";
-import cuckooBird from "@/assets/cuckoo-bird.png"; // Assuming PNG for bird based on previous context
+
+// FIX: Korrekte Dateinamen aus deinem Assets-Ordner
+import cuckooClock from "../assets/cuckoo-house.svg"; // Hieß vorher cuckoo-clock.svg
+import cuckooPendulum from "../assets/cuckoo-pendulum.svg";
+import cuckooBird from "../assets/cuckoo-bird.svg"; // War .png, ist aber .svg
 
 // --- KONSTANTEN ---
 const WIDTH_PX = 220; // Größer, wie gewünscht
