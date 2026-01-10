@@ -7,7 +7,7 @@ import { CardGrid } from "@/components/CardGrid";
 import { ConversionFooter } from "@/components/ConversionFooter";
 import { HeartbeatLine } from "@/components/HeartbeatLine";
 import { LanguageToggle } from "@/components/LanguageToggle";
-import { CuckooClockSection } from "@/components/CuckooClockSection";
+import { CuckooClockSection } from "@/components/ui/CuckooClockSection";
 import AuthButton from "@/components/AuthButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProfileData } from "@/hooks/useProfileData";
