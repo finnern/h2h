@@ -67,11 +67,11 @@ const CuckooClock = ({
   const pendulumAngle = usePendulumSwing(isLeft, syncProgress);
 
   // Visual tuning constants (easy to tweak step-by-step)
-  const WIDTH_PX = 150;
+  const WIDTH_PX = 200;
   const PENDULUM = {
     top: "58%", // 50% lower, top 15% behind house
-    left: "20%",
-    width: "60%", // proper size
+    left: "10%", // more centered
+    width: "80%", // larger pendulum
   } as const;
 
   const BIRD = {
@@ -113,20 +113,19 @@ const CuckooClock = ({
         aria-hidden="true"
       />
 
-      {/* Pendulum (BEHIND the house, no background) */}
+      {/* Pendulum (BEHIND the house, in front of background) */}
       <motion.img
         src={cuckooPendulum}
         alt="Pendel"
         className="absolute"
         style={{
-          zIndex: 1,
+          zIndex: 5, // Behind house (zIndex 10) but in front of background (zIndex 0)
           mixBlendMode: "multiply",
           height: "auto",
           top: PENDULUM.top,
           left: PENDULUM.left,
           width: PENDULUM.width,
           transformOrigin: "50% 0%",
-          filter: "drop-shadow(0 0 0 transparent)",
         }}
         animate={{ rotate: pendulumAngle }}
         transition={{
@@ -391,7 +390,7 @@ export const CuckooClockSection = () => {
         <div className="sticky top-5 h-fit p-4 lg:p-6">
           <div className="flex flex-col items-start gap-4">
             {/* Two clocks side by side */}
-            <div className="flex items-start justify-center gap-3 w-full">
+            <div className="flex items-start justify-center gap-1 w-full">
               <CuckooClock
                 isLeft={true}
                 syncProgress={currentSync}
