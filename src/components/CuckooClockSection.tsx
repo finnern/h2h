@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
 
 // FIX: Korrekte Dateinamen aus deinem Assets-Ordner
 import cuckooClock from "../assets/cuckoo-house.svg"; // Hieß vorher cuckoo-clock.svg
@@ -12,53 +12,108 @@ const PENDULUM_LENGTH = 180;
 const GRAVITY = 0.4; // Etwas stärker für snappiness
 
 export const CuckooClockSection = () => {
-  const [syncProgress, setSyncProgress] = useState(0);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [hasTriggeredCuckoo, setHasTriggeredCuckoo] = useState(false);
+
+  // Track scroll progress through this section (0 = top, 1 = bottom)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"], // Start when section enters viewport, end when it leaves
+  });
+
+  // Transform scroll progress to sync progress (ease it for smoother feel)
+  const syncProgress = useTransform(scrollYProgress, [0.2, 0.8], [0, 1]);
 
   // Wir nutzen einen gemeinsamen Hook für BEIDE Pendel (Kollisionsphysik)
   const { leftAngle, rightAngle } = useCoupledPendulums(syncProgress);
 
+  // Trigger cuckoo when reaching 100% sync
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      if (latest > 0.85 && !hasTriggeredCuckoo) {
+        setHasTriggeredCuckoo(true);
+      }
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, hasTriggeredCuckoo]);
+
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-[#F9F7F2] py-20 relative overflow-hidden">
-      <div className="container mx-auto px-4 z-10">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
-          {/* VISUALISIERUNG: Die Uhren */}
-          <div className="relative h-[450px] flex items-start justify-center">
-            {/* Wir nutzen negative Margin, damit sie näher zusammenrücken für den "Clash" */}
-            <div className="flex justify-center items-start -space-x-8">
-              <Clock angle={leftAngle} isLeft={true} syncProgress={syncProgress} />
-              <Clock angle={rightAngle} isLeft={false} syncProgress={syncProgress} />
-            </div>
-          </div>
-
-          {/* TEXT CONTENT */}
-          <div className="max-w-md space-y-8 text-center md:text-left">
-            <div className="space-y-4">
-              <span className="font-serif italic text-2xl text-cuckoo-dark/60">Die Huygens-Entdeckung</span>
-              <h2 className="text-4xl md:text-5xl font-serif text-cuckoo-dark leading-tight">
-                Synchronisation durch gemeinsame Resonanz
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              <p className="text-cuckoo-text text-lg leading-relaxed">
-                1665 bemerkte Christiaan Huygens etwas Merkwürdiges: Zwei Pendeluhren, die am gleichen Balken hingen,
-                fanden "durch unmerkliche Vibrationen" immer in einen gemeinsamen Rhythmus.
-              </p>
-
-              {/* Sync Slider */}
-              <div className="pt-4">
-                <label className="text-sm text-cuckoo-dark/50 mb-2 block font-serif italic">
-                  Synchronisation: {Math.round(syncProgress * 100)}%
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={syncProgress}
-                  onChange={(e) => setSyncProgress(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-cuckoo-taupe rounded-lg appearance-none cursor-pointer accent-cuckoo-brick"
+    <section
+      ref={sectionRef}
+      className="min-h-[200vh] flex flex-col items-center justify-center bg-paper py-20 relative overflow-hidden"
+    >
+      {/* Sticky container that stays in viewport while scrolling */}
+      <div className="sticky top-0 w-full min-h-screen flex items-center justify-center">
+        <div className="container mx-auto px-4 z-10">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24">
+            {/* VISUALISIERUNG: Die Uhren */}
+            <div className="relative h-[450px] flex items-start justify-center">
+              {/* Wir nutzen negative Margin, damit sie näher zusammenrücken für den "Clash" */}
+              <div className="flex justify-center items-start -space-x-8">
+                <Clock
+                  angle={leftAngle}
+                  isLeft={true}
+                  syncProgress={syncProgress}
+                  shouldTriggerCuckoo={hasTriggeredCuckoo}
                 />
+                <Clock
+                  angle={rightAngle}
+                  isLeft={false}
+                  syncProgress={syncProgress}
+                  shouldTriggerCuckoo={hasTriggeredCuckoo}
+                />
+              </div>
+            </div>
+
+            {/* TEXT CONTENT */}
+            <div className="max-w-md space-y-8 text-center md:text-left">
+              <div className="space-y-4">
+                <span className="font-body italic text-2xl text-primary/60">Die Huygens-Entdeckung</span>
+                <h2 className="text-4xl md:text-5xl font-display text-primary leading-tight">
+                  Synchronisation durch gemeinsame Resonanz
+                </h2>
+              </div>
+
+              <div className="space-y-6">
+                <p className="text-foreground text-lg leading-relaxed font-body">
+                  <span className="italic">1665:</span> Das Experiment
+                </p>
+                <p className="text-foreground text-lg leading-relaxed font-body">
+                  Christiaan Huygens, der Erfinder der Pendeluhr, bemerkte etwas Merkwürdiges: Zwei Uhren,
+                  die am gleichen Holzbalken hingen, synchronisierten ihre Schwingungen automatisch.
+                </p>
+
+                <blockquote className="italic text-muted-foreground border-l-4 border-primary pl-4">
+                  "Sie fanden durch unmerkliche Vibrationen im Holz immer in einen gemeinsamen Rhythmus."
+                </blockquote>
+
+                <p className="text-foreground text-lg leading-relaxed font-body">
+                  <span className="font-semibold text-primary">Hertz an Hertz:</span> Wir nutzen dieses Prinzip für Beziehungen.
+                  Die Karten sind euer "Balken". Indem ihr euch auf die gleiche Frage (Frequenz) einstimmt,
+                  schafft ihr Resonanz.
+                </p>
+
+                {/* Progress indicator */}
+                <div className="pt-4">
+                  <motion.div
+                    className="h-2 bg-secondary rounded-full overflow-hidden"
+                    initial={{ opacity: 0.3 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <motion.div
+                      className="h-full bg-primary rounded-full"
+                      style={{ scaleX: syncProgress, transformOrigin: "left" }}
+                    />
+                  </motion.div>
+                  <motion.p
+                    className="text-sm text-muted-foreground mt-2 font-body italic text-center"
+                    style={{ opacity: useTransform(scrollYProgress, [0, 0.2], [0, 1]) }}
+                  >
+                    Synchronisation: <motion.span className="text-primary font-semibold">
+                      {useTransform(syncProgress, (v: number) => `${Math.round(v * 100)}%`)}
+                    </motion.span>
+                  </motion.p>
+                </div>
               </div>
             </div>
           </div>
@@ -69,26 +124,44 @@ export const CuckooClockSection = () => {
 };
 
 // --- SUB-KOMPONENTE: Einzelne Uhr ---
-const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean; syncProgress: number }) => {
+const Clock = ({
+  angle,
+  isLeft,
+  syncProgress,
+  shouldTriggerCuckoo,
+}: {
+  angle: number;
+  isLeft: boolean;
+  syncProgress: any; // MotionValue
+  shouldTriggerCuckoo: boolean;
+}) => {
   const [doorsOpen, setDoorsOpen] = useState(false);
+  const [cuckooHasRun, setCuckooHasRun] = useState(false);
   const controls = useAnimation();
 
-  // Kuckuck Logik: Kommt raus bei hoher Sync (simuliert) oder zufällig
+  // Trigger cuckoo only once when signal received and only on one clock
   useEffect(() => {
-    // Einfache Logik: Wenn Sync > 80%, dann ab und zu Kuckuck
-    if (syncProgress > 0.8 && Math.random() > 0.99) {
+    if (shouldTriggerCuckoo && !cuckooHasRun && isLeft) {
+      // Only left clock cuckoos
       triggerCuckoo();
+      setCuckooHasRun(true);
     }
-  }, [syncProgress, angle]);
+  }, [shouldTriggerCuckoo, cuckooHasRun, isLeft]);
 
   const triggerCuckoo = async () => {
     setDoorsOpen(true);
     await new Promise((r) => setTimeout(r, 400)); // Warten bis Tür offen
     await controls.start({ x: 0, transition: { type: "spring", bounce: 0.5 } }); // Vogel raus
-    await new Promise((r) => setTimeout(r, 1000)); // Singen
+    await new Promise((r) => setTimeout(r, 1500)); // Singen
     await controls.start({ x: 40, transition: { duration: 0.3 } }); // Vogel rein
     setDoorsOpen(false); // Tür zu
   };
+
+  // Calculate clock hands positions based on scroll progress
+  // Start: 10:10 (hour hand at 310°, minute hand at 60°)
+  // End: 10:15 (hour hand at 312.5°, minute hand at 90°)
+  const hourHandRotation = useTransform(syncProgress, [0, 1], [310, 312.5]);
+  const minuteHandRotation = useTransform(syncProgress, [0, 1], [60, 90]);
 
   return (
     <div className="relative shrink-0" style={{ width: WIDTH_PX, height: WIDTH_PX * 1.5, zIndex: 10 }}>
@@ -119,9 +192,9 @@ const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean
         className="absolute inset-0 z-30"
         style={{ top: "26%", left: "0%", width: "100%", height: "30%" }} // Grober Bereich des Zifferblatts
       >
-        {/* Stundenzeiger */}
+        {/* Stundenzeiger - rotates from 10:10 to 10:15 */}
         <motion.div
-          className="absolute bg-black rounded-full"
+          className="absolute bg-ink rounded-full"
           style={{
             top: "50%",
             left: "50%",
@@ -131,12 +204,12 @@ const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean
             originX: 0.5,
             x: "-50%",
             y: "-100%", // Verschiebt es so, dass bottom auf dem Zentrum sitzt
+            rotate: hourHandRotation,
           }}
-          animate={{ rotate: Date.now() / 10000 + (isLeft ? 0 : 30) }}
         />
-        {/* Minutenzeiger */}
+        {/* Minutenzeiger - rotates from 10 minutes to 15 minutes */}
         <motion.div
-          className="absolute bg-black rounded-full"
+          className="absolute bg-ink rounded-full"
           style={{
             top: "50%",
             left: "50%",
@@ -146,11 +219,11 @@ const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean
             originX: 0.5,
             x: "-50%",
             y: "-100%",
+            rotate: minuteHandRotation,
           }}
-          animate={{ rotate: Date.now() / 1000 }}
         />
         {/* Zentraler Pin */}
-        <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-[#3a2820] rounded-full -translate-x-1/2 -translate-y-1/2 z-40" />
+        <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-ink rounded-full -translate-x-1/2 -translate-y-1/2 z-40" />
       </div>
 
       {/* 4. TÜREN & VOGEL (Ganz oben) */}
@@ -161,17 +234,18 @@ const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean
           initial={{ x: 40 }}
           animate={controls}
           className="absolute top-2 left-2 w-full h-full object-contain z-10"
+          alt="Cuckoo bird"
         />
 
         {/* Linke Tür */}
         <motion.div
-          className="absolute left-0 top-0 w-1/2 h-full bg-[#5C4033] border-r border-[#3e2b22] origin-left"
+          className="absolute left-0 top-0 w-1/2 h-full bg-primary border-r border-ink origin-left"
           animate={{ rotateY: doorsOpen ? -110 : 0 }}
           transition={{ duration: 0.4 }}
         />
         {/* Rechte Tür */}
         <motion.div
-          className="absolute right-0 top-0 w-1/2 h-full bg-[#5C4033] border-l border-[#3e2b22] origin-right"
+          className="absolute right-0 top-0 w-1/2 h-full bg-primary border-l border-ink origin-right"
           animate={{ rotateY: doorsOpen ? 110 : 0 }}
           transition={{ duration: 0.4 }}
         />
@@ -181,14 +255,24 @@ const Clock = ({ angle, isLeft, syncProgress }: { angle: number; isLeft: boolean
 };
 
 // --- PHYSIK HOOK: Das Herzstück ---
-const useCoupledPendulums = (syncProgress: number) => {
+const useCoupledPendulums = (syncProgress: any) => {
+  // MotionValue
   const [leftAngle, setLeftAngle] = useState(25);
   const [rightAngle, setRightAngle] = useState(-20); // Starten asynchron
+  const [currentSync, setCurrentSync] = useState(0);
 
   // Wir nutzen Refs für Geschwindigkeit, damit wir nicht bei jedem Frame neu rendern müssen
   const velL = useRef(0);
   const velR = useRef(0);
   const lastTime = useRef(performance.now());
+
+  // Subscribe to MotionValue changes
+  useEffect(() => {
+    const unsubscribe = syncProgress.on("change", (latest: number) => {
+      setCurrentSync(latest);
+    });
+    return () => unsubscribe();
+  }, [syncProgress]);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -200,7 +284,7 @@ const useCoupledPendulums = (syncProgress: number) => {
       // Physik-Konstanten
       const naturalFreq = 3.0;
       const damping = 0.995; // Luftwiderstand
-      const couplingStrength = syncProgress * 0.15; // Wie stark sie sich beeinflussen (Huygens Effekt)
+      const couplingStrength = currentSync * 0.15; // Wie stark sie sich beeinflussen (Huygens Effekt)
 
       // 1. Beschleunigung berechnen (Harmonischer Oszillator)
       // acc = -freq^2 * angle
@@ -264,9 +348,7 @@ const useCoupledPendulums = (syncProgress: number) => {
 
     animationFrameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [leftAngle, rightAngle, syncProgress]); // Rerun wenn State sich ändert? Nein, eigentlich Loop.
-  // Korrektur: React Hooks und AnimationFrame sind tricky.
-  // Besserer Ansatz für Loop ohne Dependency Hell:
+  }, [leftAngle, rightAngle, currentSync]);
 
   return { leftAngle, rightAngle };
 };
