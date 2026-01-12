@@ -393,19 +393,46 @@ const Index = () => {
                 
                 {/* Steps with heartbeat connector */}
                 <div className="relative">
-                  {/* Heartbeat SVG line connecting the icons */}
-                  <div className="hidden md:block absolute top-7 left-[15%] right-[15%] h-8 z-0">
+                  {/* Heartbeat SVG line connecting the icons - with open heart design */}
+                  <div className="hidden md:block absolute top-7 left-[15%] right-[15%] h-12 z-0">
                     <svg 
-                      viewBox="0 0 400 32" 
+                      viewBox="0 0 500 48" 
                       className="w-full h-full" 
-                      preserveAspectRatio="none"
+                      preserveAspectRatio="xMidYMid meet"
                     >
+                      {/* First segment with EKG spikes */}
                       <path 
-                        d="M0,16 L80,16 L90,16 L100,4 L110,28 L120,4 L130,28 L140,16 L200,16 L210,16 L220,4 L230,28 L240,4 L250,28 L260,16 L320,16 L330,16 L340,4 L350,28 L360,4 L370,28 L380,16 L400,16" 
+                        d="M0,24 L60,24 L70,24 L80,8 L90,40 L100,8 L110,40 L120,24 L180,24" 
                         fill="none" 
-                        stroke="hsl(var(--primary))" 
+                        stroke="hsl(var(--heartbeat))" 
                         strokeWidth="2" 
-                        strokeOpacity="0.25"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      {/* Open heart that doesn't touch/close */}
+                      <path 
+                        d="M195,24 C195,18 202,13 210,18 C218,13 225,18 225,24 C225,32 210,40 210,40 C210,40 195,32 195,24" 
+                        fill="none" 
+                        stroke="hsl(var(--heartbeat))" 
+                        strokeWidth="2" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      {/* Middle segment with EKG spikes */}
+                      <path 
+                        d="M225,24 L280,24 L290,24 L300,8 L310,40 L320,8 L330,40 L340,24 L390,24" 
+                        fill="none" 
+                        stroke="hsl(var(--heartbeat))" 
+                        strokeWidth="2" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      {/* End segment */}
+                      <path 
+                        d="M390,24 L420,24 L430,24 L440,8 L450,40 L460,8 L470,40 L480,24 L500,24" 
+                        fill="none" 
+                        stroke="hsl(var(--heartbeat))" 
+                        strokeWidth="2" 
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
