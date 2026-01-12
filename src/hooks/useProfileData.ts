@@ -80,32 +80,26 @@ try {
         // NICHT throwen!
       }
 
-      console.log('Profile saved:', profile);
 
-      // 2. Save memories if opt-in
-      if (profileData.historyOptIn && profile) {
-        const { error: memoriesError } = await supabase
-          .from('memories')
-          .upsert(
-            {
-              profile_id: profile.id,
-              core_events: memoriesData.coreEvents || null,
-              shared_values: memoriesData.sharedValues || null,
-              constraints: memoriesData.constraints || null,
-              updated_at: new Date().toISOString(),
-            },
-            { 
-              onConflict: 'profile_id',
-              ignoreDuplicates: false 
-            }
-          );
+// --- HIER BEGINNT DER BYPASS ---
 
-        if (memoriesError) {
-          console.error('Memories upsert error:', memoriesError);
-          // Non-blocking - continue even if memories fail
-        }
-      }
+console.log("Datenbank-Speichern übersprungen (Bypass aktiv).");
 
+// Wir erstellen ein temporäres Profil-Objekt im Speicher, damit der Code nicht meckert.
+// Keine Datenbank-Aufrufe mehr!
+const profile = { 
+  id: sessionId,
+  ...profileData 
+};
+
+// Falls du memories im n8n call brauchst, definieren wir sie hier einfach durch
+// (Das verhindert den Fehler beim Memories-Speichern)
+const memoriesError = null; 
+
+// --- HIER ENDET DER BYPASS ---
+
+// ... Hier sollte jetzt direkt dein n8n fetch kommen:
+// const response = await fetch('https://finnern.app.n8n.cloud/webhook/generate' ...
 
 
       // NACHHER (Der direkte Weg zu n8n)
