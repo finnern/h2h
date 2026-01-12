@@ -84,19 +84,30 @@ export const useProfileData = () => {
         }
       }
 
-      // 3. Trigger the n8n webhook via edge function
-      const { data: triggerData, error: triggerError } = await supabase.functions.invoke(
-        'trigger-production',
-        {
-          body: {
-            profile_id: profile?.id,
-            couple_data: coupleData,
-            memories: memoriesData,
-            history_opt_in: profileData.historyOptIn,
-            session_id: sessionId,
-          },
-        }
-      );
+
+
+      // NACHHER (Der direkte Weg zu n8n)
+// Wir senden die Daten direkt an n8n, statt über die blockierte Supabase-Funktion
+const response = await fetch('https://finnern.app.n8n.cloud/webhook/generate', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    profile_id: profile?.id,
+    // Falls n8n mehr Infos braucht (z.B. Sprache), kannst du sie hier hinzufügen:
+    // language: "de", 
+  })
+});
+
+let triggerData = null;
+let triggerError = null;
+
+if (response.ok) {
+  triggerData = await response.json();
+} else {
+  triggerError = new Error('n8n Verbindung fehlgeschlagen');
+}
 
       if (triggerError) {
         console.error('Trigger production error:', triggerError);
