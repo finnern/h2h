@@ -195,17 +195,17 @@ const Index = () => {
 
     let n8nCards = null;
     try {
-      const result = await saveProfileAndTriggerProduction(
-        {
+      const result = await saveProfileAndTriggerProduction({
+        profileData: {
           coupleNames: `${data.partnerA} & ${data.partnerB}`,
           historyOptIn: data.historyOptIn,
         },
-        {
+        memoriesData: {
           coreEvents: data.additionalInsights,
           sharedValues: `${data.scientific ? 'Scientific' : ''} ${data.spiritual ? 'Spiritual' : ''}`.trim(),
           constraints: data.context,
         },
-        {
+        coupleData: {
           partnerA: data.partnerA,
           partnerB: data.partnerB,
           lifecycle: data.lifecycle,
@@ -215,8 +215,8 @@ const Index = () => {
           context: data.context,
           additionalInsights: data.additionalInsights,
           language,
-        }
-      );
+        },
+      });
       console.log('Profile saved and production triggered');
       n8nCards = result?.n8nCards;
     } catch (error) {
