@@ -1,6 +1,7 @@
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
+import heartsAngel from "@/assets/hearts-angel.png";
 
 interface Question {
   id: number;
@@ -119,6 +120,7 @@ const HeartbeatDivider = () => (
 
 const Frage = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   
   const currentQuestion = useMemo(() => {
     const idParam = searchParams.get("id");
@@ -134,6 +136,13 @@ const Frage = () => {
     return questions[randomIndex];
   }, [searchParams]);
 
+  const handleRandomQuestion = () => {
+    // Navigate to /frage without ID to trigger random fallback
+    navigate('/frage', { replace: true });
+    // Force re-render by navigating with a key
+    window.location.href = '/frage';
+  };
+
   return (
     <>
       <Helmet>
@@ -145,8 +154,17 @@ const Frage = () => {
         {/* Subtle heartbeat pattern overlay */}
         <HeartbeatPattern />
         
+        {/* Angel Image - The Messenger */}
+        <div className="pt-8 pb-4 flex justify-center relative z-10">
+          <img 
+            src={heartsAngel} 
+            alt="Der Engel – Bote der tiefen Fragen" 
+            className="h-32 md:h-36 lg:h-40 w-auto object-contain"
+          />
+        </div>
+
         {/* Header */}
-        <header className="pt-8 pb-4 relative z-10">
+        <header className="pb-6 relative z-10">
           <p className="text-center text-xs tracking-[0.3em] uppercase" style={{ color: '#6B7280' }}>
             HERTZ AN HERTZ – LEVEL 2
           </p>
@@ -202,7 +220,21 @@ const Frage = () => {
 
         {/* Footer CTA */}
         <footer className="pb-12 px-6 relative z-10">
-          <div className="text-center">
+          <div className="flex flex-col items-center gap-4">
+            {/* Outline Button - Random Question */}
+            <button 
+              onClick={handleRandomQuestion}
+              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all hover:bg-[#C00000] hover:text-white"
+              style={{ 
+                backgroundColor: 'transparent',
+                color: '#C00000',
+                border: '2px solid #C00000'
+              }}
+            >
+              Nächste zufällige Frage ziehen ↺
+            </button>
+
+            {/* Solid Button - Home */}
             <Link 
               to="/"
               className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90 hover:shadow-lg"
