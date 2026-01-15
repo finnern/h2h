@@ -19,7 +19,6 @@ export const useProfileData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Wir holen die Session, nutzen aber die DB gerade nicht aktiv zum Schreiben
   const supabase = getSupabaseWithSession();
   const sessionId = getCurrentSessionId();
 
@@ -33,7 +32,6 @@ export const useProfileData = () => {
     coupleData: Record<string, unknown>;
   }) => {
     
-    // Sicherheitscheck
     if (!sessionId) {
       throw new Error('Session not initialized');
     }
@@ -42,49 +40,75 @@ export const useProfileData = () => {
     setError(null);
 
     try {
-      // --- BYPASS AKTIV ---
-      // Wir überspringen das Speichern in Supabase komplett, um den 401 Fehler zu vermeiden.
-      console.log("Hertz-Modus: Datenbank übersprungen, sende direkt an n8n...");
+      // First, ensure profile exists in database for session validation
+      const { data: existingProfile, error: fetchError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('session_id', sessionId)
+        .maybeSingle();
 
-      // Wir simulieren ein gespeichertes Profil
-      const profile = {
-        id: sessionId,
-        ...profileData
-      };
+      let profileId: string;
 
-      // 2. Direktes Senden an n8n (Hertz an Hertz)
-      console.log("Rufe n8n Webhook...");
-      const response = await fetch('https://finnern.app.n8n.cloud/webhook/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          profile_id: profile.id,
+      if (existingProfile) {
+        profileId = existingProfile.id;
+        // Update existing profile
+        await supabase
+          .from('profiles')
+          .update({
+            couple_names: profileData.coupleNames,
+            anniversary: profileData.anniversary || null,
+            history_opt_in: profileData.historyOptIn,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', profileId);
+      } else {
+        // Create new profile with session_id
+        const { data: newProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            session_id: sessionId,
+            couple_names: profileData.coupleNames,
+            anniversary: profileData.anniversary || null,
+            history_opt_in: profileData.historyOptIn,
+          })
+          .select('id')
+          .single();
+
+        if (insertError || !newProfile) {
+          throw new Error('Failed to create profile');
+        }
+        profileId = newProfile.id;
+      }
+
+      // Call the Edge Function instead of direct n8n webhook
+      const { data: triggerData, error: triggerError } = await supabase.functions.invoke('trigger-production', {
+        body: {
+          profile_id: profileId,
           session_id: sessionId,
           couple_names: profileData.coupleNames,
           couple_data: coupleData,
           memories: memoriesData,
           history_opt_in: profileData.historyOptIn,
-        })
+        }
       });
 
-      if (!response.ok) {
-        throw new Error(`n8n Verbindung fehlgeschlagen: ${response.status}`);
+      if (triggerError) {
+        throw new Error(triggerError.message || 'Processing failed');
       }
 
-      const triggerData = await response.json();
-      console.log('n8n Antwort erhalten:', triggerData);
+      // Extract cards from response
+      const n8nCards = triggerData?.data?.cards || triggerData?.cards || triggerData;
 
-      // n8n gibt normalerweise { cards: [...] } zurück oder direkt das Array
-      // Wir stellen sicher, dass wir das Format passend zurückgeben
-      const n8nCards = triggerData.cards || triggerData;
+      return { 
+        profile: { id: profileId, ...profileData }, 
+        triggerData, 
+        n8nCards 
+      };
 
-      return { profile, triggerData, n8nCards };
-
-    } catch (err: any) {
-      console.error('Fehler im Hertz-Prozess:', err);
-      setError(err.message || 'Ein unbekannter Fehler ist aufgetreten');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.error('Error in production trigger:', errorMessage);
+      setError(errorMessage);
       throw err;
     } finally {
       setIsLoading(false);
