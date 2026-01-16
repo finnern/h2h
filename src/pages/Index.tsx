@@ -687,7 +687,7 @@ const Index = () => {
           </section>
 
           {/* Tuner Section with Cards */}
-          <section ref={tunerRef} className="px-4 py-12 md:py-16">
+          <section ref={tunerRef} id="tuner" className="px-4 py-12 md:py-16">
             <div className="max-w-4xl mx-auto">
               <motion.div
                 className="text-center mb-8"

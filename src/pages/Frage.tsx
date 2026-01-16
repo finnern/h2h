@@ -235,20 +235,20 @@ const Frage = () => {
         </section>
 
 
-        {/* Footer CTA - Serendipity Block */}
+        {/* Footer CTA - Fügung Block */}
         <footer className="pb-12 px-6 relative z-10">
           <div className="max-w-xl mx-auto flex flex-col items-center">
-            {/* Serendipity Headline */}
+            {/* Fügung Headline */}
             <h3 className="font-display text-2xl md:text-3xl text-primary mb-3 text-center">
-              Serendipity hat euch hierher gebracht...
+              Vielleicht war es Fügung...
             </h3>
             <p className="text-muted-foreground text-sm md:text-base text-center mb-6 max-w-md leading-relaxed">
-              ...jetzt könnt ihr es persönlich vertiefen. Erzählt uns von eurer Situation und generiert euch 4 weitere Fragen-Paare (Leicht & Tief), die genau auf euch zugeschnitten sind.
+              ...dass Ihr genau jetzt hier seid. Doch jede Beziehung schwingt anders. Damit die Fragen nicht "irgendwen", sondern <em>Euch</em> im Herzen treffen, brauchen wir ein kurzes Stimmungsbild. Eicht hier die Frequenz auf Eure aktuelle Situation:
             </p>
 
-            {/* Primary CTA Button - Glowing Gradient */}
+            {/* Primary CTA Button - Glowing Gradient - Links to tuner section */}
             <Link 
-              to="/"
+              to="/#tuner"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium text-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] mb-8"
               style={{
                 background: 'linear-gradient(135deg, #C00000 0%, #8B0000 50%, #C00000 100%)',
