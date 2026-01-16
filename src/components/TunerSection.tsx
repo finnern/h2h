@@ -178,8 +178,8 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
             <textarea
               id="additionalInsights"
               placeholder={language === "de" 
-                ? "Erzählt kurz, was gerade los ist: Seid ihr erschöpft vom Elternsein? Plant ihr ein großes Abenteuer? Gibt es ein Thema, das immer wieder hochkommt? Je mehr Kontext, desto tiefer die Resonanz."
-                : "Tell us briefly what's going on: Are you exhausted from parenting? Planning a big adventure? Is there a topic that keeps coming up? The more context, the deeper the resonance."
+                ? "Erzählt kurz, was gerade los ist: Seid Ihr erschöpft vom Elternsein? Plant Ihr ein großes Abenteuer? Gibt es ein Thema, das immer wieder hochkommt? Je mehr Kontext, desto tiefer die Resonanz für Euch."
+                : "Tell us briefly what's going on: Are You exhausted from parenting? Planning a big adventure? Is there a topic that keeps coming up? The more context, the deeper the resonance for You."
               }
               value={formData.additionalInsights || ""}
               onChange={(e) => setFormData({ ...formData, additionalInsights: e.target.value })}

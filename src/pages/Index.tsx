@@ -701,8 +701,8 @@ const Index = () => {
                 </h2>
                 <p className="font-body text-lg text-ink/80 leading-relaxed max-w-2xl mx-auto">
                   {language === "de"
-                    ? "...dass ihr genau jetzt hier seid. Doch jede Beziehung schwingt anders. Damit die Fragen nicht 'irgendwen', sondern euch im Herzen treffen, brauchen wir ein kurzes Stimmungsbild. Eicht hier die Frequenz auf eure aktuelle Situation:"
-                    : "...that you are here right now. But every relationship resonates differently. So that the questions hit you in the heart, not just 'someone', we need a brief impression. Tune the frequency to your current situation here:"}
+                    ? "...dass Ihr genau jetzt hier seid. Doch jede Beziehung schwingt anders. Damit die Fragen nicht 'irgendwen', sondern Euch im Herzen treffen, brauchen wir ein kurzes Stimmungsbild. Eicht hier die Frequenz auf Eure aktuelle Situation:"
+                    : "...that You are here right now. But every relationship resonates differently. So that the questions hit You in the heart, not just 'someone', we need a brief impression. Tune the frequency to Your current situation here:"}
                 </p>
               </motion.div>
 
