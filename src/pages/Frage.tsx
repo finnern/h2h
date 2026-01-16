@@ -1,6 +1,7 @@
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { ExternalLink, Sparkles, Loader2 } from "lucide-react";
 import heartsAngel from "@/assets/hearts-angel.png";
 
 interface Question {
@@ -8,6 +9,8 @@ interface Question {
   question: string;
   subtext: string;
   science: string;
+  sourceTitle: string;
+  sourceUrl: string;
 }
 
 const questions: Question[] = [
@@ -15,49 +18,65 @@ const questions: Question[] = [
     id: 1,
     question: "In welchem Moment unserer Beziehung hast du dich am sichersten bei mir gefühlt?",
     subtext: "Sicherheit ist der Boden, auf dem Liebe wächst.",
-    science: "Die Bindungstheorie zeigt: Das Gefühl emotionaler Sicherheit ist die Grundvoraussetzung für Nähe und Exploration in einer Partnerschaft. Zu wissen, wann sich der Partner sicher fühlt, ist der Schlüssel zur Stärkung dieser Basis."
+    science: "Die Bindungstheorie zeigt: Emotionale Sicherheit ist die Basis. Zu wissen, wann sich der Partner sicher fühlt, stärkt das Fundament.",
+    sourceTitle: "Mehr zur Bindungstheorie (Psychology Today)",
+    sourceUrl: "https://www.psychologytoday.com/us/basics/attachment"
   },
   {
     id: 2,
     question: "Welche Eigenschaft bewunderst du an mir, sagst es mir aber im Alltag viel zu selten?",
     subtext: "Bewunderung ist der Sauerstoff für den Partner.",
-    science: "Beziehungsforscher John Gottman nennt dies das 'System der Zuneigung und Bewunderung'. Regelmäßig ausgesprochene Wertschätzung ist der stärkste Puffer gegen Konflikte und Verachtung."
+    science: "John Gottman nennt dies das 'System der Zuneigung'. Regelmäßige Wertschätzung ist der stärkste Puffer gegen Konflikte.",
+    sourceTitle: "Das Fondness & Admiration System (Gottman)",
+    sourceUrl: "https://www.gottman.com/blog/the-fondness-and-admiration-system/"
   },
   {
     id: 3,
     question: "Welchen gemeinsamen Traum haben wir aus den Augen verloren, den wir unbedingt wiederbeleben sollten?",
-    subtext: "Gemeinsame Ziele schaffen ein 'Wir-Gefühl' und Sinn über den Alltag hinaus.",
-    science: "Paare, die eine gemeinsame Vision für ihre Zukunft haben ('Shared Meaning'), erleben eine tiefere Verbindung und Resilienz in Krisenzeiten. Träume sind der Kitt, der die Beziehung zusammenhält."
+    subtext: "Gemeinsame Ziele schaffen Sinn über den Alltag hinaus.",
+    science: "Paare mit einer gemeinsamen Vision ('Shared Meaning') sind resilienter. Träume sind der Kitt, der die Beziehung zusammenhält.",
+    sourceTitle: "Shared Meaning erschaffen (Gottman Blog)",
+    sourceUrl: "https://www.gottman.com/blog/create-shared-meaning/"
   },
   {
     id: 4,
     question: "Was könnte ich tun, damit du dich im stressigen Alltag von mir mehr unterstützt fühlst?",
     subtext: "Unterstützung ist Liebe in Aktion.",
-    science: "Studien zur 'wahrgenommenen Partner-Reagibilität' zeigen: Nichts senkt das Stresslevel so effektiv wie das Gefühl, dass der Partner die eigenen Lasten sieht und mitträgt."
+    science: "Studien zur 'Partner-Reagibilität' zeigen: Nichts senkt Stress so effektiv wie das Gefühl, dass der Partner die Lasten sieht.",
+    sourceTitle: "Die Wissenschaft des Supports (Greater Good)",
+    sourceUrl: "https://greatergood.berkeley.edu/article/item/how_to_support_partner_stressed"
   },
   {
     id: 5,
     question: "Wann fühlst du dich mir am nächsten – ist es beim Reden, beim Schweigen oder bei Berührung?",
     subtext: "Jeder spricht eine andere Sprache der Liebe.",
-    science: "Missverständnisse entstehen oft, weil wir Zuneigung so zeigen, wie wir sie selbst gerne empfangen, nicht wie der Partner sie braucht. Das Verständnis der 'Liebessprache' des anderen ist essenziell für echte Intimität."
+    science: "Missverständnisse entstehen, wenn wir Zuneigung so zeigen, wie wir sie selbst brauchen, statt wie der Partner sie empfängt.",
+    sourceTitle: "Verstehe die Liebessprachen (Psychology Today)",
+    sourceUrl: "https://www.psychologytoday.com/us/blog/click-here-happiness/202009/what-are-the-5-love-languages"
   },
   {
     id: 6,
     question: "Was brauchst du von mir am meisten, wenn wir uns gestritten haben – erst mal Ruhe oder sofortige Nähe?",
-    subtext: "Streitkultur entscheidet über die Dauerhaftigkeit der Beziehung.",
-    science: "In Konflikten geraten Partner oft in ein 'Forderungs-Rückzugs-Muster'. Zu wissen, ob der andere Raum zur Selbstregulation oder Nähe zur Co-Regulation braucht, verhindert Eskalationen."
+    subtext: "Streitkultur entscheidet über die Dauerhaftigkeit.",
+    science: "Das 'Forderungs-Rückzugs-Muster' zerstört Beziehungen. Zu wissen, wer Raum und wer Nähe braucht, verhindert Eskalation.",
+    sourceTitle: "Demand-Withdraw Pattern (Psychology Today)",
+    sourceUrl: "https://www.psychologytoday.com/intl/blog/resolution-not-conflict/201210/the-demand-withdraw-pattern-in-relationships"
   },
   {
     id: 7,
     question: "Wovor hast du in Bezug auf unser gemeinsames Älterwerden am meisten Respekt?",
     subtext: "Ängste zu teilen, macht sie kleiner.",
-    science: "Das Teilen von Verletzlichkeit ist der direkteste Weg zu tiefer emotionaler Verbindung. Es signalisiert Vertrauen und ermöglicht dem Partner, Fürsorge zu zeigen."
+    science: "Verletzlichkeit ist der direkteste Weg zur Verbindung. Sie signalisiert Vertrauen und ermöglicht dem Partner, Fürsorge zu zeigen.",
+    sourceTitle: "Die Kraft der Verletzlichkeit (Brené Brown)",
+    sourceUrl: "https://brenebrown.com/articles/"
   },
   {
     id: 8,
     question: "In welchem Moment warst du zuletzt richtig stolz darauf, wie wir als Team funktionieren?",
     subtext: "Wir sind mehr als die Summe unserer Teile.",
-    science: "Das Bewusstsein für die gemeinsame Wirksamkeit ('Collective Efficacy') stärkt die Identität als Paar. Der Stolz auf das 'Wir' ist ein starker Schutzfaktor in herausfordernden Zeiten."
+    science: "Das Bewusstsein für 'Collective Efficacy' (gemeinsame Wirksamkeit) stärkt die Identität als Paar massiv.",
+    sourceTitle: "The Power of We (Psychology Today)",
+    sourceUrl: "https://www.psychologytoday.com/us/blog/meet-catch-and-keep/202302/the-power-of-we-in-relationships"
   }
 ];
 
@@ -121,6 +140,10 @@ const HeartbeatDivider = () => (
 const Frage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [userInput, setUserInput] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStep, setGenerationStep] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const currentQuestion = useMemo(() => {
     const idParam = searchParams.get("id");
@@ -137,10 +160,30 @@ const Frage = () => {
   }, [searchParams]);
 
   const handleRandomQuestion = () => {
-    // Navigate to /frage without ID to trigger random fallback
     navigate('/frage', { replace: true });
-    // Force re-render by navigating with a key
     window.location.href = '/frage';
+  };
+
+  const handleGenerateQuestion = async () => {
+    if (!userInput.trim()) return;
+    
+    setIsGenerating(true);
+    setShowSuccess(false);
+    
+    const steps = [
+      "Analysiere Resonanz...",
+      "Verstehe Kontext...",
+      "Formuliere Impuls..."
+    ];
+    
+    for (let i = 0; i < steps.length; i++) {
+      setGenerationStep(steps[i]);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    setIsGenerating(false);
+    setShowSuccess(true);
+    setUserInput("");
   };
 
   return (
@@ -165,7 +208,7 @@ const Frage = () => {
 
         {/* Header */}
         <header className="pb-6 relative z-10">
-          <p className="text-center text-xs tracking-[0.3em] uppercase" style={{ color: '#6B7280' }}>
+          <p className="text-center text-xs tracking-[0.3em] uppercase text-muted-foreground">
             HERTZ AN HERTZ – LEVEL 2
           </p>
         </header>
@@ -175,8 +218,7 @@ const Frage = () => {
           <div className="max-w-xl text-center">
             {/* Question */}
             <h1 
-              className="font-display text-2xl md:text-3xl lg:text-4xl leading-relaxed mb-4"
-              style={{ color: '#374151' }}
+              className="font-display text-2xl md:text-3xl lg:text-4xl leading-relaxed mb-4 text-foreground"
             >
               „{currentQuestion.question}"
             </h1>
@@ -185,36 +227,103 @@ const Frage = () => {
             <HeartbeatDivider />
             
             {/* Subtext */}
-            <p 
-              className="text-base md:text-lg italic"
-              style={{ color: '#6B7280' }}
-            >
+            <p className="text-base md:text-lg italic text-muted-foreground">
               {currentQuestion.subtext}
             </p>
           </div>
         </main>
 
-        {/* Science Section */}
+        {/* Science Section - Premium Card Look */}
         <section className="px-6 pb-8 relative z-10">
           <div 
-            className="max-w-xl mx-auto p-6 rounded-sm"
+            className="max-w-xl mx-auto p-6 rounded-lg shadow-card"
             style={{ 
-              backgroundColor: '#F5F0EB',
-              borderLeft: '3px solid #C00000'
+              backgroundColor: '#FFFDF9',
+              borderLeft: '4px solid hsl(var(--primary))',
+              border: '1px solid hsl(var(--border))',
+              borderLeftWidth: '4px',
+              borderLeftColor: 'hsl(var(--primary))'
             }}
           >
-            <h2 
-              className="text-xs tracking-[0.2em] uppercase mb-3 font-medium"
-              style={{ color: '#C00000' }}
-            >
+            <h2 className="text-xs tracking-[0.2em] uppercase mb-3 font-medium text-primary">
               Wissenschaftlicher Impuls
             </h2>
-            <p 
-              className="text-sm md:text-base leading-relaxed"
-              style={{ color: '#4B5563' }}
-            >
+            <p className="text-sm md:text-base leading-relaxed text-muted-foreground mb-4">
               {currentQuestion.science}
             </p>
+            
+            {/* Source Link */}
+            <a 
+              href={currentQuestion.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium transition-colors hover:opacity-80"
+              style={{ color: '#4B5563' }}
+            >
+              <span className="underline underline-offset-2">{currentQuestion.sourceTitle}</span>
+              <ExternalLink className="w-4 h-4 flex-shrink-0" />
+            </a>
+          </div>
+        </section>
+
+        {/* AI Synchronizer Section */}
+        <section className="px-6 pb-10 relative z-10">
+          <div 
+            className="max-w-xl mx-auto p-8 rounded-xl shadow-elevated text-center"
+            style={{ 
+              background: 'linear-gradient(145deg, #FFFDF9 0%, #F9F5F0 100%)',
+              border: '1px solid hsl(var(--border))'
+            }}
+          >
+            <h3 className="font-display text-2xl md:text-3xl text-primary mb-2">
+              Eure Situation ist einzigartig?
+            </h3>
+            <p className="text-muted-foreground text-sm md:text-base mb-6">
+              Erzählt uns kurz von euch – Hertz an Hertz generiert eine Frage, die euch jetzt gerade synchronisiert.
+            </p>
+            
+            {/* Textarea */}
+            <textarea
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="Wir sind frisch Eltern geworden und haben kaum Zeit... oder: Wir streiten oft über Kleinigkeiten..."
+              className="w-full h-28 p-4 rounded-lg border border-border bg-white/80 text-foreground placeholder:text-muted-foreground/60 resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all text-sm md:text-base"
+              disabled={isGenerating}
+            />
+            
+            {/* Magic Button */}
+            <button
+              onClick={handleGenerateQuestion}
+              disabled={isGenerating || !userInput.trim()}
+              className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: isGenerating 
+                  ? 'linear-gradient(135deg, #8B0000 0%, #C00000 100%)' 
+                  : 'linear-gradient(135deg, #C00000 0%, #8B0000 50%, #C00000 100%)',
+                backgroundSize: '200% 200%',
+              }}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>{generationStep}</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5" />
+                  <span>Persönliche Impuls-Frage generieren</span>
+                </>
+              )}
+            </button>
+
+            {/* Success Message */}
+            {showSuccess && (
+              <div className="mt-4 p-4 rounded-lg bg-green-50 border border-green-200">
+                <p className="text-green-800 text-sm">
+                  ✓ Deine Anfrage wurde verarbeitet. <span className="opacity-70">(Dies ist eine Demo für das MVP)</span>
+                </p>
+              </div>
+            )}
           </div>
         </section>
 
@@ -224,12 +333,7 @@ const Frage = () => {
             {/* Outline Button - Random Question */}
             <button 
               onClick={handleRandomQuestion}
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all hover:bg-[#C00000] hover:text-white"
-              style={{ 
-                backgroundColor: 'transparent',
-                color: '#C00000',
-                border: '2px solid #C00000'
-              }}
+              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground"
             >
               Nächste zufällige Frage ziehen ↺
             </button>
@@ -237,11 +341,7 @@ const Frage = () => {
             {/* Solid Button - Home */}
             <Link 
               to="/"
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all hover:opacity-90 hover:shadow-lg"
-              style={{ 
-                backgroundColor: '#C00000',
-                color: '#FFFFFF'
-              }}
+              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all bg-primary text-primary-foreground hover:opacity-90 hover:shadow-lg"
             >
               Zur Startseite
             </Link>
