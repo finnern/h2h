@@ -1,7 +1,7 @@
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { ExternalLink, Sparkles, Loader2 } from "lucide-react";
+import { ExternalLink, Sparkles } from "lucide-react";
 import heartsAngel from "@/assets/hearts-angel.png";
 
 interface Question {
@@ -139,11 +139,6 @@ const HeartbeatDivider = () => (
 
 const Frage = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const [userInput, setUserInput] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generationStep, setGenerationStep] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
   
   const currentQuestion = useMemo(() => {
     const idParam = searchParams.get("id");
@@ -158,33 +153,6 @@ const Frage = () => {
     const randomIndex = Math.floor(Math.random() * questions.length);
     return questions[randomIndex];
   }, [searchParams]);
-
-  const handleRandomQuestion = () => {
-    navigate('/frage', { replace: true });
-    window.location.href = '/frage';
-  };
-
-  const handleGenerateQuestion = async () => {
-    if (!userInput.trim()) return;
-    
-    setIsGenerating(true);
-    setShowSuccess(false);
-    
-    const steps = [
-      "Analysiere Resonanz...",
-      "Verstehe Kontext...",
-      "Formuliere Impuls..."
-    ];
-    
-    for (let i = 0; i < steps.length; i++) {
-      setGenerationStep(steps[i]);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    
-    setIsGenerating(false);
-    setShowSuccess(true);
-    setUserInput("");
-  };
 
   return (
     <>
@@ -266,66 +234,6 @@ const Frage = () => {
           </div>
         </section>
 
-        {/* AI Synchronizer Section */}
-        <section className="px-6 pb-10 relative z-10">
-          <div 
-            className="max-w-xl mx-auto p-8 rounded-xl shadow-elevated text-center"
-            style={{ 
-              background: 'linear-gradient(145deg, #FFFDF9 0%, #F9F5F0 100%)',
-              border: '1px solid hsl(var(--border))'
-            }}
-          >
-            <h3 className="font-display text-2xl md:text-3xl text-primary mb-2">
-              Eure Situation ist einzigartig?
-            </h3>
-            <p className="text-muted-foreground text-sm md:text-base mb-6">
-              Erzählt uns kurz von euch – Hertz an Hertz generiert eine Frage, die euch jetzt gerade synchronisiert.
-            </p>
-            
-            {/* Textarea */}
-            <textarea
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              placeholder="Wir sind frisch Eltern geworden und haben kaum Zeit... oder: Wir streiten oft über Kleinigkeiten..."
-              className="w-full h-28 p-4 rounded-lg border border-border bg-white/80 text-foreground placeholder:text-muted-foreground/60 resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all text-sm md:text-base"
-              disabled={isGenerating}
-            />
-            
-            {/* Magic Button */}
-            <button
-              onClick={handleGenerateQuestion}
-              disabled={isGenerating || !userInput.trim()}
-              className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-              style={{
-                background: isGenerating 
-                  ? 'linear-gradient(135deg, #8B0000 0%, #C00000 100%)' 
-                  : 'linear-gradient(135deg, #C00000 0%, #8B0000 50%, #C00000 100%)',
-                backgroundSize: '200% 200%',
-              }}
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>{generationStep}</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  <span>Persönliche Impuls-Frage generieren</span>
-                </>
-              )}
-            </button>
-
-            {/* Success Message */}
-            {showSuccess && (
-              <div className="mt-4 p-4 rounded-lg bg-green-50 border border-green-200">
-                <p className="text-green-800 text-sm">
-                  ✓ Deine Anfrage wurde verarbeitet. <span className="opacity-70">(Dies ist eine Demo für das MVP)</span>
-                </p>
-              </div>
-            )}
-          </div>
-        </section>
 
         {/* Footer CTA - Serendipity Block */}
         <footer className="pb-12 px-6 relative z-10">
@@ -351,13 +259,6 @@ const Frage = () => {
               <span>4 persönliche Karten erstellen</span>
             </Link>
 
-            {/* Secondary Button - Outline */}
-            <button 
-              onClick={handleRandomQuestion}
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all border-2 border-primary/40 text-primary bg-transparent hover:border-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              Nächste zufällige Frage ziehen ↺
-            </button>
           </div>
         </footer>
       </div>
