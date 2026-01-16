@@ -225,6 +225,15 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
               )}
             </Button>
           </div>
+
+          {/* Trust Badge */}
+          <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-border/30">
+            <p className="text-xs md:text-sm text-ink/70 leading-relaxed text-center">
+              {language === "de" 
+                ? "✨ Technologie trifft Vertrauen: Eure Karten werden live von einer KI generiert. Eure Geschichten sind uns dabei heilig – wir verarbeiten Eure Eingaben streng vertraulich und DSGVO-konform."
+                : "✨ Technology meets trust: Your cards are generated live by AI. Your stories are sacred to us – we process Your input strictly confidentially and GDPR-compliant."}
+            </p>
+          </div>
       </form>
     </div>
   );
