@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { useLanguage, Language } from "@/contexts/LanguageContext";
 
 export interface TunerData {
   partnerA: string;
@@ -31,7 +31,7 @@ interface TunerSectionProps {
 }
 
 export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const lifecycleOptions = [
     { value: "fresh-spark", labelKey: "tuner.lifecycle.freshSpark" },
@@ -177,7 +177,10 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
             </Label>
             <textarea
               id="additionalInsights"
-              placeholder={t("tuner.insightsPlaceholder")}
+              placeholder={language === "de" 
+                ? "Erzählt kurz, was gerade los ist: Seid ihr erschöpft vom Elternsein? Plant ihr ein großes Abenteuer? Gibt es ein Thema, das immer wieder hochkommt? Je mehr Kontext, desto tiefer die Resonanz."
+                : "Tell us briefly what's going on: Are you exhausted from parenting? Planning a big adventure? Is there a topic that keeps coming up? The more context, the deeper the resonance."
+              }
               value={formData.additionalInsights || ""}
               onChange={(e) => setFormData({ ...formData, additionalInsights: e.target.value })}
               className="w-full min-h-[100px] p-3 font-body bg-paper border border-border rounded-md focus:ring-2 focus:ring-primary focus:outline-none resize-y"

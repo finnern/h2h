@@ -17,12 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2, FileText, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseWithSession } from "@/lib/supabaseWithSession";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 // Import Hartschierle images
 import hartschierleMadonna from "@/assets/hartschierle-madonna.png";
@@ -171,15 +165,12 @@ const Index = () => {
   const [currentCards, setCurrentCards] = useState(getGenericCards());
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
   const [coupleData, setCoupleData] = useState<{ partner_a: string; partner_b: string } | null>(null);
-  const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
+  
   const cardGridRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
 
   const scrollToTuner = () => {
-    setOpenAccordion("tuner");
-    setTimeout(() => {
-      tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleGenerate = useCallback(async (data: TunerData) => {
@@ -187,7 +178,7 @@ const Index = () => {
     setShowHeartbeatAnimation(true);
     setIsShuffling(true);
     
-    setOpenAccordion(undefined);
+    
     
     setTimeout(() => {
       cardGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -706,32 +697,30 @@ const Index = () => {
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="font-display text-3xl md:text-4xl text-primary mb-4">
-                  {language === "de" ? "Bereit für Resonanz?" : "Ready for Resonance?"}
+                  {language === "de" ? "Vielleicht war es Fügung..." : "Maybe it was fate..."}
                 </h2>
-                <p className="font-body text-lg text-ink/80">
+                <p className="font-body text-lg text-ink/80 leading-relaxed max-w-2xl mx-auto">
                   {language === "de"
-                    ? "Synchronisiert euch immer wieder neu. Damit das entsteht, wonach wir uns alle sehnen: Eine Liebe, die wächst und gedeiht."
-                    : "Synchronize yourselves anew, again and again. So that what we all long for emerges: A love that grows and thrives."}
+                    ? "...dass ihr genau jetzt hier seid. Doch jede Beziehung schwingt anders. Damit die Fragen nicht 'irgendwen', sondern euch im Herzen treffen, brauchen wir ein kurzes Stimmungsbild. Eicht hier die Frequenz auf eure aktuelle Situation:"
+                    : "...that you are here right now. But every relationship resonates differently. So that the questions hit you in the heart, not just 'someone', we need a brief impression. Tune the frequency to your current situation here:"}
                 </p>
               </motion.div>
 
-              {/* Accordion for Tuner */}
-              <Accordion 
-                type="single" 
-                collapsible 
-                value={openAccordion} 
-                onValueChange={setOpenAccordion}
-                className="mb-8"
+              {/* Tuner Input Block */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="border-2 border-primary/30 rounded-lg bg-card mb-8"
               >
-                <AccordionItem value="tuner" className="border-2 border-primary/30 rounded-lg bg-card">
-                  <AccordionTrigger className="px-4 py-4 font-display text-lg text-primary hover:no-underline font-semibold">
-                    {t("accordion.tuner")}
-                  </AccordionTrigger>
-                  <AccordionContent className="px-0 pb-0">
-                    <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                <div className="px-4 py-4 border-b border-primary/20">
+                  <h3 className="font-display text-lg text-primary font-semibold">
+                    {language === "de" ? "⚡ Eure Schwingung justieren" : "⚡ Adjust Your Resonance"}
+                  </h3>
+                </div>
+                <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
+              </motion.div>
 
               {/* Animated heartbeat line on generation */}
               <AnimatePresence>
