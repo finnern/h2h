@@ -327,24 +327,37 @@ const Frage = () => {
           </div>
         </section>
 
-        {/* Footer CTA */}
+        {/* Footer CTA - Serendipity Block */}
         <footer className="pb-12 px-6 relative z-10">
-          <div className="flex flex-col items-center gap-4">
-            {/* Outline Button - Random Question */}
+          <div className="max-w-xl mx-auto flex flex-col items-center">
+            {/* Serendipity Headline */}
+            <h3 className="font-display text-2xl md:text-3xl text-primary mb-3 text-center">
+              Serendipity hat euch hierher gebracht...
+            </h3>
+            <p className="text-muted-foreground text-sm md:text-base text-center mb-6 max-w-md leading-relaxed">
+              ...jetzt könnt ihr es persönlich vertiefen. Erzählt uns von eurer Situation und generiert euch 4 weitere Fragen-Paare (Leicht & Tief), die genau auf euch zugeschnitten sind.
+            </p>
+
+            {/* Primary CTA Button - Glowing Gradient */}
+            <Link 
+              to="/"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium text-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] mb-8"
+              style={{
+                background: 'linear-gradient(135deg, #C00000 0%, #8B0000 50%, #C00000 100%)',
+                boxShadow: '0 4px 24px -4px rgba(192, 0, 0, 0.4)',
+              }}
+            >
+              <Sparkles className="w-5 h-5" />
+              <span>4 persönliche Karten erstellen</span>
+            </Link>
+
+            {/* Secondary Button - Outline */}
             <button 
               onClick={handleRandomQuestion}
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground"
+              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all border-2 border-primary/40 text-primary bg-transparent hover:border-primary hover:bg-primary hover:text-primary-foreground"
             >
               Nächste zufällige Frage ziehen ↺
             </button>
-
-            {/* Solid Button - Home */}
-            <Link 
-              to="/"
-              className="inline-flex items-center justify-center px-8 py-3 rounded-full text-sm font-medium tracking-wide transition-all bg-primary text-primary-foreground hover:opacity-90 hover:shadow-lg"
-            >
-              Zur Startseite
-            </Link>
           </div>
         </footer>
       </div>
