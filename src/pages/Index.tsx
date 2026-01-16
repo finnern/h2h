@@ -340,15 +340,15 @@ const Index = () => {
                   transition={{ duration: 0.8 }}
                   className="text-center md:text-left order-2 md:order-1"
                 >
-                  <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-primary mb-4 leading-tight">
+                  <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-primary mb-6 leading-[1.1] tracking-tight">
                     {language === "de" 
-                      ? "Hertz an Hertz – Das Sync-Deck für Paare." 
-                      : "Hertz an Hertz – The Sync Deck for Couples."}
+                      ? "Hertz an Hertz – Resonanz-Karten für eure Liebe." 
+                      : "Hertz an Hertz – Resonance Cards for Your Love."}
                   </h1>
-                  <p className="font-body text-lg md:text-xl text-ink/80 mb-8 leading-relaxed">
+                  <p className="font-body text-lg md:text-xl lg:text-2xl text-ink/70 mb-10 leading-relaxed max-w-lg">
                     {language === "de"
-                      ? "52 Wochen. 52 Fragen. Euer Ritual, um im Alltag wieder einen gemeinsamen Takt zu finden."
-                      : "52 weeks. 52 questions. Your ritual to find a shared rhythm in everyday life."}
+                      ? "Ein Kartenset, das Raum schafft. Für Momente, in denen ihr euch wieder aufeinander einschwingen wollt."
+                      : "A card set that creates space. For moments when you want to tune into each other again."}
                   </p>
                   <Button 
                     onClick={scrollToTuner}
