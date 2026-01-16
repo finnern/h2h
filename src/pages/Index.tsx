@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
@@ -168,6 +169,17 @@ const Index = () => {
   
   const cardGridRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  // Handle hash scroll on page load (for navigation from other pages like /frage)
+  useEffect(() => {
+    if (location.hash === '#tuner') {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }, [location.hash]);
 
   const scrollToTuner = () => {
     tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -333,7 +345,7 @@ const Index = () => {
                 >
                   <h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-primary mb-6 leading-[1.1] tracking-tight">
                     {language === "de" 
-                      ? "Hertz an Hertz – Resonanz-Karten für eure Liebe." 
+                      ? "Hertz an Hertz – Resonanz-Karten für Eure Liebe." 
                       : "Hertz an Hertz – Resonance Cards for Your Love."}
                   </h1>
                   <p className="font-body text-lg md:text-xl lg:text-2xl text-ink/70 mb-10 leading-relaxed max-w-lg">
@@ -524,7 +536,7 @@ const Index = () => {
                   </p>
                   <p className="font-semibold text-primary">
                     {language === "de"
-                      ? "Hertz an Hertz ist dieser Balken für eure Beziehung."
+                      ? "Hertz an Hertz ist dieser Balken für Eure Beziehung."
                       : "Hertz an Hertz is that beam for your relationship."}
                   </p>
                 </div>
@@ -811,11 +823,11 @@ const Index = () => {
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="font-display text-3xl md:text-4xl text-primary mb-6">
-                  {language === "de" ? "Einzigartige Karten für eure Zeit zu zweit" : "Unique Cards for Your Time Together"}
+                  {language === "de" ? "Einzigartige Karten für Eure Zeit zu zweit" : "Unique Cards for Your Time Together"}
                 </h2>
                 <p className="font-body text-lg text-ink/70 mb-10 max-w-lg mx-auto leading-relaxed">
                   {language === "de"
-                    ? "Ein hochwertig gefertigtes Kartenset für eure gemeinsame Reise. Entdeckt Impulse für echte Verbindung – ganz flexibel in eurem eigenen Rhythmus."
+                    ? "Ein hochwertig gefertigtes Kartenset für Eure gemeinsame Reise. Entdeckt Impulse für echte Verbindung – ganz flexibel in Eurem eigenen Rhythmus."
                     : "A beautifully crafted card set for your shared journey. Discover impulses for genuine connection – at your own pace."}
                 </p>
                 <Button 
