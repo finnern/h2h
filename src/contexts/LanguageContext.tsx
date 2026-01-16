@@ -49,9 +49,9 @@ const translations: Record<Language, Record<string, string>> = {
     "card.remember": "What do we want to remember from this?",
     
     // Conversion Footer
-    "footer.sampleTitle": "This was just a 4-card sample",
-    "footer.sampleDesc": "The full ritual is 52 cards—one for every date night of the year. A premium physical deck, personalized to your journey together.",
-    "footer.cards": "52 cards",
+    "footer.sampleTitle": "This was just a glimpse",
+    "footer.sampleDesc": "A beautifully crafted card set for your shared journey. Discover impulses for genuine connection – at your own pace.",
+    "footer.cards": "unique cards",
     "footer.reserveTitle": "Reserve First Batch",
     "footer.reservePrice": "€5 Priority Down Payment",
     "footer.reserved": "Reserved!",
@@ -162,9 +162,9 @@ const translations: Record<Language, Record<string, string>> = {
     "card.remember": "Was wollen wir uns davon merken?",
     
     // Conversion Footer
-    "footer.sampleTitle": "Das war nur ein 4-Karten-Sample",
-    "footer.sampleDesc": "Das vollständige Ritual umfasst 52 Karten—eine für jeden Date-Abend des Jahres. Ein hochwertiges physisches Deck, personalisiert auf eure gemeinsame Reise.",
-    "footer.cards": "52 Karten",
+    "footer.sampleTitle": "Das war nur ein kleiner Einblick",
+    "footer.sampleDesc": "Ein hochwertig gefertigtes Kartenset für eure gemeinsame Reise. Entdeckt Impulse für echte Verbindung – ganz flexibel in eurem eigenen Rhythmus.",
+    "footer.cards": "einzigartige Karten",
     "footer.reserveTitle": "Erste Auflage reservieren",
     "footer.reservePrice": "€5 Prioritäts-Anzahlung",
     "footer.reserved": "Reserviert!",
