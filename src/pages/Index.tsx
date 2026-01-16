@@ -821,13 +821,13 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <h2 className="font-display text-3xl md:text-4xl text-primary mb-4">
-                  {language === "de" ? "Hertz an Hertz" : "Hertz an Hertz"}
+                <h2 className="font-display text-3xl md:text-4xl text-primary mb-6">
+                  {language === "de" ? "Einzigartige Karten für eure Zeit zu zweit" : "Unique Cards for Your Time Together"}
                 </h2>
-                <p className="font-body text-lg text-ink/80 mb-8">
+                <p className="font-body text-lg text-ink/70 mb-10 max-w-lg mx-auto leading-relaxed">
                   {language === "de"
-                    ? "52 Karten für 52 Date Nights. Personalisierte Fragen, die eure Verbindung vertiefen."
-                    : "52 cards for 52 date nights. Personalized questions that deepen your connection."}
+                    ? "Ein hochwertig gefertigtes Kartenset für eure gemeinsame Reise. Entdeckt Impulse für echte Verbindung – ganz flexibel in eurem eigenen Rhythmus."
+                    : "A beautifully crafted card set for your shared journey. Discover impulses for genuine connection – at your own pace."}
                 </p>
                 <Button 
                   onClick={scrollToTuner}
