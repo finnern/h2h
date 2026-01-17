@@ -19,7 +19,7 @@ const questions: Question[] = [
     question: "In welchem Moment unserer Beziehung hast du dich am sichersten bei mir gefühlt?",
     subtext: "Sicherheit ist der Boden, auf dem Liebe wächst.",
     science: "Die Bindungstheorie zeigt: Emotionale Sicherheit ist die Basis. Zu wissen, wann sich der Partner sicher fühlt, stärkt das Fundament.",
-    sourceTitle: "Mehr zur Bindungstheorie (Psychology Today)",
+    sourceTitle: "Bindungstheorie Basics (Psychology Today)",
     sourceUrl: "https://www.psychologytoday.com/us/basics/attachment"
   },
   {
@@ -27,7 +27,7 @@ const questions: Question[] = [
     question: "Welche Eigenschaft bewunderst du an mir, sagst es mir aber im Alltag viel zu selten?",
     subtext: "Bewunderung ist der Sauerstoff für den Partner.",
     science: "John Gottman nennt dies das 'System der Zuneigung'. Regelmäßige Wertschätzung ist der stärkste Puffer gegen Konflikte.",
-    sourceTitle: "Das Fondness & Admiration System (Gottman)",
+    sourceTitle: "Fondness & Admiration (Gottman)",
     sourceUrl: "https://www.gottman.com/blog/the-fondness-and-admiration-system/"
   },
   {
@@ -35,7 +35,7 @@ const questions: Question[] = [
     question: "Welchen gemeinsamen Traum haben wir aus den Augen verloren, den wir unbedingt wiederbeleben sollten?",
     subtext: "Gemeinsame Ziele schaffen Sinn über den Alltag hinaus.",
     science: "Paare mit einer gemeinsamen Vision ('Shared Meaning') sind resilienter. Träume sind der Kitt, der die Beziehung zusammenhält.",
-    sourceTitle: "Shared Meaning erschaffen (Gottman Blog)",
+    sourceTitle: "Shared Meaning erschaffen (Gottman)",
     sourceUrl: "https://www.gottman.com/blog/create-shared-meaning/"
   },
   {
@@ -43,16 +43,16 @@ const questions: Question[] = [
     question: "Was könnte ich tun, damit du dich im stressigen Alltag von mir mehr unterstützt fühlst?",
     subtext: "Unterstützung ist Liebe in Aktion.",
     science: "Studien zur 'Partner-Reagibilität' zeigen: Nichts senkt Stress so effektiv wie das Gefühl, dass der Partner die Lasten sieht.",
-    sourceTitle: "Die Wissenschaft des Supports (Greater Good)",
-    sourceUrl: "https://greatergood.berkeley.edu/article/item/how_to_support_partner_stressed"
+    sourceTitle: "The Science of Support (Greater Good)",
+    sourceUrl: "https://greatergood.berkeley.edu/article/item/how_to_be_a_supportive_spouse"
   },
   {
     id: 5,
     question: "Wann fühlst du dich mir am nächsten – ist es beim Reden, beim Schweigen oder bei Berührung?",
     subtext: "Jeder spricht eine andere Sprache der Liebe.",
     science: "Missverständnisse entstehen, wenn wir Zuneigung so zeigen, wie wir sie selbst brauchen, statt wie der Partner sie empfängt.",
-    sourceTitle: "Verstehe die Liebessprachen (Psychology Today)",
-    sourceUrl: "https://www.psychologytoday.com/us/blog/click-here-happiness/202009/what-are-the-5-love-languages"
+    sourceTitle: "Die 5 Sprachen der Liebe (Verlags-Info)",
+    sourceUrl: "https://www.5lovelanguages.com/learn"
   },
   {
     id: 6,
@@ -67,8 +67,8 @@ const questions: Question[] = [
     question: "Wovor hast du in Bezug auf unser gemeinsames Älterwerden am meisten Respekt?",
     subtext: "Ängste zu teilen, macht sie kleiner.",
     science: "Verletzlichkeit ist der direkteste Weg zur Verbindung. Sie signalisiert Vertrauen und ermöglicht dem Partner, Fürsorge zu zeigen.",
-    sourceTitle: "Die Kraft der Verletzlichkeit (Brené Brown)",
-    sourceUrl: "https://brenebrown.com/articles/"
+    sourceTitle: "The Power of Vulnerability (Brené Brown)",
+    sourceUrl: "https://brenebrown.com/podcast/the-power-of-vulnerability/"
   },
   {
     id: 8,
@@ -77,6 +77,70 @@ const questions: Question[] = [
     science: "Das Bewusstsein für 'Collective Efficacy' (gemeinsame Wirksamkeit) stärkt die Identität als Paar massiv.",
     sourceTitle: "The Power of We (Psychology Today)",
     sourceUrl: "https://www.psychologytoday.com/us/blog/meet-catch-and-keep/202302/the-power-of-we-in-relationships"
+  },
+  {
+    id: 9,
+    question: "Hast du manchmal das Gefühl, dass die Verantwortung für unseren Alltag ungerecht verteilt ist?",
+    subtext: "Unsichtbare Arbeit sichtbar machen.",
+    science: "'Mental Load' ist die unsichtbare Planungsarbeit, die oft belastender ist als die Ausführung. Darüber zu sprechen, schafft Entlastung.",
+    sourceTitle: "Was ist Mental Load? (Equal Care Day)",
+    sourceUrl: "https://equalcareday.org/mental-load/"
+  },
+  {
+    id: 10,
+    question: "Haben wir im 'Erwachsen-Sein' verlernt, einfach nur albern miteinander zu sein?",
+    subtext: "Spielen hält die Liebe jung.",
+    science: "Verspieltheit ('Playfulness') korreliert direkt mit Beziehungszufriedenheit. Gemeinsames Lachen baut Stresshormone sofort ab.",
+    sourceTitle: "Playfulness in Relationships (Psychology Today)",
+    sourceUrl: "https://www.psychologytoday.com/us/blog/everyone-on-top/202312/how-playfulness-can-transform-your-love-life"
+  },
+  {
+    id: 11,
+    question: "Welches Beziehungsmuster deiner Eltern möchtest du in unserer Partnerschaft auf keinen Fall wiederholen?",
+    subtext: "Prägungen erkennen ist der erste Schritt zur Freiheit.",
+    science: "Wir wiederholen oft unbewusst, was wir vorgelebt bekamen ('Intergenerationale Weitergabe'). Bewusstheit ist der erste Schritt zur Änderung.",
+    sourceTitle: "Breaking Family Patterns (PsychWeb)",
+    sourceUrl: "https://www.psychologytoday.com/us/blog/the-regret-free-life/202501/breaking-the-cycle-of-generational-trauma"
+  },
+  {
+    id: 12,
+    question: "Welche Angst in Bezug auf Geld oder Sicherheit hast du, die ich vielleicht gar nicht kenne?",
+    subtext: "Geld ist selten nur Geld – es sind Werte.",
+    science: "Geldkonflikte sind selten mathematisch, sondern fast immer Wertekonflikte (Freiheit vs. Sicherheit). Das 'Warum' ist wichtiger als der Betrag.",
+    sourceTitle: "Money & Relationships (APA)",
+    sourceUrl: "https://www.apa.org/topics/money/conflict"
+  },
+  {
+    id: 13,
+    question: "Haben wir im Trubel der Liebe vergessen, einfach nur 'beste Freunde' zu sein?",
+    subtext: "Freundschaft ist das Fundament.",
+    science: "Eine tiefe Freundschaft ist laut Dr. Gottman das Fundament der Beziehung ('Sound Relationship House'). Leidenschaft braucht Freundschaft.",
+    sourceTitle: "The Sound Relationship House (Gottman)",
+    sourceUrl: "https://www.gottman.com/blog/the-sound-relationship-house-build-love-maps/"
+  },
+  {
+    id: 14,
+    question: "Gibt es eine alte Verletzung, die du zwar verziehen, aber noch nicht vergessen hast?",
+    subtext: "Verzeihen heißt nicht vergessen.",
+    science: "Der 'Zeigarnik-Effekt' besagt: Wir erinnern uns besser an Unerledigtes. Aussprechen hilft dem Gehirn, das emotionale Kapitel wirklich zu schließen.",
+    sourceTitle: "Zeigarnik Effect (GoodTherapy)",
+    sourceUrl: "https://www.goodtherapy.org/blog/psychpedia/zeigarnik-effect"
+  },
+  {
+    id: 15,
+    question: "In welchem Bereich habe ich mich so verändert, dass du mich manchmal neu kennenlernen musst?",
+    subtext: "Wachstum braucht Neugier.",
+    science: "Das 'Michelangelo-Phänomen': Glückliche Partner 'meißeln' sich gegenseitig positiv und unterstützen das persönliche Wachstum des anderen.",
+    sourceTitle: "The Michelangelo Phenomenon (ScienceDirect)",
+    sourceUrl: "https://www.sciencedirect.com/topics/psychology/michelangelo-phenomenon"
+  },
+  {
+    id: 16,
+    question: "Fühlst du dich manchmal einsam, obwohl ich im selben Raum bin?",
+    subtext: "Anwesenheit ist nicht gleich Verbundenheit.",
+    science: "Einsamkeit zu zweit entsteht durch fehlende emotionale Abstimmung ('Attunement'). Das Gefühl zu benennen, ist der Weg zurück in die Verbindung.",
+    sourceTitle: "Emotional Attunement (Gottman)",
+    sourceUrl: "https://www.gottman.com/blog/emotional-attunement-creates-safety/"
   }
 ];
 
