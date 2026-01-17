@@ -1,5 +1,5 @@
 import { useSearchParams, Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { ExternalLink, Sparkles } from "lucide-react";
 import heartsAngel from "@/assets/hearts-angel.png";
@@ -137,8 +137,25 @@ const HeartbeatDivider = () => (
   </svg>
 );
 
+// Safe IDs for roulette rotation (includes all valid question IDs)
+const SAFE_IDS = [1, 2, 3, 4, 5, 8, 10, 13, 15];
+
 const Frage = () => {
   const [searchParams] = useSearchParams();
+  
+  // Roulette-Logik: Bei id=2 auf zufällige Safe-ID weiterleiten
+  useEffect(() => {
+    const idParam = searchParams.get("id");
+    const hasRedirected = sessionStorage.getItem("roulette_redirect");
+    
+    if (idParam === "2" && !hasRedirected) {
+      const randomId = SAFE_IDS[Math.floor(Math.random() * SAFE_IDS.length)];
+      sessionStorage.setItem("roulette_redirect", "true");
+      window.location.replace(`/frage?id=${randomId}`);
+    } else {
+      sessionStorage.removeItem("roulette_redirect");
+    }
+  }, [searchParams]);
   
   const currentQuestion = useMemo(() => {
     const idParam = searchParams.get("id");
@@ -149,9 +166,10 @@ const Frage = () => {
       if (found) return found;
     }
     
-    // Fallback: random question
-    const randomIndex = Math.floor(Math.random() * questions.length);
-    return questions[randomIndex];
+    // Fallback: random question from SAFE_IDS
+    const randomId = SAFE_IDS[Math.floor(Math.random() * SAFE_IDS.length)];
+    const found = questions.find(q => q.id === randomId);
+    return found || questions[0];
   }, [searchParams]);
 
   return (
