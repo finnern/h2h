@@ -62,20 +62,31 @@ const getGenericCards = () => [
 
 // Generate personalized cards based on tuner input
 const generatePersonalizedCards = (data: TunerData, language: string) => {
-  const { partnerA, partnerB, lifecycle, scientific, spiritual, culture } = data;
+  const { partnerA, partnerB, phase, focus, culture } = data;
   
-  const lifecycleContext = language === "de" ? {
-    "fresh-spark": { focus: "Entdeckung und Hoffnungen", tone: "aufregende Möglichkeiten" },
-    "deep-groove": { focus: "tieferes Verständnis", tone: "gemeinsames Wachstum" },
-    "vintage-gold": { focus: "Wertschätzung und Geschichte", tone: "wertvolle Erinnerungen" },
-    "navigating-storms": { focus: "Heilung und Wiederverbindung", tone: "gemeinsamer Wiederaufbau" },
-  }[lifecycle] || { focus: "eure Reise", tone: "Verbindung" }
+  const phaseContext = language === "de" ? {
+    "fresh-spark": { theme: "Entdeckung und Hoffnungen", tone: "aufregende Möglichkeiten" },
+    "rock-solid": { theme: "tieferes Verständnis", tone: "gemeinsames Wachstum" },
+    "rush-hour": { theme: "Balance und Zusammenhalt", tone: "gemeinsame Stärke" },
+    "golden-years": { theme: "Wertschätzung und Neu-Erfindung", tone: "wertvolle Erinnerungen" },
+  }[phase] || { theme: "eure Reise", tone: "Verbindung" }
   : {
-    "fresh-spark": { focus: "discovery and hopes", tone: "exciting possibilities" },
-    "deep-groove": { focus: "deepening understanding", tone: "growth together" },
-    "vintage-gold": { focus: "appreciation and history", tone: "treasured memories" },
-    "navigating-storms": { focus: "healing and reconnection", tone: "rebuilding together" },
-  }[lifecycle] || { focus: "your journey", tone: "connection" };
+    "fresh-spark": { theme: "discovery and hopes", tone: "exciting possibilities" },
+    "rock-solid": { theme: "deepening understanding", tone: "growth together" },
+    "rush-hour": { theme: "balance and togetherness", tone: "shared strength" },
+    "golden-years": { theme: "appreciation and reinvention", tone: "treasured memories" },
+  }[phase] || { theme: "your journey", tone: "connection" };
+
+  const focusContext = language === "de" ? {
+    "lightness": "Leichtigkeit und gemeinsames Lachen",
+    "depth": "tiefes Verstehen und Verbindung",
+    "support": "Halt und gegenseitiger Rückenwind",
+  }[focus] || "Verbindung"
+  : {
+    "lightness": "lightness and shared laughter",
+    "depth": "deep understanding and connection",
+    "support": "support and encouragement",
+  }[focus] || "connection";
 
   const culturalNote = culture?.toLowerCase().includes("swabian") 
     ? language === "de" ? " (in Erinnerung an unsere Kehrwoche-Weisheit)" : " (remembering our Kehrwoche wisdom)" 
@@ -87,7 +98,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         archetype: "hearts" as Archetype,
         questions: {
           light: `${partnerA}, welche kleine Geste von ${partnerB} bringt dich in dein 'inneres Zuhause'?`,
-          deep: `Wie würde ${lifecycleContext.focus} in unseren verletzlichsten Momenten gemeinsam aussehen?`,
+          deep: `Mit Fokus auf ${focusContext}: Wie würde ${phaseContext.theme} in unseren verletzlichsten Momenten aussehen?`,
         },
         initialFlipped: false,
       },
@@ -95,7 +106,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         archetype: "clubs" as Archetype,
         questions: {
           light: `Welches gemeinsame Projekt könnten ${partnerA} und ${partnerB} diese Saison zusammen erschaffen?${culturalNote}`,
-          deep: `Bei ${lifecycleContext.tone}, welches Handwerk bauen wir mit unseren täglichen Handlungen?`,
+          deep: `Bei ${phaseContext.tone}, welches Handwerk bauen wir mit unseren täglichen Handlungen?`,
         },
         initialFlipped: true,
       },
@@ -103,7 +114,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         archetype: "diamonds" as Archetype,
         questions: {
           light: `${partnerB}, welche 'Geld-Geschichte' hat dir deine Familie beigebracht, die heute noch nachklingt?`,
-          deep: `Mit ${lifecycleContext.focus}, welches Vermächtnis wollen ${partnerA} und ${partnerB} aufbauen?`,
+          deep: `Mit ${phaseContext.theme}, welches Vermächtnis wollen ${partnerA} und ${partnerB} aufbauen?`,
         },
         initialFlipped: true,
       },
@@ -111,7 +122,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
         archetype: "spades" as Archetype,
         questions: {
           light: `${partnerA}, welche Frage über die Zukunft zögerst du, ${partnerB} zu stellen?`,
-          deep: `In ${lifecycleContext.tone}, welche Weisheit sind wir bereit, gemeinsam anzunehmen?`,
+          deep: `In ${phaseContext.tone}, welche Weisheit sind wir bereit, gemeinsam anzunehmen?`,
         },
         initialFlipped: false,
       },
@@ -123,7 +134,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
       archetype: "hearts" as Archetype,
       questions: {
         light: `${partnerA}, what small gesture from ${partnerB} brings you into your 'inner home'?`,
-        deep: `What would ${lifecycleContext.focus} look like in our most vulnerable moments together?`,
+        deep: `With a focus on ${focusContext}: What would ${phaseContext.theme} look like in our most vulnerable moments?`,
       },
       initialFlipped: false,
     },
@@ -131,7 +142,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
       archetype: "clubs" as Archetype,
       questions: {
         light: `What shared project could ${partnerA} and ${partnerB} create together this season?${culturalNote}`,
-        deep: `As ${lifecycleContext.tone}, what craft are we building with our daily actions?`,
+        deep: `As ${phaseContext.tone}, what craft are we building with our daily actions?`,
       },
       initialFlipped: true,
     },
@@ -139,7 +150,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
       archetype: "diamonds" as Archetype,
       questions: {
         light: `${partnerB}, what 'money story' did your family teach you that still echoes today?`,
-        deep: `With ${lifecycleContext.focus}, what legacy do ${partnerA} and ${partnerB} want to build?`,
+        deep: `With ${phaseContext.theme}, what legacy do ${partnerA} and ${partnerB} want to build?`,
       },
       initialFlipped: true,
     },
@@ -147,7 +158,7 @@ const generatePersonalizedCards = (data: TunerData, language: string) => {
       archetype: "spades" as Archetype,
       questions: {
         light: `${partnerA}, what question about the future are you hesitant to ask ${partnerB}?`,
-        deep: `In ${lifecycleContext.tone}, what wisdom are we ready to embrace together?`,
+        deep: `In ${phaseContext.tone}, what wisdom are we ready to embrace together?`,
       },
       initialFlipped: false,
     },
@@ -205,15 +216,16 @@ const Index = () => {
         },
         memoriesData: {
           coreEvents: data.additionalInsights,
-          sharedValues: `${data.scientific ? 'Scientific' : ''} ${data.spiritual ? 'Spiritual' : ''}`.trim(),
+          sharedValues: data.focus || '',
           constraints: data.context,
         },
         coupleData: {
           partnerA: data.partnerA,
           partnerB: data.partnerB,
-          lifecycle: data.lifecycle,
-          scientific: data.scientific,
-          spiritual: data.spiritual,
+          phase: data.phase,
+          focus: data.focus,
+          isGift: data.isGift,
+          gifterName: data.gifterName,
           culture: data.culture,
           context: data.context,
           additionalInsights: data.additionalInsights,
