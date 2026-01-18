@@ -1,7 +1,7 @@
 import { useSearchParams, Link } from "react-router-dom";
 import { useMemo, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { ExternalLink, Sparkles } from "lucide-react";
+import { ExternalLink, Sparkles, Brain, Heart } from "lucide-react";
 import heartsAngel from "@/assets/hearts-angel.png";
 
 interface Question {
@@ -334,21 +334,70 @@ const Frage = () => {
         </section>
 
 
-        {/* Footer CTA - Fügung Block */}
+        {/* Three Pillars Section - Compact for Mobile */}
+        <section className="px-6 pb-8 relative z-10">
+          <div className="max-w-xl mx-auto">
+            <h3 className="font-display text-xl md:text-2xl text-primary mb-6 text-center">
+              So funktionieren alle unsere Karten
+            </h3>
+            
+            {/* Pillars as compact list on mobile */}
+            <div className="space-y-4">
+              {/* Pillar 1: Science */}
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-card/50 border border-border/50">
+                <div className="w-10 h-10 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Brain className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-display text-base text-primary mb-1">
+                    Die Wissenschaft
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Keine Kalendersprüche. Gold-Standards der Paartherapie – von Gottman bis Esther Perel.
+                  </p>
+                </div>
+              </div>
+
+              {/* Pillar 2: Tradition */}
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-card/50 border border-border/50">
+                <div className="w-10 h-10 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Heart className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-display text-base text-primary mb-1">
+                    Die Tradition
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Inspiriert vom Hartschierle. Die Kraft der Stille und des einfachen Daseins.
+                  </p>
+                </div>
+              </div>
+
+              {/* Pillar 3: Technology */}
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-card/50 border border-border/50">
+                <div className="w-10 h-10 flex-shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-display text-base text-primary mb-1">
+                    Die Technologie
+                  </h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    KI als Baukasten. Passt die Karten an eure Lebensphase an – sicher & privat.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer CTA */}
         <footer className="pb-12 px-6 relative z-10">
           <div className="max-w-xl mx-auto flex flex-col items-center">
-            {/* Fügung Headline */}
-            <h3 className="font-display text-2xl md:text-3xl text-primary mb-3 text-center">
-              Vielleicht war es Fügung...
-            </h3>
-            <p className="text-muted-foreground text-sm md:text-base text-center mb-6 max-w-md leading-relaxed">
-              ...dass Ihr genau jetzt hier seid. Doch jede Beziehung schwingt anders. Damit die Fragen nicht "irgendwen", sondern <em>Euch</em> im Herzen treffen, brauchen wir ein kurzes Stimmungsbild. Eicht hier die Frequenz auf Eure aktuelle Situation:
-            </p>
-
             {/* Primary CTA Button - Glowing Gradient - Links to tuner section */}
             <Link 
               to="/#tuner"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium text-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] mb-8"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-medium text-white transition-all hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
               style={{
                 background: 'linear-gradient(135deg, #C00000 0%, #8B0000 50%, #C00000 100%)',
                 boxShadow: '0 4px 24px -4px rgba(192, 0, 0, 0.4)',
@@ -357,7 +406,6 @@ const Frage = () => {
               <Sparkles className="w-5 h-5" />
               <span>4 persönliche Karten erstellen</span>
             </Link>
-
           </div>
         </footer>
       </div>
