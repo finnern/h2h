@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export interface TunerData {
   partnerA: string;
@@ -109,90 +109,6 @@ const PendulumLoader = () => (
     <span className="font-body text-ink">Synchronisiere...</span>
   </div>
 );
-
-// Mechanical Toggle Component
-const MechanicalToggle = ({ 
-  isGift, 
-  onChange,
-  language
-}: { 
-  isGift: boolean; 
-  onChange: (value: boolean) => void;
-  language: string;
-}) => {
-  return (
-    <div className="relative flex items-center justify-center">
-      {/* The balance beam container */}
-      <div className="relative w-full max-w-md">
-        {/* Center pivot */}
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-4 h-4 z-10">
-          <div className="w-4 h-4 rounded-full border-2 border-ink bg-paper" />
-          <div className="w-0.5 h-3 bg-ink mx-auto" />
-        </div>
-        
-        {/* Balance beam */}
-        <motion.div 
-          className="relative mt-6 h-1 bg-ink rounded-full mx-8"
-          animate={{ 
-            rotate: isGift ? 3 : -3 
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 200, 
-            damping: 20 
-          }}
-          style={{ transformOrigin: "center center" }}
-        >
-          {/* Left weight - "Für uns" */}
-          <button
-            onClick={() => onChange(false)}
-            className={`absolute left-0 -top-8 -translate-x-1/2 flex flex-col items-center transition-all duration-300 ${
-              !isGift ? "scale-110" : "opacity-60"
-            }`}
-          >
-            <motion.div 
-              className={`w-16 h-16 rounded-full border-2 flex items-center justify-center transition-colors ${
-                !isGift 
-                  ? "border-primary bg-primary/10" 
-                  : "border-ink/30 bg-paper"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="text-2xl">💕</span>
-            </motion.div>
-            <span className={`mt-2 font-body text-sm ${!isGift ? "text-primary font-semibold" : "text-ink-light"}`}>
-              {language === "de" ? "Für uns" : "For us"}
-            </span>
-          </button>
-
-          {/* Right weight - "Für Freunde" */}
-          <button
-            onClick={() => onChange(true)}
-            className={`absolute right-0 -top-8 translate-x-1/2 flex flex-col items-center transition-all duration-300 ${
-              isGift ? "scale-110" : "opacity-60"
-            }`}
-          >
-            <motion.div 
-              className={`w-16 h-16 rounded-full border-2 flex items-center justify-center transition-colors ${
-                isGift 
-                  ? "border-primary bg-primary/10" 
-                  : "border-ink/30 bg-paper"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span className="text-2xl">🎁</span>
-            </motion.div>
-            <span className={`mt-2 font-body text-sm ${isGift ? "text-primary font-semibold" : "text-ink-light"}`}>
-              {language === "de" ? "Für Freunde" : "For friends"}
-            </span>
-          </button>
-        </motion.div>
-      </div>
-    </div>
-  );
-};
 
 // Phase Tile Component with pendulum aesthetic
 const PhaseTile = ({ 
@@ -298,7 +214,6 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
   const [formData, setFormData] = useState<TunerData>({
     partnerA: "",
     partnerB: "",
-    gifterName: "",
     isGift: false,
     phase: "",
     focus: "",
@@ -313,33 +228,6 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
   };
 
   const isFormValid = formData.partnerA && formData.partnerB && formData.phase && formData.focus;
-
-  // Dynamic placeholders based on gift mode
-  const getNamePlaceholders = () => {
-    if (formData.isGift) {
-      return {
-        a: language === "de" ? "Name von Freund A" : "Friend A's name",
-        b: language === "de" ? "Name von Freund B" : "Friend B's name",
-      };
-    }
-    return {
-      a: language === "de" ? "Dein Name" : "Your name",
-      b: language === "de" ? "Name deines Partners" : "Partner's name",
-    };
-  };
-
-  const placeholders = getNamePlaceholders();
-
-  const getInsightsPlaceholder = () => {
-    if (formData.isGift) {
-      return language === "de"
-        ? "Erzähl uns kurz: Bauen sie gerade ein Haus? Was ist ihr Insider? Woher kennt ihr euch?"
-        : "Tell us briefly: Are they building a house? What's their inside joke? How do you know them?";
-    }
-    return language === "de"
-      ? "Erzählt kurz, was gerade los ist: Seid ihr erschöpft vom Elternsein? Plant ihr ein großes Abenteuer? Was beschäftigt euch?"
-      : "Tell us briefly what's going on: Are you exhausted from parenting? Planning a big adventure? What's on your mind?";
-  };
 
   return (
     <div className="p-4 md:p-8">
@@ -358,25 +246,16 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Toggle: Für uns / Für Freunde */}
-        <div className="py-6">
-          <MechanicalToggle 
-            isGift={formData.isGift} 
-            onChange={(value) => setFormData({ ...formData, isGift: value })}
-            language={language}
-          />
-        </div>
-
         {/* Names section */}
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="partnerA" className="font-body text-ink font-semibold">
-                {language === "de" ? "Name A" : "Name A"}
+                {language === "de" ? "Dein Name" : "Your Name"}
               </Label>
               <Input
                 id="partnerA"
-                placeholder={placeholders.a}
+                placeholder={language === "de" ? "Dein Name" : "Your name"}
                 value={formData.partnerA}
                 onChange={(e) => setFormData({ ...formData, partnerA: e.target.value })}
                 className="font-body bg-paper border-ink/30 focus:border-primary focus:ring-primary/20 rounded-sm"
@@ -384,40 +263,17 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
             </div>
             <div className="space-y-2">
               <Label htmlFor="partnerB" className="font-body text-ink font-semibold">
-                {language === "de" ? "Name B" : "Name B"}
+                {language === "de" ? "Name deines Partners" : "Partner's Name"}
               </Label>
               <Input
                 id="partnerB"
-                placeholder={placeholders.b}
+                placeholder={language === "de" ? "Name deines Partners" : "Partner's name"}
                 value={formData.partnerB}
                 onChange={(e) => setFormData({ ...formData, partnerB: e.target.value })}
                 className="font-body bg-paper border-ink/30 focus:border-primary focus:ring-primary/20 rounded-sm"
               />
             </div>
           </div>
-
-          {/* Gifter name - only visible in gift mode */}
-          <AnimatePresence>
-            {formData.isGift && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="space-y-2 overflow-hidden"
-              >
-                <Label htmlFor="gifterName" className="font-body text-ink font-semibold">
-                  {language === "de" ? "Dein Name (Schenker)" : "Your name (Gift giver)"}
-                </Label>
-                <Input
-                  id="gifterName"
-                  placeholder={language === "de" ? "Wie heißt du?" : "What's your name?"}
-                  value={formData.gifterName}
-                  onChange={(e) => setFormData({ ...formData, gifterName: e.target.value })}
-                  className="font-body bg-paper border-ink/30 focus:border-primary focus:ring-primary/20 rounded-sm"
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {/* Divider */}
@@ -430,7 +286,7 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
         {/* Phase Selection - Visual Tiles */}
         <div className="space-y-3">
           <Label className="font-body text-ink font-semibold">
-            {language === "de" ? "Wo steht die Beziehung?" : "Where is the relationship?"}
+            {language === "de" ? "Wo steht Eure Beziehung?" : "Where is your relationship?"}
           </Label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {phaseOptions.map((option) => (
@@ -455,7 +311,7 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
         {/* Focus Selection */}
         <div className="space-y-3">
           <Label className="font-body text-ink font-semibold">
-            {language === "de" ? "Was braucht die Beziehung?" : "What does the relationship need?"}
+            {language === "de" ? "Was braucht Eure Beziehung?" : "What does your relationship need?"}
           </Label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {focusOptions.map((option) => (
@@ -514,7 +370,9 @@ export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) =>
           </Label>
           <textarea
             id="additionalInsights"
-            placeholder={getInsightsPlaceholder()}
+            placeholder={language === "de"
+              ? "Erzählt kurz, was gerade los ist: Seid ihr erschöpft vom Elternsein? Plant ihr ein großes Abenteuer? Was beschäftigt euch?"
+              : "Tell us briefly what's going on: Are you exhausted from parenting? Planning a big adventure? What's on your mind?"}
             value={formData.additionalInsights || ""}
             onChange={(e) => setFormData({ ...formData, additionalInsights: e.target.value })}
             className="w-full min-h-[120px] p-4 font-body bg-paper border border-ink/30 rounded-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none resize-y text-ink placeholder:text-ink/40"
