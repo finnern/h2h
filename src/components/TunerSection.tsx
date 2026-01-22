@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +19,11 @@ export interface TunerData {
   additionalInsights?: string;
   historyOptIn: boolean;
 }
-
 interface TunerSectionProps {
   onGenerate: (data: TunerData) => void;
   isGenerating: boolean;
+  initialData?: Partial<TunerData>;
 }
-
 // Phase options with descriptions
 const phaseOptions = [
   { 
@@ -208,19 +207,37 @@ const FocusOption = ({
   );
 };
 
-export const TunerSection = ({ onGenerate, isGenerating }: TunerSectionProps) => {
+export const TunerSection = ({ onGenerate, isGenerating, initialData }: TunerSectionProps) => {
   const { language } = useLanguage();
   
   const [formData, setFormData] = useState<TunerData>({
-    partnerA: "",
-    partnerB: "",
-    isGift: false,
-    phase: "",
-    focus: "",
-    culture: "",
-    context: "",
+    partnerA: initialData?.partnerA || "",
+    partnerB: initialData?.partnerB || "",
+    isGift: initialData?.isGift || false,
+    phase: initialData?.phase || "",
+    focus: initialData?.focus || "",
+    culture: initialData?.culture || "",
+    context: initialData?.context || "",
+    additionalInsights: initialData?.additionalInsights || "",
     historyOptIn: false,
   });
+  
+  // Sync form data when initialData changes (for Magic Link prefill)
+  React.useEffect(() => {
+    if (initialData) {
+      setFormData(prev => ({
+        ...prev,
+        partnerA: initialData.partnerA || prev.partnerA,
+        partnerB: initialData.partnerB || prev.partnerB,
+        phase: initialData.phase || prev.phase,
+        focus: initialData.focus || prev.focus,
+        culture: initialData.culture || prev.culture,
+        context: initialData.context || prev.context,
+        additionalInsights: initialData.additionalInsights || prev.additionalInsights,
+        isGift: initialData.isGift || prev.isGift,
+      }));
+    }
+  }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
