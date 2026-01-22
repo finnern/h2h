@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gift, ArrowLeft, ArrowRight, Sparkles, X } from "lucide-react";
+import { Gift, ArrowLeft, ArrowRight, Sparkles, Check, Copy, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TunerData } from "@/components/TunerSection";
 
 // Phase options
 const phaseOptions = [
@@ -74,15 +73,16 @@ const focusOptions = [
 interface GiftFlowModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: TunerData) => void;
-  isGenerating: boolean;
 }
 
-type Step = "names" | "details" | "insider" | "review";
+type Step = "names" | "details" | "insider" | "review" | "success";
 
-export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftFlowModalProps) => {
+export const GiftFlowModal = ({ isOpen, onClose }: GiftFlowModalProps) => {
   const { language } = useLanguage();
   const [step, setStep] = useState<Step>("names");
+  const [magicLink, setMagicLink] = useState("");
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [messageCopied, setMessageCopied] = useState(false);
   
   const [formData, setFormData] = useState({
     partnerA: "",
@@ -95,8 +95,28 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
     additionalInsights: "",
   });
 
+  const generateMagicLink = () => {
+    const baseUrl = window.location.origin;
+    const params = new URLSearchParams();
+    params.set("gift", "true");
+    params.set("nameA", formData.partnerA);
+    params.set("nameB", formData.partnerB);
+    params.set("phase", formData.phase);
+    params.set("topic", formData.focus);
+    if (formData.context) params.set("context", formData.context);
+    if (formData.culture) params.set("culture", formData.culture);
+    if (formData.additionalInsights) params.set("insights", formData.additionalInsights);
+    return `${baseUrl}/?${params.toString()}`;
+  };
+
+  const getShareMessage = () => {
+    return language === "de"
+      ? `Hey ${formData.partnerA} & ${formData.partnerB}, ich habe das Hertz an Hertz Deck entdeckt und musste an euch denken. Hier ist euer persönlicher Einstieg: ${magicLink}`
+      : `Hey ${formData.partnerA} & ${formData.partnerB}, I discovered the Hertz an Hertz Deck and thought of you. Here's your personal entry: ${magicLink}`;
+  };
+
   const handleNext = () => {
-    const steps: Step[] = ["names", "details", "insider", "review"];
+    const steps: Step[] = ["names", "details", "insider", "review", "success"];
     const currentIndex = steps.indexOf(step);
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
@@ -104,7 +124,7 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
   };
 
   const handleBack = () => {
-    const steps: Step[] = ["names", "details", "insider", "review"];
+    const steps: Step[] = ["names", "details", "insider", "review", "success"];
     const currentIndex = steps.indexOf(step);
     if (currentIndex > 0) {
       setStep(steps[currentIndex - 1]);
@@ -112,11 +132,24 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
   };
 
   const handleSubmit = () => {
-    onSubmit({
-      ...formData,
-      isGift: true,
-      historyOptIn: false,
-    });
+    const link = generateMagicLink();
+    setMagicLink(link);
+    setStep("success");
+  };
+
+  const copyToClipboard = async (text: string, type: "link" | "message") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === "link") {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 2000);
+      } else {
+        setMessageCopied(true);
+        setTimeout(() => setMessageCopied(false), 2000);
+      }
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   };
 
   const canProceedFromNames = formData.partnerA && formData.partnerB && formData.gifterName;
@@ -134,6 +167,9 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
 
   const resetAndClose = () => {
     setStep("names");
+    setMagicLink("");
+    setLinkCopied(false);
+    setMessageCopied(false);
     setFormData({
       partnerA: "",
       partnerB: "",
@@ -152,19 +188,28 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto bg-card border-2 border-primary/30">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-primary flex items-center gap-2">
-            <Gift className="w-6 h-6" />
-            {language === "de" ? "Geschenk für Freunde" : "Gift for Friends"}
+            {step === "success" ? (
+              <>
+                <Sparkles className="w-6 h-6" />
+                {language === "de" ? "Geschenk bereit!" : "Gift Ready!"}
+              </>
+            ) : (
+              <>
+                <Gift className="w-6 h-6" />
+                {language === "de" ? "Geschenk für Freunde" : "Gift for Friends"}
+              </>
+            )}
           </DialogTitle>
         </DialogHeader>
 
         <div className="mt-4">
           {/* Progress indicator */}
           <div className="flex items-center justify-center gap-2 mb-6">
-            {["names", "details", "insider", "review"].map((s, i) => (
+            {["names", "details", "insider", "review", "success"].map((s) => (
               <div
                 key={s}
                 className={`w-2.5 h-2.5 rounded-full transition-colors ${
-                  s === step ? "bg-primary" : "bg-ink/20"
+                  s === step ? "bg-primary" : s === "success" && step === "success" ? "bg-primary" : "bg-ink/20"
                 }`}
               />
             ))}
@@ -403,8 +448,8 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
               >
                 <p className="font-body text-ink/70 text-sm">
                   {language === "de"
-                    ? "Alles korrekt? Dann generieren wir die Karten!"
-                    : "Everything correct? Then let's generate the cards!"}
+                    ? "Alles korrekt? Dann erstellen wir den Magic Link!"
+                    : "Everything correct? Then let's create the Magic Link!"}
                 </p>
 
                 <div className="bg-muted/50 rounded-lg p-4 space-y-3 border border-border/50">
@@ -475,19 +520,111 @@ export const GiftFlowModal = ({ isOpen, onClose, onSubmit, isGenerating }: GiftF
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    disabled={isGenerating}
                     className="flex-1 font-body bg-primary hover:bg-primary/90"
                   >
-                    {isGenerating ? (
-                      <>{language === "de" ? "Generiere..." : "Generating..."}</>
-                    ) : (
-                      <>
-                        <Sparkles className="mr-2 w-4 h-4" />
-                        {language === "de" ? "Karten erstellen" : "Create Cards"}
-                      </>
-                    )}
+                    <Sparkles className="mr-2 w-4 h-4" />
+                    {language === "de" ? "Geschenk erstellen" : "Create Gift"}
                   </Button>
                 </div>
+              </motion.div>
+            )}
+
+            {/* Step 5: Success - Magic Link */}
+            {step === "success" && (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="space-y-5"
+              >
+                <div className="text-center py-4">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", delay: 0.2 }}
+                    className="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4"
+                  >
+                    <Sparkles className="w-8 h-8 text-primary" />
+                  </motion.div>
+                  <p className="font-body text-ink/70 text-sm">
+                    {language === "de"
+                      ? `Der Magic Link für ${formData.partnerA} & ${formData.partnerB} ist bereit!`
+                      : `The Magic Link for ${formData.partnerA} & ${formData.partnerB} is ready!`}
+                  </p>
+                </div>
+
+                {/* Magic Link Box */}
+                <div className="space-y-2">
+                  <Label className="font-body text-ink font-semibold text-sm">
+                    {language === "de" ? "Magic Link" : "Magic Link"}
+                  </Label>
+                  <div className="flex gap-2">
+                    <div className="flex-1 p-3 bg-muted/50 rounded-lg border border-border/50 font-mono text-xs text-ink/80 break-all">
+                      {magicLink}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => copyToClipboard(magicLink, "link")}
+                      className="shrink-0"
+                    >
+                      {linkCopied ? (
+                        <Check className="w-4 h-4 text-green-600" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Shareable Message */}
+                <div className="space-y-2">
+                  <Label className="font-body text-ink font-semibold text-sm">
+                    {language === "de" ? "Nachricht zum Teilen" : "Message to Share"}
+                  </Label>
+                  <div className="relative">
+                    <textarea
+                      readOnly
+                      value={getShareMessage()}
+                      className="w-full min-h-[100px] p-3 font-body bg-muted/50 border border-border/50 rounded-lg text-ink text-sm resize-none"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => copyToClipboard(getShareMessage(), "message")}
+                      className="absolute bottom-2 right-2"
+                    >
+                      {messageCopied ? (
+                        <>
+                          <Check className="w-3 h-3 mr-1 text-green-600" />
+                          {language === "de" ? "Kopiert!" : "Copied!"}
+                        </>
+                      ) : (
+                        <>
+                          <Share2 className="w-3 h-3 mr-1" />
+                          {language === "de" ? "Kopieren" : "Copy"}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <Button
+                    onClick={resetAndClose}
+                    variant="outline"
+                    className="w-full font-body"
+                  >
+                    {language === "de" ? "Fertig" : "Done"}
+                  </Button>
+                </div>
+
+                <p className="text-center font-body text-xs text-ink/50">
+                  {language === "de"
+                    ? "Tipp: Teile den Link via WhatsApp oder E-Mail!"
+                    : "Tip: Share the link via WhatsApp or Email!"}
+                </p>
               </motion.div>
             )}
           </AnimatePresence>

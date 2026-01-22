@@ -179,6 +179,8 @@ const Index = () => {
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
   const [coupleData, setCoupleData] = useState<{ partner_a: string; partner_b: string } | null>(null);
   const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
+  const [giftPrefillData, setGiftPrefillData] = useState<Partial<TunerData> | null>(null);
+  const [isGiftRecipient, setIsGiftRecipient] = useState(false);
   
   const cardGridRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
@@ -193,6 +195,52 @@ const Index = () => {
       }, 100);
     }
   }, [location.hash]);
+
+  // Handle Magic Link detection for gift recipients
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('gift') === 'true') {
+      const prefillData: Partial<TunerData> = {
+        partnerA: params.get('nameA') || '',
+        partnerB: params.get('nameB') || '',
+        phase: params.get('phase') || '',
+        focus: params.get('topic') || '',
+        context: params.get('context') || '',
+        culture: params.get('culture') || '',
+        additionalInsights: params.get('insights') || '',
+        isGift: true,
+      };
+      
+      setGiftPrefillData(prefillData);
+      setIsGiftRecipient(true);
+      
+      // Show welcome toast first
+      toast({
+        title: language === "de" 
+          ? "✨ Ein Impuls von einem Freund wurde geladen." 
+          : "✨ An impulse from a friend has been loaded.",
+        description: language === "de"
+          ? "Eure persönlichen Karten werden gleich generiert..."
+          : "Your personalized cards will be generated shortly...",
+      });
+      
+      // Scroll to tuner section
+      setTimeout(() => {
+        tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+      
+      // Trigger generation after 800ms delay so user can see pre-filled form
+      setTimeout(() => {
+        handleGenerate({
+          ...prefillData,
+          historyOptIn: false,
+        } as TunerData);
+      }, 800);
+      
+      // Clean URL without reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   const scrollToTuner = () => {
     tunerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -745,7 +793,7 @@ const Index = () => {
                     {language === "de" ? "⚡ Eure Schwingung justieren" : "⚡ Adjust Your Resonance"}
                   </h3>
                 </div>
-                <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} />
+                <TunerSection onGenerate={handleGenerate} isGenerating={isGenerating} initialData={giftPrefillData || undefined} />
               </motion.div>
 
               {/* Animated heartbeat line on generation */}
@@ -882,11 +930,6 @@ const Index = () => {
         <GiftFlowModal
           isOpen={isGiftModalOpen}
           onClose={() => setIsGiftModalOpen(false)}
-          onSubmit={(data) => {
-            setIsGiftModalOpen(false);
-            handleGenerate(data);
-          }}
-          isGenerating={isGenerating}
         />
       </div>
     </>
