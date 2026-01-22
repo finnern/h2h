@@ -9,13 +9,14 @@ import { ConversionFooter } from "@/components/ConversionFooter";
 import { HeartbeatLine } from "@/components/HeartbeatLine";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { CuckooClockSection } from "@/components/ui/CuckooClockSection";
+import { GiftFlowModal } from "@/components/GiftFlowModal";
 import AuthButton from "@/components/AuthButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useProfileData } from "@/hooks/useProfileData";
 import { useSessionId } from "@/hooks/useSessionId";
 import { Archetype } from "@/components/FlippableCard";
 import { Button } from "@/components/ui/button";
-import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2, FileText, MessageCircle } from "lucide-react";
+import { Brain, Heart, Sparkles, ArrowRight, Printer, Loader2, FileText, MessageCircle, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getSupabaseWithSession } from "@/lib/supabaseWithSession";
 
@@ -177,6 +178,7 @@ const Index = () => {
   const [currentCards, setCurrentCards] = useState(getGenericCards());
   const [showHeartbeatAnimation, setShowHeartbeatAnimation] = useState(false);
   const [coupleData, setCoupleData] = useState<{ partner_a: string; partner_b: string } | null>(null);
+  const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
   
   const cardGridRef = useRef<HTMLDivElement>(null);
   const tunerRef = useRef<HTMLDivElement>(null);
@@ -794,7 +796,7 @@ const Index = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.4, delay: 0.2 }}
-                      className="flex justify-center mt-8"
+                      className="flex flex-col items-center gap-4 mt-8"
                     >
                       <Button
                         onClick={handleOrder}
@@ -815,6 +817,28 @@ const Index = () => {
                           </>
                         )}
                       </Button>
+
+                      {/* Gift CTA - appears after personalization */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-center"
+                      >
+                        <p className="font-body text-ink/60 text-sm mb-2">
+                          {language === "de" 
+                            ? "Kennst du ein Paar, das diese Erfahrung auch verdient?" 
+                            : "Know a couple who deserves this experience too?"}
+                        </p>
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsGiftModalOpen(true)}
+                          className="font-body border-primary/30 hover:border-primary hover:bg-primary/5"
+                        >
+                          <Gift className="mr-2 h-4 w-4" />
+                          {language === "de" ? "Verschenke Hertz an Hertz" : "Gift Hertz an Hertz"}
+                        </Button>
+                      </motion.div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -853,6 +877,17 @@ const Index = () => {
             </div>
           </section>
         </main>
+
+        {/* Gift Flow Modal */}
+        <GiftFlowModal
+          isOpen={isGiftModalOpen}
+          onClose={() => setIsGiftModalOpen(false)}
+          onSubmit={(data) => {
+            setIsGiftModalOpen(false);
+            handleGenerate(data);
+          }}
+          isGenerating={isGenerating}
+        />
       </div>
     </>
   );
