@@ -331,10 +331,20 @@ const About = () => {
               <p>{t("about.conclusion.p2")}</p>
               <p>{t("about.conclusion.p3")}</p>
             </div>
-            <p className="font-display text-2xl text-heartbeat pt-4">
+          <p className="font-display text-2xl text-heartbeat pt-4">
               Hertz an Hertz.
             </p>
           </motion.section>
+
+          {/* Footer */}
+          <footer className="text-center py-8 border-t border-border/50">
+            <Link 
+              to="/transparenz" 
+              className="font-body text-sm text-ink/50 hover:text-heartbeat transition-colors"
+            >
+              Impressum & Datenschutz
+            </Link>
+          </footer>
         </main>
       </div>
     </>

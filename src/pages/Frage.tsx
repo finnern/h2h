@@ -404,7 +404,15 @@ const Frage = () => {
               }}
             >
               <Sparkles className="w-5 h-5" />
-              <span>4 persönliche Karten erstellen</span>
+              Starte den Tuner – Wähle deine Karten
+            </Link>
+
+            {/* Impressum Link */}
+            <Link 
+              to="/transparenz" 
+              className="mt-8 text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Impressum & Datenschutz
             </Link>
           </div>
         </footer>
