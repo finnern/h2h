@@ -225,6 +225,16 @@ const Hartschierle = () => {
               Zurück zur Über-uns-Seite
             </Link>
           </motion.div>
+
+          {/* Footer */}
+          <footer className="text-center py-8 mt-8 border-t border-border/50">
+            <Link 
+              to="/transparenz" 
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Impressum & Datenschutz
+            </Link>
+          </footer>
         </main>
       </div>
     </>
