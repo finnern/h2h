@@ -5,11 +5,11 @@ import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
 
-// WIR NUTZEN JETZT DEN '@' ALIAS - DAS IST SICHERER UND KONSISTENT
-import impressumScribe from "@/assets/impressum-scribe.png";
-import privacyGuard from "@/assets/privacy-guard.png";
-import aiScholar from "@/assets/ai-scholar.png";
-import contactHorn from "@/assets/contact-horn.png";
+// WIR NUTZEN RELATIVE PFADE - DAS VERSTEHT JEDES SYSTEM
+import impressumScribe from "../assets/impressum-scribe.png";
+import privacyGuard from "../assets/privacy-guard.png";
+import aiScholar from "../assets/ai-scholar.png";
+import contactHorn from "../assets/contact-horn.png";
 
 const Transparenz = () => {
   const { language } = useLanguage();
