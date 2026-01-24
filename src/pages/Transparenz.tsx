@@ -74,8 +74,12 @@ const Transparenz = () => {
               <div className="bg-card rounded-xl p-6 md:p-8 border border-border shadow-sm relative overflow-hidden">
                 <div className="flex flex-col md:flex-row gap-8 relative z-10">
                     <div className="md:w-1/4 flex justify-center items-start pt-2">
-                        {/* HIER NUTZEN WIR DEN IMPORTIERTEN NAMEN */}
-                        <img src={impressumScribe} alt="Der Stadtschreiber" className="w-32 h-auto drop-shadow-md opacity-90 hover:scale-105 transition-transform duration-500" />
+                        {/* UPDATE: HIER HABEN WIR IHN GESPIEGELT (-scale-x-100) */}
+                        <img 
+                          src={impressumScribe} 
+                          alt="Der Stadtschreiber" 
+                          className="w-32 h-auto drop-shadow-md opacity-90 hover:scale-105 transition-transform duration-500 -scale-x-100" 
+                        />
                     </div>
                     <div className="md:w-3/4">
                         <h2 className="font-display text-2xl text-foreground mb-6 border-b border-border pb-2">
@@ -160,19 +164,23 @@ const Transparenz = () => {
                                 </ul>
                             </div>
 
-                            {/* KI SECTION MIT ALCHEMIST */}
-                            <div className="bg-muted/30 p-6 rounded-lg border border-border mt-6 relative">
-                                <div className="absolute -right-2 -top-10 md:-right-6 md:-top-6 w-24 h-24 pointer-events-none opacity-80">
-                                     <img src={aiScholar} alt="Der Alchemist" className="w-full h-full object-contain" />
+                            {/* UPDATE: KI SECTION - GELEHRTER NICHT MEHR IM UNKRAUT */}
+                            <div className="bg-muted/30 p-6 rounded-lg border border-border mt-8">
+                                <div className="flex flex-col-reverse md:flex-row gap-6 items-center">
+                                    <div className="flex-1">
+                                        <h3 className="text-lg font-bold text-heartbeat mb-2">3. Die Alchemie (KI-Verarbeitung)</h3>
+                                        <p className="mb-2">Dies ist das Herzstück. Damit aus deinen Worten ein Spiel wird, nutzen wir moderne Schnittstellen:</p>
+                                        <ol className="list-decimal pl-5 space-y-2">
+                                            <li><strong>Transport:</strong> Deine Eingaben werden an unseren Workflow-Server (<strong>n8n</strong>, EU/Deutschland) gesendet.</li>
+                                            <li><strong>Veredelung:</strong> Wir senden anonymisierte Prompts an die API von <strong>OpenAI</strong> (USA). 
+                                            <em>Wichtig:</em> Wir nutzen Einstellungen, die verhindern, dass deine Daten zum Training der KI-Modelle verwendet werden.</li>
+                                            <li><strong>Output:</strong> Das Ergebnis sind deine <strong>PDF-Unikat-Karten</strong>, die wir anschließend in unserer Manufaktur für dich drucken, schneiden und verpacken.</li>
+                                        </ol>
+                                    </div>
+                                    <div className="w-32 md:w-40 flex-shrink-0 flex justify-center">
+                                         <img src={aiScholar} alt="Der Alchemist" className="w-full h-auto object-contain opacity-90" />
+                                    </div>
                                 </div>
-                                <h3 className="text-lg font-bold text-heartbeat mb-2 pr-12">3. Die Alchemie (KI-Verarbeitung)</h3>
-                                <p className="mb-2">Dies ist das Herzstück. Damit aus deinen Worten ein Spiel wird, nutzen wir moderne Schnittstellen:</p>
-                                <ol className="list-decimal pl-5 space-y-2">
-                                    <li><strong>Transport:</strong> Deine Eingaben werden an unseren Workflow-Server (<strong>n8n</strong>, EU/Deutschland) gesendet.</li>
-                                    <li><strong>Veredelung:</strong> Wir senden anonymisierte Prompts an die API von <strong>OpenAI</strong> (USA). 
-                                    <em>Wichtig:</em> Wir nutzen Einstellungen, die verhindern, dass deine Daten zum Training der KI-Modelle verwendet werden.</li>
-                                    <li><strong>Output:</strong> Das Ergebnis sind deine <strong>PDF-Unikat-Karten</strong>, die wir anschließend in unserer Manufaktur für dich drucken, schneiden und verpacken.</li>
-                                </ol>
                             </div>
 
                             <div>
