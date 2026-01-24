@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Heart, Mail, CreditCard, Check } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HeartbeatLine } from "./HeartbeatLine";
@@ -162,6 +163,12 @@ export const ConversionFooter = ({ isVisible }: ConversionFooterProps) => {
           <p className="font-body text-sm text-muted-foreground mt-2 italic">
             {t("header.tagline")}
           </p>
+          <Link 
+            to="/transparenz" 
+            className="font-body text-xs text-muted-foreground hover:text-heartbeat transition-colors mt-4 inline-block"
+          >
+            Impressum & Datenschutz
+          </Link>
         </div>
       </div>
     </motion.footer>
